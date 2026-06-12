@@ -1,0 +1,46 @@
+<section style="padding-block: var(--spacing-section); background: var(--rattib-white);">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-header__title">{{ section.settings.title }}</h2>
+    </div>
+    <div class="category-grid">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.url }}" class="category-tile" {{ block.shopify_attributes }}>
+          <span class="category-tile__emoji">{{ block.settings.emoji }}</span>
+          <span class="category-tile__label">{{ block.settings.label }}</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "شبكة الفئات",
+  "settings": [
+    { "type": "text", "id": "title", "label": "عنوان القسم", "default": "تسوّقي حسب الفئة" }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "فئة",
+      "settings": [
+        { "type": "text", "id": "emoji", "label": "الإيموجي", "default": "🏠" },
+        { "type": "text", "id": "label", "label": "اسم الفئة", "default": "فئة جديدة" },
+        { "type": "url",  "id": "url",   "label": "الرابط" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "شبكة الفئات",
+    "blocks": [
+      { "type": "category", "settings": { "emoji": "🍳", "label": "تنظيم المطبخ" } },
+      { "type": "category", "settings": { "emoji": "🧊", "label": "تنظيم الثلاجة" } },
+      { "type": "category", "settings": { "emoji": "🛁", "label": "تنظيم الحمام" } },
+      { "type": "category", "settings": { "emoji": "🗄️", "label": "تنظيم الأدراج والخزائن" } },
+      { "type": "category", "settings": { "emoji": "🧺", "label": "غرفة الغسيل" } },
+      { "type": "category", "settings": { "emoji": "🧸", "label": "غرف الأطفال" } }
+    ]
+  }]
+}
+{% endschema %}

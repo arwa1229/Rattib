@@ -1,0 +1,96 @@
+{
+  "general": {
+    "password_page": { "login_form_heading": "أدخلي كلمة المرور" },
+    "meta": { "tags": "الوسوم", "page": "الصفحة" }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "أضف إلى السلة",
+      "buy_it_now": "اشترِي الآن",
+      "sold_out": "نفذ المخزون",
+      "unavailable": "غير متوفر",
+      "on_sale": "خصم",
+      "quantity": "الكمية",
+      "description": "الوصف"
+    },
+    "general": {
+      "vendor": "الماركة",
+      "sku": "الرقم التعريفي"
+    }
+  },
+  "cart": {
+    "general": {
+      "title": "سلة التسوق",
+      "empty": "سلتك فارغة",
+      "checkout": "إتمام الشراء",
+      "subtotal": "المجموع الجزئي",
+      "savings": "وفّرتِ",
+      "continue_shopping": "مواصلة التسوق",
+      "item_count": {
+        "one": "منتج واحد",
+        "other": "{{ count }} منتجات"
+      }
+    }
+  },
+  "collections": {
+    "general": {
+      "sort_by": "ترتيب حسب",
+      "filter_by": "تصفية",
+      "view_all": "عرض الكل",
+      "items_count": { "one": "منتج", "other": "منتجات" }
+    },
+    "sorting": {
+      "featured": "المميز",
+      "best_selling": "الأكثر مبيعًا",
+      "title_ascending": "أ - ي",
+      "title_descending": "ي - أ",
+      "price_ascending": "السعر: الأقل أولاً",
+      "price_descending": "السعر: الأعلى أولاً",
+      "created_descending": "الأحدث",
+      "created_ascending": "الأقدم"
+    }
+  },
+  "customer": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "دخول",
+      "forgot_password": "نسيتِ كلمة المرور؟"
+    },
+    "register": {
+      "title": "إنشاء حساب",
+      "first_name": "الاسم الأول",
+      "last_name": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "submit": "إنشاء الحساب"
+    },
+    "account": {
+      "title": "حسابي",
+      "order_history": "سجل الطلبات",
+      "details": "بيانات الحساب",
+      "logout": "تسجيل الخروج"
+    },
+    "orders": {
+      "title": "طلباتي",
+      "order_number": "رقم الطلب",
+      "date": "التاريخ",
+      "payment_status": "حالة الدفع",
+      "fulfillment_status": "حالة الشحن",
+      "total": "المجموع"
+    }
+  },
+  "accessibility": {
+    "skip_to_content": "انتقل إلى المحتوى",
+    "close": "إغلاق",
+    "open_menu": "فتح القائمة",
+    "close_menu": "إغلاق القائمة",
+    "loading": "جاري التحميل…"
+  },
+  "sections": {
+    "header": {
+      "cart_count": { "one": "منتج", "other": "منتجات" }
+    }
+  }
+}

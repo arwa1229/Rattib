@@ -1,0 +1,95 @@
+<section class="cart-drawer">
+
+  {%- assign free_shipping_threshold = 199 -%}
+  {%- assign cart_total_sar = cart.total_price | divided_by: 100.0 -%}
+  {%- assign remaining = free_shipping_threshold | minus: cart_total_sar -%}
+  {%- assign progress_pct = cart_total_sar | divided_by: free_shipping_threshold | times: 100 | at_most: 100 -%}
+
+  <!-- Free shipping progress bar -->
+  <div class="shipping-progress">
+    {%- if remaining > 0 -%}
+      <p class="shipping-progress__label">
+        🎉 باقي <strong>{{ remaining | ceil }} ر.س</strong> وتحصلين على شحن مجاني!
+      </p>
+    {%- else -%}
+      <p class="shipping-progress__label">✅ تهانيكِ! حصلتِ على شحن مجاني</p>
+    {%- endif -%}
+    <div class="shipping-progress__bar-track">
+      <div class="shipping-progress__bar-fill" style="width: {{ progress_pct }}%;"></div>
+    </div>
+  </div>
+
+  <!-- Cart items -->
+  {%- if cart.item_count > 0 -%}
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      {%- for item in cart.items -%}
+        <div class="product-card" style="flex-direction:row; align-items:center; gap:12px; padding:12px;">
+          <img src="{{ item.image | img_url: '120x120', crop: 'center' }}" alt="{{ item.title | escape }}"
+               width="60" height="60" style="border-radius:10px; object-fit:cover; flex-shrink:0;">
+          <div style="flex:1;">
+            <p class="product-card__title">{{ item.product.title }}</p>
+            <p class="product-card__price">{{ item.price | money }} ر.س</p>
+          </div>
+          <span style="font-size:12px; color:#8A9695;">× {{ item.quantity }}</span>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <!-- Upsell card (first recommended product from related collection) -->
+    {%- assign upsell = recommendations.products | first -%}
+    {%- if upsell -%}
+      <div class="upsell-card">
+        <img class="upsell-card__image"
+             src="{{ upsell.featured_image | img_url: '120x120', crop: 'center' }}"
+             alt="{{ upsell.title | escape }}" width="60" height="60">
+        <div class="upsell-card__info">
+          <p class="upsell-card__title">{{ upsell.title }}</p>
+          <p class="upsell-card__price">{{ upsell.price | money }} ر.س</p>
+        </div>
+        <form action="/cart/add" method="post">
+          <input type="hidden" name="id" value="{{ upsell.variants.first.id }}">
+          <button type="submit" class="btn btn-primary" style="padding:8px 14px; font-size:13px;">
+            + أضف
+          </button>
+        </form>
+      </div>
+    {%- endif -%}
+
+    <!-- Checkout button -->
+    <a href="/checkout" class="btn btn-primary btn-full">
+      اشترِي الآن · {{ cart.total_price | money }} ر.س
+    </a>
+
+    <!-- Payment trust row -->
+    <div class="payment-trust">
+      <p class="payment-trust__label">ادفعي بأمان عبر</p>
+      <div class="payment-trust__logos">
+        <span>مدى</span>
+        <span>·</span>
+        <span>Apple Pay</span>
+        <span>·</span>
+        <span>تابي</span>
+        <span>·</span>
+        <span>تمارا</span>
+        <span>·</span>
+        <span>STC Pay</span>
+      </div>
+    </div>
+
+  {%- else -%}
+    <div style="text-align:center; padding:40px 16px; color:#8A9695;">
+      <p style="font-size:40px; margin-bottom:12px;">🛒</p>
+      <p style="font-family:'Tajawal',sans-serif; font-weight:700; font-size:16px; color:var(--rattib-charcoal);">سلتك فارغة</p>
+      <p style="font-size:14px; margin-top:6px;">ابدئي التسوق لإضافة منتجات</p>
+      <a href="/collections/all" class="btn btn-primary" style="margin-top:20px;">تسوّقي الآن</a>
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "سلة التسوق",
+  "settings": []
+}
+{% endschema %}

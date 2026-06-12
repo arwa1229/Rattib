@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#5BC4BE">
+  <title>{{ page_title }} — {{ shop.name }}</title>
+  <meta name="description" content="{{ page_description | escape }}">
+
+  {{ content_for_header }}
+
+  <!-- Google Fonts: Tajawal + IBM Plex Sans Arabic -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet">
+
+  {{ 'rattib.css' | asset_url | stylesheet_tag }}
+</head>
+
+<body>
+
+  <!-- Sticky free-shipping announcement -->
+  <div class="free-shipping-bar">
+    🚚 شحن مجاني على الطلبات فوق ١٩٩ ر.س
+  </div>
+
+  <!-- Header -->
+  <header class="site-header" role="banner">
+    <div class="site-header__inner">
+      <a href="/" class="site-header__logo" aria-label="رتّب - الصفحة الرئيسية">
+        {{ 'rattib-logo.svg' | asset_url | img_tag: 'رتّب', loading: 'eager', width: 120, height: 56 }}
+      </a>
+
+      <div class="site-header__actions">
+        <a href="/search" class="site-header__icon" aria-label="بحث">🔍</a>
+        <a href="/cart" class="site-header__icon" aria-label="السلة">
+          🛒
+          {%- if cart.item_count > 0 -%}
+            <span class="site-header__cart-count">{{ cart.item_count }}</span>
+          {%- endif -%}
+        </a>
+        <a href="/account" class="site-header__icon" aria-label="حسابي">👤</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main id="main-content" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p class="site-footer__tagline">بيتك مرتب… حياتك أسهل</p>
+      <p class="site-footer__sub">© {{ 'now' | date: '%Y' }} رتّب — جميع الحقوق محفوظة</p>
+    </div>
+  </footer>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav" aria-label="التنقل السريع">
+    <a href="/" class="mobile-nav__item {% if request.page_type == 'index' %}active{% endif %}">
+      <span class="mobile-nav__icon">🏠</span>
+      <span>الرئيسية</span>
+    </a>
+    <a href="/search" class="mobile-nav__item {% if request.page_type == 'search' %}active{% endif %}">
+      <span class="mobile-nav__icon">🔍</span>
+      <span>بحث</span>
+    </a>
+    <a href="/cart" class="mobile-nav__item {% if request.page_type == 'cart' %}active{% endif %}">
+      <span class="mobile-nav__icon">🛒</span>
+      {%- if cart.item_count > 0 -%}
+        <span class="mobile-nav__cart-badge">{{ cart.item_count }}</span>
+      {%- endif -%}
+      <span>سلتي</span>
+    </a>
+    <a href="/account" class="mobile-nav__item {% if request.page_type == 'customers/account' %}active{% endif %}">
+      <span class="mobile-nav__icon">👤</span>
+      <span>حسابي</span>
+    </a>
+  </nav>
+
+</body>
+</html>

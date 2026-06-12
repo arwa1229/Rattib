@@ -1,0 +1,167 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Rattib — رتّب",
+    "theme_version": "1.0.0",
+    "theme_author": "RATTIB",
+    "theme_documentation_url": "https://rattib.sa",
+    "theme_support_url": "https://rattib.sa/support"
+  },
+  {
+    "name": "الألوان",
+    "settings": [
+      { "type": "header", "content": "ألوان العلامة التجارية" },
+      { "type": "color", "id": "color_primary",       "label": "الأكوا الرئيسي",                 "default": "#5BC4BE" },
+      { "type": "color", "id": "color_primary_deep",  "label": "الأكوا الداكن",                  "default": "#2E8F8A" },
+      { "type": "color", "id": "color_primary_soft",  "label": "الأكوا الفاتح",                  "default": "#DDF3F1" },
+      { "type": "color", "id": "color_charcoal",      "label": "الفحمي (العناوين والنصوص)",      "default": "#262B2B" },
+      { "type": "color", "id": "color_gray",          "label": "الرمادي الفاتح (خلفيات)",        "default": "#F4F6F6" },
+      { "type": "color", "id": "color_white",         "label": "الأبيض",                         "default": "#FFFFFF" },
+      { "type": "color", "id": "color_success",       "label": "لون النجاح (أخضر)",              "default": "#4DAE7C" },
+      { "type": "color", "id": "color_success_soft",  "label": "الأخضر الفاتح",                  "default": "#E2F3E8" },
+      { "type": "color", "id": "color_rating",        "label": "لون التقييم (النجوم)",           "default": "#F2B53D" },
+      { "type": "header", "content": "ألوان النصوص" },
+      { "type": "color", "id": "color_text_primary",  "label": "النص الرئيسي",                   "default": "#262B2B" },
+      { "type": "color", "id": "color_text_secondary","label": "النص الثانوي",                   "default": "#5F6B6A" },
+      { "type": "color", "id": "color_price",         "label": "لون السعر",                      "default": "#2E8F8A" },
+      { "type": "header", "content": "ألوان الخلفية" },
+      { "type": "color", "id": "color_bg_body",       "label": "خلفية الصفحة",                   "default": "#FFFFFF" },
+      { "type": "color", "id": "color_bg_card",       "label": "خلفية بطاقة المنتج",             "default": "#F4F6F6" },
+      { "type": "color", "id": "color_border_card",   "label": "إطار البطاقة",                   "default": "#EDF1F1" }
+    ]
+  },
+  {
+    "name": "الخطوط",
+    "settings": [
+      { "type": "header", "content": "خط العناوين والأزرار" },
+      {
+        "type": "select",
+        "id": "font_heading",
+        "label": "خط العناوين والأزرار والأسعار",
+        "options": [
+          { "value": "Tajawal",  "label": "Tajawal (مُوصى به)" },
+          { "value": "Cairo",    "label": "Cairo" },
+          { "value": "Almarai",  "label": "Almarai" }
+        ],
+        "default": "Tajawal"
+      },
+      { "type": "header", "content": "خط النصوص الأساسية" },
+      {
+        "type": "select",
+        "id": "font_body",
+        "label": "خط النصوص والوصف",
+        "options": [
+          { "value": "'IBM Plex Sans Arabic'", "label": "IBM Plex Sans Arabic (مُوصى به)" },
+          { "value": "Tajawal",                "label": "Tajawal" },
+          { "value": "Cairo",                  "label": "Cairo" }
+        ],
+        "default": "'IBM Plex Sans Arabic'"
+      },
+      { "type": "header", "content": "أحجام الخطوط" },
+      { "type": "range", "id": "font_size_base", "label": "حجم الخط الأساسي (px)", "min": 13, "max": 18, "step": 1, "default": 15 },
+      { "type": "range", "id": "font_size_h1",   "label": "حجم H1 (px)",            "min": 24, "max": 52, "step": 2, "default": 36 },
+      { "type": "range", "id": "font_size_h2",   "label": "حجم H2 (px)",            "min": 18, "max": 36, "step": 1, "default": 24 }
+    ]
+  },
+  {
+    "name": "التخطيط",
+    "settings": [
+      { "type": "header", "content": "أبعاد الصفحة" },
+      { "type": "range", "id": "max_width",        "label": "أقصى عرض للمحتوى (px)",      "min": 375, "max": 800, "step": 10, "default": 680 },
+      { "type": "range", "id": "spacing_section",  "label": "المسافة بين الأقسام (px)",   "min": 24,  "max": 80,  "step": 4,  "default": 52  },
+      { "type": "range", "id": "spacing_card_gap", "label": "المسافة بين البطاقات (px)",  "min": 6,   "max": 20,  "step": 2,  "default": 10  },
+      { "type": "header", "content": "انحناء الزوايا" },
+      { "type": "range", "id": "radius_card", "label": "انحناء زوايا البطاقة (px)", "min": 8, "max": 24, "step": 2, "default": 16 },
+      { "type": "range", "id": "radius_btn",  "label": "انحناء زوايا الأزرار (px)", "min": 4, "max": 24, "step": 2, "default": 12 }
+    ]
+  },
+  {
+    "name": "الهيدر",
+    "settings": [
+      { "type": "header", "content": "الشعار" },
+      { "type": "image_picker", "id": "logo", "label": "شعار المتجر (اختياري — يُستخدم SVG الافتراضي إن لم يُرفع)" },
+      { "type": "range", "id": "logo_width", "label": "عرض الشعار (px)", "min": 60, "max": 200, "step": 10, "default": 110 },
+      { "type": "header", "content": "إعدادات الهيدر" },
+      { "type": "checkbox", "id": "header_sticky",       "label": "تثبيت الهيدر عند التمرير (Sticky)", "default": true  },
+      { "type": "color",    "id": "header_bg",           "label": "خلفية الهيدر",                       "default": "#FFFFFF" },
+      { "type": "color",    "id": "header_text",         "label": "لون نصوص الهيدر",                    "default": "#262B2B" },
+      { "type": "checkbox", "id": "header_show_search",  "label": "إظهار أيقونة البحث",                 "default": true  },
+      { "type": "checkbox", "id": "header_show_account", "label": "إظهار أيقونة الحساب",                "default": true  },
+      { "type": "header", "content": "القائمة الرئيسية" },
+      { "type": "link_list", "id": "main_menu", "label": "القائمة الرئيسية", "default": "main-menu" },
+      { "type": "header", "content": "شريط الشحن المجاني" },
+      { "type": "checkbox", "id": "show_free_shipping_bar",  "label": "إظهار شريط الشحن المجاني",    "default": true },
+      { "type": "text",     "id": "free_shipping_bar_text",  "label": "نص شريط الشحن المجاني",       "default": "🚚 شحن مجاني على الطلبات فوق ١٩٩ ر.س" }
+    ]
+  },
+  {
+    "name": "الفوتر",
+    "settings": [
+      { "type": "header", "content": "نصوص الفوتر" },
+      { "type": "text",     "id": "footer_tagline",  "label": "الشعار النصي",    "default": "بيتك مرتب… حياتك أسهل" },
+      { "type": "richtext", "id": "footer_about",    "label": "نبذة عن المتجر",  "default": "<p>رتّب متجرك الأول لمستلزمات تنظيم المنزل. نجلب لكِ أفضل حلول التخزين لكل غرفة.</p>" },
+      { "type": "header", "content": "روابط الفوتر" },
+      { "type": "link_list", "id": "footer_menu", "label": "قائمة الفوتر", "default": "footer" },
+      { "type": "header", "content": "وسائل التواصل الاجتماعي" },
+      { "type": "text", "id": "social_instagram", "label": "رابط إنستغرام",  "default": "https://instagram.com/rattib.sa"   },
+      { "type": "text", "id": "social_tiktok",    "label": "رابط تيك توك",   "default": "https://tiktok.com/@rattib.sa"    },
+      { "type": "text", "id": "social_twitter",   "label": "رابط تويتر / X", "default": ""                                 },
+      { "type": "text", "id": "social_snapchat",  "label": "رابط سناب شات",  "default": ""                                 },
+      { "type": "header", "content": "الدفع والثقة" },
+      { "type": "checkbox", "id": "footer_show_payment", "label": "إظهار أيقونات طرق الدفع", "default": true },
+      { "type": "text",     "id": "footer_copyright",    "label": "نص حقوق النشر",            "default": "© 2025 رتّب. جميع الحقوق محفوظة." }
+    ]
+  },
+  {
+    "name": "المنتجات",
+    "settings": [
+      { "type": "header", "content": "الشارات (Badges)" },
+      { "type": "checkbox", "id": "product_show_badge_available",  "label": "إظهار شارة «متوفر»",        "default": true },
+      { "type": "checkbox", "id": "product_show_badge_shipping",   "label": "إظهار شارة «شحن مجاني»",   "default": true },
+      { "type": "checkbox", "id": "product_show_badge_bestseller", "label": "إظهار شارة «الأكثر مبيعًا»","default": true },
+      { "type": "checkbox", "id": "product_show_delivery_badge",   "label": "إظهار شارة وقت التوصيل",   "default": true },
+      { "type": "text",     "id": "product_delivery_text",         "label": "نص شارة التوصيل",           "default": "يصلك خلال ٧–١٢ يوم" },
+      { "type": "header", "content": "بطاقة المنتج" },
+      { "type": "checkbox", "id": "product_show_compare_price", "label": "إظهار السعر قبل الخصم",    "default": true },
+      { "type": "checkbox", "id": "product_show_rating",        "label": "إظهار التقييم بالنجوم",     "default": true },
+      {
+        "type": "select", "id": "product_image_ratio", "label": "نسبة أبعاد صورة المنتج",
+        "options": [
+          { "value": "1/1", "label": "مربعة (1:1)" },
+          { "value": "4/3", "label": "أفقية (4:3)" },
+          { "value": "3/4", "label": "عمودية (3:4)" }
+        ],
+        "default": "1/1"
+      }
+    ]
+  },
+  {
+    "name": "السلة",
+    "settings": [
+      { "type": "header", "content": "الشحن المجاني" },
+      { "type": "number",   "id": "cart_free_shipping_threshold", "label": "حد الشحن المجاني (ر.س)",             "default": 199 },
+      { "type": "checkbox", "id": "cart_show_free_shipping_bar",  "label": "إظهار شريط تقدم الشحن المجاني",     "default": true },
+      { "type": "text",     "id": "cart_free_shipping_message",   "label": "رسالة الشحن المجاني",                "default": "شحن مجاني على الطلبات فوق ١٩٩ ر.س" },
+      { "type": "text",     "id": "cart_free_shipping_reached",   "label": "رسالة عند الوصول للحد",              "default": "تهانينا! حصلتِ على شحن مجاني 🎉" },
+      { "type": "header", "content": "منتجات مقترحة في السلة" },
+      { "type": "checkbox",    "id": "cart_show_upsell",         "label": "إظهار منتجات مقترحة", "default": true },
+      { "type": "collection",  "id": "cart_upsell_collection",   "label": "مجموعة المنتجات المقترحة" },
+      { "type": "header", "content": "الدفع والأمان" },
+      { "type": "checkbox", "id": "cart_show_payment_trust", "label": "إظهار أيقونات طرق الدفع في السلة", "default": true },
+      { "type": "checkbox", "id": "cart_enable_notes",       "label": "تفعيل حقل ملاحظات الطلب",          "default": true },
+      { "type": "text",     "id": "cart_note_label",         "label": "نص حقل الملاحظات",                  "default": "ملاحظات إضافية على طلبك" }
+    ]
+  },
+  {
+    "name": "السيو والتحليلات",
+    "settings": [
+      { "type": "header", "content": "السيو" },
+      { "type": "text",     "id": "meta_title_suffix",       "label": "لاحقة عنوان الصفحة",   "default": "| رتّب" },
+      { "type": "textarea", "id": "meta_description_default","label": "الوصف الافتراضي",       "default": "رتّب — متجرك الأول لمستلزمات تنظيم المنزل. بيتك مرتب… حياتك أسهل." },
+      { "type": "header", "content": "التحليلات" },
+      { "type": "text", "id": "google_analytics_id", "label": "معرّف Google Analytics (GA4)", "default": "" },
+      { "type": "text", "id": "meta_pixel_id",       "label": "معرّف Meta Pixel",             "default": "" },
+      { "type": "text", "id": "tiktok_pixel_id",     "label": "معرّف TikTok Pixel",           "default": "" }
+    ]
+  }
+]

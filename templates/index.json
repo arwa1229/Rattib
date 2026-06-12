@@ -1,0 +1,31 @@
+{
+  "sections": {
+    "free-shipping-bar": {
+      "type": "free-shipping-bar",
+      "settings": {
+        "threshold": 199
+      }
+    },
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {}
+    },
+    "category-grid": {
+      "type": "category-grid",
+      "settings": {}
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "منتجاتنا المميزة",
+        "products_to_show": 8
+      }
+    }
+  },
+  "order": [
+    "free-shipping-bar",
+    "hero-banner",
+    "category-grid",
+    "featured-products"
+  ]
+}

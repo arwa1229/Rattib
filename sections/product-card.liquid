@@ -1,0 +1,124 @@
+{% comment %}
+  Reusable product card section.
+  Pass `card_product` variable before rendering, or section.settings.product is used.
+{% endcomment %}
+
+{%- liquid
+  assign card_product = card_product | default: section.settings.product
+  if card_product == blank
+    assign card_product = product
+  endif
+-%}
+
+<article class="product-card" aria-label="{{ card_product.title | escape }}">
+
+  <!-- Product image -->
+  <a href="{{ card_product.url }}" class="product-card__image-wrap" tabindex="-1" aria-hidden="true">
+    {%- if card_product.featured_image -%}
+      <img
+        src="{{ card_product.featured_image | image_url: width: 480 }}"
+        alt="{{ card_product.featured_image.alt | escape | default: card_product.title }}"
+        width="480"
+        height="480"
+        loading="lazy"
+        class="product-card__img"
+      >
+    {%- else -%}
+      <div class="product-card__img product-card__img--placeholder" aria-hidden="true">
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    {%- endif -%}
+
+    <!-- Discount badge over image -->
+    {%- if card_product.compare_at_price > card_product.price -%}
+      {%- assign discount_pct = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price -%}
+      <span class="badge badge-discount product-card__discount-badge">-{{ discount_pct }}%</span>
+    {%- endif -%}
+  </a>
+
+  <!-- Badges row -->
+  <div class="product-card__badges">
+    {%- if card_product.available -%}
+      <span class="badge badge-available">{{ 'badges.available' | t }}</span>
+    {%- else -%}
+      <span class="badge badge-unavailable">{{ 'products.product.sold_out' | t }}</span>
+    {%- endif -%}
+
+    {%- if card_product.tags contains 'شحن-مجاني' or card_product.tags contains 'free-shipping' -%}
+      <span class="badge badge-free-shipping">{{ 'badges.free_shipping' | t }}</span>
+    {%- endif -%}
+
+    {%- if card_product.tags contains 'الأكثر-مبيعاً' or card_product.tags contains 'bestseller' -%}
+      <span class="badge badge-bestseller">{{ 'badges.bestseller' | t }}</span>
+    {%- endif -%}
+  </div>
+
+  <!-- Card body -->
+  <div class="product-card__body">
+    <a href="{{ card_product.url }}" class="product-card__title">{{ card_product.title }}</a>
+
+    <!-- Price row -->
+    <div class="product-card__price-row">
+      <span class="product-card__price">
+        {%- assign price_sar = card_product.price | divided_by: 100.0 | ceil -%}
+        «{{ price_sar }} ر.س»
+      </span>
+      {%- if card_product.compare_at_price > card_product.price -%}
+        {%- assign compare_sar = card_product.compare_at_price | divided_by: 100.0 | ceil -%}
+        <span class="product-card__compare-price">{{ compare_sar }} ر.س</span>
+      {%- endif -%}
+    </div>
+
+    <!-- Star rating — reads from metafield if available, else shows 5 ★ -->
+    {%- assign rating_value = card_product.metafields.reviews.rating.value | default: 5 -%}
+    {%- assign rating_count = card_product.metafields.reviews.rating_count.value | default: 0 -%}
+    <div class="product-card__rating" aria-label="التقييم: {{ rating_value }} من ٥">
+      {%- for i in (1..5) -%}
+        {%- if i <= rating_value -%}
+          <span class="star star--filled" aria-hidden="true">★</span>
+        {%- else -%}
+          <span class="star star--empty" aria-hidden="true">☆</span>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if rating_count > 0 -%}
+        <span class="product-card__rating-count">({{ rating_count }})</span>
+      {%- endif -%}
+    </div>
+
+    <!-- Delivery badge -->
+    <span class="badge badge-delivery product-card__delivery">{{ 'badges.delivery' | t }}</span>
+
+    <!-- Add to cart form -->
+    {%- if card_product.available -%}
+      {%- form 'product', card_product, class: 'product-card__form' -%}
+        <input type="hidden" name="id" value="{{ card_product.selected_or_first_available_variant.id }}">
+        <button type="submit" class="btn btn-primary product-card__atc" aria-label="{{ 'products.product.add_to_cart' | t }}: {{ card_product.title | escape }}">
+          {{ 'products.product.add_to_cart' | t }}
+        </button>
+      {%- endform -%}
+    {%- else -%}
+      <button class="btn btn-primary product-card__atc" disabled aria-disabled="true">
+        {{ 'products.product.sold_out' | t }}
+      </button>
+    {%- endif -%}
+  </div>
+
+</article>
+
+{% schema %}
+{
+  "name": "بطاقة المنتج",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "المنتج"
+    }
+  ],
+  "presets": [
+    {
+      "name": "بطاقة المنتج"
+    }
+  ]
+}
+{% endschema %}
