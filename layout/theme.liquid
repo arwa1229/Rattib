@@ -149,7 +149,7 @@
                 fetchpriority: 'high'
           }}
         {%- else -%}
-          {%- render 'rattib-logo-svg' -%}
+          {%- render 'rattib-logo-svg', inverted: true -%}
         {%- endif -%}
       </a>
 
@@ -292,20 +292,11 @@
             <span class="payment-badge payment-badge--text" style="color:#7B2FBE;">STC Pay</span>
             <span class="payment-badge payment-badge--text" style="color:#3DBFA0;">تابي</span>
             <span class="payment-badge payment-badge--text" style="color:#5BC4BE;">تمارا</span>
-            <span class="payment-badge">
-              <svg viewBox="0 0 50 32" width="50" height="32" aria-label="Mastercard">
-                <rect width="50" height="32" rx="5" fill="#252525"/>
-                <circle cx="20" cy="16" r="9" fill="#EB001B"/>
-                <circle cx="30" cy="16" r="9" fill="#F79E1B"/>
-                <path d="M25 8.54a9 9 0 0 1 0 14.92A9 9 0 0 1 25 8.54z" fill="#FF5F00"/>
-              </svg>
+            <span class="payment-badge payment-badge--mc">
+              <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#EB001B;margin-inline-end:-5px;"></span>
+              <span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#F79E1B;opacity:0.95;"></span>
             </span>
-            <span class="payment-badge">
-              <svg viewBox="0 0 50 32" width="50" height="32" aria-label="Visa">
-                <rect width="50" height="32" rx="5" fill="#1A1F71"/>
-                <text x="7" y="22" font-family="Arial,sans-serif" font-size="15" font-weight="900" fill="#fff" font-style="italic">VISA</text>
-              </svg>
-            </span>
+            <span class="payment-badge payment-badge--visa">VISA</span>
           </div>
         </div>
 
