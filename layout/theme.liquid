@@ -1,84 +1,318 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#5BC4BE">
-  <title>{{ page_title }} — {{ shop.name }}</title>
-  <meta name="description" content="{{ page_description | escape }}">
 
-  {{ content_for_header }}
+  <title>
+    {%- if template == 'index' -%}
+      {{ shop.name }} — {{ settings.footer_tagline | default: 'بيتك مرتب… حياتك أسهل' }}
+    {%- elsif page_title -%}
+      {{ page_title }} — {{ shop.name }}
+    {%- else -%}
+      {{ shop.name }}
+    {%- endif -%}
+  </title>
 
-  <!-- Google Fonts: Tajawal + IBM Plex Sans Arabic -->
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <!-- Canonical & OG -->
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  <meta property="og:title" content="{{ page_title | default: shop.name }}">
+  {%- if page_description -%}
+    <meta property="og:description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  <meta property="og:type" content="website">
+
+  <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet">
 
+  <!-- Google Fonts: Tajawal (headings) + IBM Plex Sans Arabic (body) -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Theme CSS -->
   {{ 'rattib.css' | asset_url | stylesheet_tag }}
+
+  <!-- Shopify Required -->
+  {{ content_for_header }}
+
+  <!-- Inline critical CSS variables from settings -->
+  <style>
+    :root {
+      --rattib-aqua:        {{ settings.color_primary | default: '#5BC4BE' }};
+      --rattib-aqua-deep:   {{ settings.color_primary_deep | default: '#2E8F8A' }};
+      --rattib-aqua-soft:   {{ settings.color_primary_soft | default: '#DDF3F1' }};
+      --rattib-charcoal:    {{ settings.color_charcoal | default: '#262B2B' }};
+      --rattib-gray:        {{ settings.color_gray | default: '#F4F6F6' }};
+      --rattib-success:     {{ settings.color_success | default: '#4DAE7C' }};
+      --rattib-success-soft:{{ settings.color_success_soft | default: '#E2F3E8' }};
+      --rattib-rating:      {{ settings.color_rating | default: '#F2B53D' }};
+      --max-width:          {{ settings.max_width | default: 680 }}px;
+      --spacing-section:    {{ settings.spacing_section | default: 52 }}px;
+      --spacing-card-gap:   {{ settings.spacing_card_gap | default: 10 }}px;
+      --font-heading:       '{{ settings.font_heading | default: 'Tajawal' }}', sans-serif;
+      --font-body:          '{{ settings.font_body | default: 'IBM Plex Sans Arabic' }}', sans-serif;
+    }
+  </style>
 </head>
 
-<body>
+<body class="template-{{ template.name }}{% if customer %} customer-logged-in{% endif %}">
 
-  <!-- Sticky free-shipping announcement -->
-  <div class="free-shipping-bar">
-    🚚 شحن مجاني على الطلبات فوق ١٩٩ ر.س
-  </div>
+  <!-- ═══════════════════════════════════════════
+       SKIP TO CONTENT (Accessibility)
+  ═══════════════════════════════════════════ -->
+  <a href="#main-content" class="sr-only skip-link">
+    {{- 'accessibility.skip_to_content' | t | default: 'تخطّي إلى المحتوى' -}}
+  </a>
 
-  <!-- Header -->
-  <header class="site-header" role="banner">
-    <div class="site-header__inner">
-      <a href="/" class="site-header__logo" aria-label="رتّب - الصفحة الرئيسية">
-        {{ 'rattib-logo.svg' | asset_url | img_tag: 'رتّب', loading: 'eager', width: 120, height: 56 }}
-      </a>
+  <!-- ═══════════════════════════════════════════
+       FREE SHIPPING BAR (above header)
+  ═══════════════════════════════════════════ -->
+  {%- if settings.show_free_shipping_bar -%}
+    {%- render 'free-shipping-bar-inline' -%}
+  {%- endif -%}
 
-      <div class="site-header__actions">
-        <a href="/search" class="site-header__icon" aria-label="بحث">🔍</a>
-        <a href="/cart" class="site-header__icon" aria-label="السلة">
-          🛒
-          {%- if cart.item_count > 0 -%}
-            <span class="site-header__cart-count">{{ cart.item_count }}</span>
+  <!-- ═══════════════════════════════════════════
+       SITE HEADER
+  ═══════════════════════════════════════════ -->
+  <header
+    class="site-header{% if settings.header_sticky %} site-header--sticky{% endif %}"
+    role="banner"
+    id="site-header"
+  >
+    <div class="container">
+      <div class="header-inner">
+
+        <!-- Logo -->
+        <a href="{{ routes.root_url }}" class="header-logo" aria-label="{{ shop.name }}">
+          {%- if settings.logo -%}
+            {{
+              settings.logo
+              | image_url: width: 240
+              | image_tag:
+                loading: 'eager',
+                fetchpriority: 'high',
+                alt: shop.name,
+                width: settings.logo_width | default: 100,
+                height: 'auto',
+                class: 'header-logo__img'
+            }}
+          {%- else -%}
+            {%- render 'icon-logo' -%}
           {%- endif -%}
         </a>
-        <a href="/account" class="site-header__icon" aria-label="حسابي">👤</a>
-      </div>
-    </div>
+
+        <!-- Desktop Navigation -->
+        <nav class="header-nav" aria-label="{{ 'navigation.main' | t | default: 'القائمة الرئيسية' }}">
+          <a href="/collections/kitchen" class="header-nav__link">🍳 تنظيم المطبخ</a>
+          <a href="/collections/fridge" class="header-nav__link">🧊 تنظيم الثلاجة</a>
+          <a href="/collections/bathroom" class="header-nav__link">🛁 الحمام</a>
+          <a href="/collections/drawers-closets" class="header-nav__link">🗄️ الأدراج والخزائن</a>
+          <a href="/collections/laundry" class="header-nav__link">🧺 الغسيل</a>
+          <a href="/collections/kids" class="header-nav__link">🧸 غرف الأطفال</a>
+        </nav>
+
+        <!-- Header Actions -->
+        <div class="header-actions">
+
+          <!-- Search -->
+          {%- if settings.show_search_icon -%}
+            <a href="{{ routes.search_url }}" class="header-icon-btn" aria-label="{{ 'search.title' | t | default: 'بحث' }}">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </a>
+          {%- endif -%}
+
+          <!-- Account -->
+          <a
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+            class="header-icon-btn"
+            aria-label="{%- if customer -%}{{ 'account.my_account' | t | default: 'حسابي' }}{%- else -%}{{ 'account.login' | t | default: 'تسجيل الدخول' }}{%- endif -%}"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </a>
+
+          <!-- Cart -->
+          <a href="{{ routes.cart_url }}" class="header-icon-btn" aria-label="{{ 'cart.title' | t | default: 'السلة' }} ({{ cart.item_count }})">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+            {%- if cart.item_count > 0 -%}
+              <span class="cart-count" aria-live="polite">{{ cart.item_count }}</span>
+            {%- endif -%}
+          </a>
+
+        </div><!-- /.header-actions -->
+
+      </div><!-- /.header-inner -->
+    </div><!-- /.container -->
   </header>
 
-  <!-- Main content -->
+  <!-- ═══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
   <main id="main-content" role="main" tabindex="-1">
     {{ content_for_layout }}
   </main>
 
-  <!-- Footer -->
+  <!-- ═══════════════════════════════════════════
+       SITE FOOTER
+  ═══════════════════════════════════════════ -->
   <footer class="site-footer" role="contentinfo">
     <div class="container">
-      <p class="site-footer__tagline">بيتك مرتب… حياتك أسهل</p>
-      <p class="site-footer__sub">© {{ 'now' | date: '%Y' }} رتّب — جميع الحقوق محفوظة</p>
-    </div>
+      <div class="footer-inner">
+
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <div class="footer-brand__logo" aria-label="{{ shop.name }}">
+            {%- render 'icon-logo-white' -%}
+          </div>
+          <p class="footer-brand__tagline">{{ settings.footer_tagline | default: 'بيتك مرتب… حياتك أسهل' }}</p>
+          {%- if settings.footer_about -%}
+            <div class="footer-brand__about">{{ settings.footer_about }}</div>
+          {%- endif -%}
+
+          <!-- Social Links -->
+          <div class="social-links" style="margin-top:16px;">
+            {%- if settings.social_instagram != blank -%}
+              <a href="{{ settings.social_instagram }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="إنستقرام">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_tiktok != blank -%}
+              <a href="{{ settings.social_tiktok }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="تيك توك">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.77 1.5V6.73a4.85 4.85 0 0 1-1-.04z"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_twitter != blank -%}
+              <a href="{{ settings.social_twitter }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="تويتر / X">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.736l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+            {%- endif -%}
+            {%- if settings.social_snapchat != blank -%}
+              <a href="{{ settings.social_snapchat }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="سناب شات">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.01 2C9.19 2 7 4.17 7 6.97v.59l-.72-.12C5.81 7.3 5.38 7.7 5.38 8.3c0 .48.32.88.77 1.02.12.04.25.06.37.06l-.09.18c-.42.86-1.07 1.4-1.07 2.24 0 .9.68 1.62 1.55 1.62.11 0 .22-.01.33-.04-.5 1.17-1.33 1.63-1.33 2.62 0 1.2 1.12 1.5 2.49 1.77.2.04.37.25.46.54.16.5.58.69.99.69.36 0 .73-.13 1.02-.31.28-.17.61-.27.96-.27.35 0 .68.1.96.27.3.18.67.31 1.03.31.41 0 .83-.19.99-.69.09-.29.26-.5.46-.54 1.37-.27 2.49-.57 2.49-1.77 0-.99-.83-1.45-1.33-2.62.11.03.22.04.33.04.87 0 1.55-.72 1.55-1.62 0-.84-.65-1.38-1.07-2.24l-.09-.18c.12 0 .25-.02.37-.06.45-.14.77-.54.77-1.02 0-.6-.43-1-1-.86l-.72.12v-.59C17 4.17 14.81 2 12.01 2z"/></svg>
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <!-- Categories Column -->
+        <div class="footer-col">
+          <h3 class="footer-col__title">تسوّقي</h3>
+          <nav class="footer-links" aria-label="تسوّقي">
+            <a href="/collections/kitchen">تنظيم المطبخ</a>
+            <a href="/collections/fridge">تنظيم الثلاجة</a>
+            <a href="/collections/bathroom">تنظيم الحمام</a>
+            <a href="/collections/drawers-closets">الأدراج والخزائن</a>
+            <a href="/collections/laundry">غرفة الغسيل</a>
+            <a href="/collections/kids">غرف الأطفال</a>
+          </nav>
+        </div>
+
+        <!-- Help Column -->
+        <div class="footer-col">
+          <h3 class="footer-col__title">المساعدة</h3>
+          <nav class="footer-links" aria-label="المساعدة">
+            <a href="/pages/about">عن رتّب</a>
+            <a href="/pages/faq">الأسئلة الشائعة</a>
+            <a href="/pages/shipping-policy">سياسة الشحن</a>
+            <a href="/pages/refund-policy">سياسة الإرجاع</a>
+            <a href="/pages/privacy-policy">سياسة الخصوصية</a>
+            <a href="/pages/contact">تواصلي معنا</a>
+          </nav>
+        </div>
+
+      </div><!-- /.footer-inner -->
+
+      <!-- Payment Methods -->
+      {%- if settings.footer_show_payment or settings.show_payment_icons -%}
+        <div class="footer-payment">
+          <p class="footer-payment__label">وسائل الدفع المتاحة</p>
+          <div class="footer-payment__methods">
+            <span class="footer-payment-badge">مدى</span>
+            <span class="footer-payment-badge">Apple Pay</span>
+            <span class="footer-payment-badge">تابي</span>
+            <span class="footer-payment-badge">تمارا</span>
+            <span class="footer-payment-badge">STC Pay</span>
+            <span class="footer-payment-badge">Visa</span>
+            <span class="footer-payment-badge">Mastercard</span>
+          </div>
+        </div>
+      {%- endif -%}
+
+      <!-- Copyright -->
+      <p class="footer-copyright">
+        {{ settings.footer_copyright | default: '© 2025 رتّب. جميع الحقوق محفوظة.' }}
+      </p>
+
+    </div><!-- /.container -->
   </footer>
 
-  <!-- Mobile bottom nav -->
-  <nav class="mobile-nav" aria-label="التنقل السريع">
-    <a href="/" class="mobile-nav__item {% if request.page_type == 'index' %}active{% endif %}">
-      <span class="mobile-nav__icon">🏠</span>
-      <span>الرئيسية</span>
+  <!-- ═══════════════════════════════════════════
+       MOBILE BOTTOM NAVIGATION BAR
+  ═══════════════════════════════════════════ -->
+  <nav class="mobile-bottom-nav" aria-label="{{ 'navigation.mobile' | t | default: 'قائمة الهاتف' }}">
+    <a href="{{ routes.root_url }}" class="mobile-bottom-nav__item{% if template.name == 'index' %} active{% endif %}" aria-label="{{ 'navigation.home' | t | default: 'الرئيسية' }}">
+      <span class="mobile-bottom-nav__icon" aria-hidden="true">🏠</span>
+      <span class="mobile-bottom-nav__label">الرئيسية</span>
     </a>
-    <a href="/search" class="mobile-nav__item {% if request.page_type == 'search' %}active{% endif %}">
-      <span class="mobile-nav__icon">🔍</span>
-      <span>بحث</span>
+    <a href="{{ routes.search_url }}" class="mobile-bottom-nav__item{% if template.name == 'search' %} active{% endif %}" aria-label="{{ 'search.title' | t | default: 'بحث' }}">
+      <span class="mobile-bottom-nav__icon" aria-hidden="true">🔍</span>
+      <span class="mobile-bottom-nav__label">بحث</span>
     </a>
-    <a href="/cart" class="mobile-nav__item {% if request.page_type == 'cart' %}active{% endif %}">
-      <span class="mobile-nav__icon">🛒</span>
-      {%- if cart.item_count > 0 -%}
-        <span class="mobile-nav__cart-badge">{{ cart.item_count }}</span>
-      {%- endif -%}
-      <span>سلتي</span>
+    <a href="{{ routes.cart_url }}" class="mobile-bottom-nav__item{% if template.name == 'cart' %} active{% endif %}" aria-label="{{ 'cart.title' | t | default: 'السلة' }}">
+      <span class="mobile-bottom-nav__cart-wrap">
+        <span class="mobile-bottom-nav__icon" aria-hidden="true">🛒</span>
+        {%- if cart.item_count > 0 -%}
+          <span class="cart-count" aria-live="polite" style="top:0;left:0;">{{ cart.item_count }}</span>
+        {%- endif -%}
+      </span>
+      <span class="mobile-bottom-nav__label">السلة</span>
     </a>
-    <a href="/account" class="mobile-nav__item {% if request.page_type == 'customers/account' %}active{% endif %}">
-      <span class="mobile-nav__icon">👤</span>
-      <span>حسابي</span>
+    <a
+      href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+      class="mobile-bottom-nav__item{% if template.name == 'customers/account' or template.name == 'customers/login' %} active{% endif %}"
+      aria-label="{{ 'account.title' | t | default: 'حسابي' }}"
+    >
+      <span class="mobile-bottom-nav__icon" aria-hidden="true">👤</span>
+      <span class="mobile-bottom-nav__label">حسابي</span>
     </a>
   </nav>
+
+  <!-- ═══════════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════════ -->
+  <script>
+    // Sticky header scroll effect
+    (function () {
+      var header = document.getElementById('site-header');
+      if (!header) return;
+      var lastY = 0;
+      window.addEventListener('scroll', function () {
+        var y = window.scrollY;
+        if (y > 40) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+        lastY = y;
+      }, { passive: true });
+    })();
+  </script>
 
 </body>
 </html>
