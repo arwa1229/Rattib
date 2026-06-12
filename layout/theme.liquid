@@ -273,6 +273,7 @@
             <ul class="site-footer__links" role="list">
               <li><a href="{{ routes.root_url }}"           class="site-footer__link">الرئيسية</a></li>
               <li><a href="{{ routes.all_products_collection_url }}" class="site-footer__link">جميع المنتجات</a></li>
+              <li><a href="{{ routes.search_url }}"         class="site-footer__link">البحث</a></li>
               <li><a href="/pages/about"                    class="site-footer__link">من نحن</a></li>
               <li><a href="/pages/shipping-policy"          class="site-footer__link">سياسة الشحن</a></li>
               <li><a href="/pages/refund-policy"            class="site-footer__link">سياسة الإرجاع</a></li>
@@ -289,17 +290,22 @@
       <div class="site-footer__bottom">
         <p class="site-footer__copyright">{{ settings.footer_copyright }}</p>
 
-        {%- if settings.footer_show_payment -%}
-          <div class="site-footer__payment" aria-label="طرق الدفع المقبولة">
-            <span class="site-footer__payment-label">ادفعي بـ:</span>
-            <span class="payment-icon">مدى</span>
-            <span class="payment-icon">Visa</span>
-            <span class="payment-icon">Mastercard</span>
-            <span class="payment-icon">Apple Pay</span>
-            <span class="payment-icon">STC Pay</span>
-            <span class="payment-icon">Tabby</span>
+        <div class="site-footer__payment" aria-label="طرق الدفع المقبولة">
+          <p class="site-footer__payment-label">وسائل الدفع المقبولة</p>
+          <div class="payment-methods-row">
+            <span class="payment-badge">
+              <svg viewBox="0 0 38 24" width="38" height="24" aria-hidden="true"><rect width="38" height="24" rx="4" fill="#1A1F71"/><text x="5" y="17" font-family="Arial,sans-serif" font-size="10" font-weight="bold" fill="#fff">VISA</text></svg>
+            </span>
+            <span class="payment-badge">
+              <svg viewBox="0 0 38 24" width="38" height="24" aria-hidden="true"><rect width="38" height="24" rx="4" fill="#EB001B"/><circle cx="15" cy="12" r="7" fill="#EB001B"/><circle cx="23" cy="12" r="7" fill="#F79E1B"/><path d="M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z" fill="#FF5F00"/></svg>
+            </span>
+            <span class="payment-badge" style="font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;color:#fff;padding:5px 10px;">مدى</span>
+            <span class="payment-badge" style="font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;color:#fff;padding:5px 10px;">Apple Pay</span>
+            <span class="payment-badge" style="font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;color:#fff;padding:5px 10px;">STC Pay</span>
+            <span class="payment-badge" style="font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;color:#5BC4BE;padding:5px 10px;">تابي</span>
+            <span class="payment-badge" style="font-size:11px;font-weight:700;font-family:'Tajawal',sans-serif;color:#5BC4BE;padding:5px 10px;">تمارا</span>
           </div>
-        {%- endif -%}
+        </div>
       </div>
     </div><!-- /.site-footer__inner -->
   </footer>
