@@ -1,0 +1,505 @@
+{% comment %}
+  RATTIB – Featured Products Section
+  FILE: sections/featured-products.liquid
+  RTL Arabic-first | Tajawal headings | IBM Plex Sans Arabic body
+{% endcomment %}
+
+<style>
+  .rattib-featured {
+    padding: 48px 0;
+    background: var(--rattib-white, #ffffff);
+    direction: rtl;
+  }
+
+  .rattib-featured__inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .rattib-featured__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .rattib-featured__heading {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: clamp(22px, 3vw, 32px);
+    color: var(--rattib-charcoal, #262b2b);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .rattib-featured__view-all {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--rattib-aqua-deep, #2e8f8a);
+    text-decoration: none;
+    border: 1.5px solid var(--rattib-aqua-deep, #2e8f8a);
+    border-radius: 99px;
+    padding: 8px 20px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-right: 16px;
+  }
+
+  .rattib-featured__view-all:hover {
+    background: var(--rattib-aqua-deep, #2e8f8a);
+    color: #fff;
+  }
+
+  .rattib-featured__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  @media (min-width: 640px) {
+    .rattib-featured__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .rattib-featured__grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+  }
+
+  /* ── Product Card ── */
+  .rattib-pcard {
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid #e8eded;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.22s, transform 0.22s;
+  }
+
+  .rattib-pcard:hover {
+    box-shadow: 0 8px 32px rgba(43, 142, 136, 0.12);
+    transform: translateY(-2px);
+  }
+
+  .rattib-pcard__image-wrap {
+    background: var(--rattib-gray, #f4f6f6);
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .rattib-pcard__image-wrap a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .rattib-pcard__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 12px;
+    transition: transform 0.3s ease;
+  }
+
+  .rattib-pcard:hover .rattib-pcard__img {
+    transform: scale(1.04);
+  }
+
+  .rattib-pcard__badges {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-end;
+    z-index: 2;
+  }
+
+  .rattib-badge {
+    display: inline-block;
+    border-radius: 99px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    line-height: 1.6;
+    white-space: nowrap;
+  }
+
+  .rattib-badge--available {
+    background: #4dae7c;
+    color: #fff;
+  }
+
+  .rattib-badge--shipping {
+    background: #e2f3e8;
+    color: #2e7d54;
+  }
+
+  .rattib-badge--bestseller {
+    background: #5bc4be;
+    color: #fff;
+  }
+
+  .rattib-badge--delivery {
+    background: #ddf3f1;
+    color: #2e8f8a;
+  }
+
+  .rattib-pcard__body {
+    padding: 12px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .rattib-pcard__inline-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .rattib-pcard__title {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--rattib-charcoal, #262b2b);
+    margin: 0;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .rattib-pcard__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .rattib-pcard__title a:hover {
+    color: var(--rattib-aqua-deep, #2e8f8a);
+  }
+
+  .rattib-pcard__pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .rattib-pcard__price {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    color: var(--rattib-aqua-deep, #2e8f8a);
+  }
+
+  .rattib-pcard__compare {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    font-size: 13px;
+    color: #999;
+    text-decoration: line-through;
+  }
+
+  .rattib-pcard__delivery-badge {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    background: #ddf3f1;
+    color: #2e8f8a;
+    border-radius: 99px;
+    padding: 3px 10px;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  .rattib-pcard__spacer {
+    flex: 1;
+  }
+
+  .rattib-btn-primary {
+    display: block;
+    width: 100%;
+    background: var(--rattib-aqua, #5bc4be);
+    color: #fff;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s;
+    margin-top: 4px;
+    text-decoration: none;
+  }
+
+  .rattib-btn-primary:hover {
+    background: var(--rattib-aqua-deep, #2e8f8a);
+  }
+
+  .rattib-btn-primary:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .rattib-featured__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 36px;
+  }
+
+  .rattib-featured__more-btn {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--rattib-aqua-deep, #2e8f8a);
+    text-decoration: none;
+    border: 2px solid var(--rattib-aqua-deep, #2e8f8a);
+    border-radius: 99px;
+    padding: 12px 36px;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .rattib-featured__more-btn:hover {
+    background: var(--rattib-aqua-deep, #2e8f8a);
+    color: #fff;
+  }
+</style>
+
+<section
+  class="rattib-featured"
+  id="featured-products-{{ section.id }}"
+  dir="rtl"
+>
+  <div class="rattib-featured__inner">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="rattib-featured__header">
+        <h2 class="rattib-featured__heading">{{ section.settings.heading }}</h2>
+        {%- assign collection_handle = section.settings.collection -%}
+        {%- if collection_handle != blank -%}
+          <a
+            href="{{ collections[collection_handle].url }}"
+            class="rattib-featured__view-all"
+            aria-label="عرض جميع منتجات {{ section.settings.heading }}"
+          >
+            عرض الكل
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- assign products_limit = section.settings.products_to_show | default: 8 -%}
+    {%- assign col_handle = section.settings.collection -%}
+    {%- assign display_products = collections[col_handle].products -%}
+
+    {%- if display_products.size > 0 -%}
+      <div
+        class="rattib-featured__grid"
+        role="list"
+        aria-label="{{ section.settings.heading | default: 'منتجات مميزة' }}"
+      >
+        {%- for product in display_products limit: products_limit -%}
+          {%- assign first_image = product.featured_image -%}
+          {%- assign has_compare = false -%}
+          {%- if product.compare_at_price > product.price -%}
+            {%- assign has_compare = true -%}
+          {%- endif -%}
+          {%- assign is_available = product.available -%}
+
+          <div class="rattib-pcard" role="listitem">
+
+            <div class="rattib-pcard__image-wrap">
+              <a
+                href="{{ product.url }}"
+                aria-label="{{ product.title }}"
+                tabindex="0"
+              >
+                {%- if first_image -%}
+                  <img
+                    class="rattib-pcard__img"
+                    src="{{ first_image | image_url: width: 600 }}"
+                    alt="{{ first_image.alt | default: product.title | escape }}"
+                    width="600"
+                    height="600"
+                    loading="lazy"
+                    decoding="async"
+                  >
+                {%- else -%}
+                  {{ 'product-1' | placeholder_svg_tag: 'rattib-pcard__img' }}
+                {%- endif -%}
+              </a>
+
+              <div class="rattib-pcard__badges">
+                {%- if product.tags contains 'bestseller' or product.tags contains 'الأكثر مبيعاً' -%}
+                  <span class="rattib-badge rattib-badge--bestseller">الأكثر مبيعًا</span>
+                {%- endif -%}
+                {%- if has_compare -%}
+                  {%- assign discount_pct = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
+                  <span class="rattib-badge rattib-badge--available">خصم {{ discount_pct }}٪</span>
+                {%- endif -%}
+                {%- unless is_available -%}
+                  <span class="rattib-badge" style="background:#999;color:#fff;">نفد المخزون</span>
+                {%- endunless -%}
+              </div>
+            </div>
+
+            <div class="rattib-pcard__body">
+
+              <div class="rattib-pcard__inline-badges">
+                {%- if is_available -%}
+                  <span class="rattib-badge rattib-badge--available">متوفر ✓</span>
+                {%- endif -%}
+                {%- if product.tags contains 'free-shipping' or product.tags contains 'شحن مجاني' -%}
+                  <span class="rattib-badge rattib-badge--shipping">شحن مجاني</span>
+                {%- endif -%}
+              </div>
+
+              <p class="rattib-pcard__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+              </p>
+
+              <div class="rattib-pcard__pricing">
+                <span class="rattib-pcard__price">
+                  {{- product.price | money_without_trailing_zeros -}} ر.س
+                </span>
+                {%- if has_compare -%}
+                  <span class="rattib-pcard__compare" aria-label="السعر الأصلي">
+                    {{- product.compare_at_price | money_without_trailing_zeros -}} ر.س
+                  </span>
+                {%- endif -%}
+              </div>
+
+              <span class="rattib-pcard__delivery-badge">يصلك خلال ٧–١٢ يوم</span>
+
+              <div class="rattib-pcard__spacer"></div>
+
+              {%- if is_available -%}
+                {%- assign first_variant = product.variants.first -%}
+                <button
+                  class="rattib-btn-primary rattib-atc-btn"
+                  data-product-id="{{ product.id }}"
+                  data-variant-id="{{ first_variant.id }}"
+                  aria-label="أضف {{ product.title }} إلى السلة"
+                  type="button"
+                >
+                  أضف إلى السلة
+                </button>
+              {%- else -%}
+                <button class="rattib-btn-primary" disabled type="button">
+                  نفد المخزون
+                </button>
+              {%- endif -%}
+
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+    {%- else -%}
+      <p style="text-align:center; color:#888; font-family:'IBM Plex Sans Arabic',sans-serif; padding: 40px 0;">
+        لا توجد منتجات في هذه المجموعة حالياً.
+      </p>
+    {%- endif -%}
+
+    {%- if col_handle != blank and collections[col_handle].products_count > products_limit -%}
+      <div class="rattib-featured__footer">
+        <a
+          href="{{ collections[col_handle].url }}"
+          class="rattib-featured__more-btn"
+          aria-label="عرضي المزيد من المنتجات"
+        >
+          عرضي المزيد
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+  (function () {
+    'use strict';
+
+    document.querySelectorAll('.rattib-atc-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var variantId = this.dataset.variantId;
+        if (!variantId) return;
+
+        var self = this;
+        self.disabled = true;
+        self.textContent = 'جاري الإضافة…';
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ id: variantId, quantity: 1 })
+        })
+          .then(function (res) { return res.json(); })
+          .then(function () {
+            self.textContent = '✓ تمت الإضافة';
+            self.style.background = '#4dae7c';
+            document.dispatchEvent(new CustomEvent('rattib:cart:updated'));
+            setTimeout(function () {
+              self.disabled = false;
+              self.textContent = 'أضف إلى السلة';
+              self.style.background = '';
+            }, 2200);
+          })
+          .catch(function () {
+            self.disabled = false;
+            self.textContent = 'أضف إلى السلة';
+          });
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "منتجات مميزة",
+  "tag": "section",
+  "class": "rattib-section-featured-products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "عنوان القسم",
+      "default": "منتجاتنا المميزة"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "المجموعة"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "عدد المنتجات",
+      "min": 2,
+      "max": 24,
+      "step": 2,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "منتجات مميزة"
+    }
+  ]
+}
+{% endschema %}

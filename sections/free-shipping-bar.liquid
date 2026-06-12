@@ -1,0 +1,202 @@
+{% comment %}
+  RATTIB – Free Shipping Progress Bar
+  FILE: sections/free-shipping-bar.liquid
+  Sticky top banner – RTL Arabic
+{% endcomment %}
+
+{%- assign threshold_riyals = section.settings.threshold | default: 199 -%}
+{%- assign threshold_cents  = threshold_riyals | times: 100 -%}
+{%- assign cart_cents       = cart.total_price | default: 0 -%}
+{%- assign cart_riyals      = cart_cents | divided_by: 100.0 -%}
+
+{%- if cart_cents >= threshold_cents -%}
+  {%- assign shipping_reached  = true -%}
+  {%- assign progress_pct      = 100 -%}
+{%- else -%}
+  {%- assign shipping_reached  = false -%}
+  {%- assign remaining_riyals  = threshold_riyals | minus: cart_riyals | ceil -%}
+  {%- assign progress_pct      = cart_riyals | times: 100 | divided_by: threshold_riyals | round -%}
+  {%- if progress_pct > 100 -%}{%- assign progress_pct = 100 -%}{%- endif -%}
+{%- endif -%}
+
+<style>
+  .rattib-shipping-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--rattib-success-soft, #e2f3e8);
+    padding: 9px 20px;
+    direction: rtl;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(77, 174, 124, 0.12);
+  }
+
+  .rattib-shipping-bar__inner {
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .rattib-shipping-bar__text {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #1e6b45;
+    line-height: 1.4;
+  }
+
+  .rattib-shipping-bar__text--reached {
+    color: #155c37;
+    font-size: 14px;
+  }
+
+  .rattib-shipping-bar__track {
+    width: 100%;
+    max-width: 380px;
+    height: 6px;
+    background: rgba(255,255,255,0.75);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .rattib-shipping-bar__fill {
+    height: 100%;
+    background: var(--rattib-success, #4dae7c);
+    border-radius: 99px;
+    transition: width 0.5s ease;
+    width: {{ progress_pct }}%;
+  }
+
+  @media (min-width: 640px) {
+    .rattib-shipping-bar__inner {
+      flex-direction: row;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .rattib-shipping-bar__track {
+      max-width: 260px;
+    }
+  }
+</style>
+
+<div
+  class="rattib-shipping-bar"
+  id="rattib-shipping-bar"
+  role="status"
+  aria-live="polite"
+  aria-atomic="true"
+  dir="rtl"
+>
+  <div class="rattib-shipping-bar__inner">
+
+    {%- if cart_cents == 0 -%}
+      <p class="rattib-shipping-bar__text">
+        🚚 شحن مجاني على الطلبات فوق {{ threshold_riyals }} ر.س
+      </p>
+      <div class="rattib-shipping-bar__track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div class="rattib-shipping-bar__fill" style="width:0%"></div>
+      </div>
+
+    {%- elsif shipping_reached -%}
+      <p class="rattib-shipping-bar__text rattib-shipping-bar__text--reached">
+        🎉 تهانينا! حصلتِ على شحن مجاني
+      </p>
+      <div class="rattib-shipping-bar__track" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="اكتملت">
+        <div class="rattib-shipping-bar__fill" style="width:100%"></div>
+      </div>
+
+    {%- else -%}
+      <p class="rattib-shipping-bar__text">
+        تحتاجين <strong>{{ remaining_riyals }} ر.س</strong> للحصول على شحن مجاني
+      </p>
+      <div
+        class="rattib-shipping-bar__track"
+        role="progressbar"
+        aria-valuenow="{{ progress_pct }}"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="تقدم الشحن المجاني {{ progress_pct }}٪"
+      >
+        <div class="rattib-shipping-bar__fill" style="width:{{ progress_pct }}%"></div>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    'use strict';
+
+    var threshold = {{ threshold_cents }};
+
+    function updateShippingBar(cartTotal) {
+      var bar       = document.getElementById('rattib-shipping-bar');
+      if (!bar) return;
+
+      var fill      = bar.querySelector('.rattib-shipping-bar__fill');
+      var track     = bar.querySelector('.rattib-shipping-bar__track');
+      var textEl    = bar.querySelector('.rattib-shipping-bar__text');
+
+      var thresholdRiyals = {{ threshold_riyals }};
+      var cartRiyals      = cartTotal / 100;
+      var pct             = Math.min(Math.round((cartRiyals / thresholdRiyals) * 100), 100);
+      var remaining       = Math.ceil(thresholdRiyals - cartRiyals);
+
+      if (fill) fill.style.width = pct + '%';
+      if (track) {
+        track.setAttribute('aria-valuenow', pct);
+      }
+
+      if (!textEl) return;
+
+      if (cartTotal === 0) {
+        textEl.className = 'rattib-shipping-bar__text';
+        textEl.innerHTML = '🚚 شحن مجاني على الطلبات فوق ' + thresholdRiyals + ' ر.س';
+      } else if (cartTotal >= threshold) {
+        textEl.className = 'rattib-shipping-bar__text rattib-shipping-bar__text--reached';
+        textEl.innerHTML = '🎉 تهانينا! حصلتِ على شحن مجاني';
+      } else {
+        textEl.className = 'rattib-shipping-bar__text';
+        textEl.innerHTML = 'تحتاجين <strong>' + remaining + ' ر.س</strong> للحصول على شحن مجاني';
+      }
+    }
+
+    function fetchAndUpdate() {
+      fetch('/cart.js', { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (data) { updateShippingBar(data.total_price); })
+        .catch(function () {});
+    }
+
+    document.addEventListener('rattib:cart:updated', fetchAndUpdate);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "شريط الشحن المجاني",
+  "tag": "div",
+  "class": "rattib-section-shipping-bar",
+  "settings": [
+    {
+      "type": "range",
+      "id": "threshold",
+      "label": "حد الشحن المجاني (ر.س)",
+      "min": 50,
+      "max": 500,
+      "step": 10,
+      "default": 199
+    }
+  ],
+  "presets": [
+    {
+      "name": "شريط الشحن المجاني"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,70 @@
+{% comment %}
+  RATTIB – Reusable Badge Snippet
+  FILE: snippets/badge.liquid
+
+  Usage:
+    {% render 'badge', badge_type: 'available' %}
+    {% render 'badge', badge_type: 'shipping', badge_text: 'شحن مجاني على طلبك' %}
+    {% render 'badge', badge_type: 'bestseller' %}
+    {% render 'badge', badge_type: 'delivery' %}
+    {% render 'badge', badge_type: 'discount', badge_text: 'خصم ٣٠٪' %}
+
+  Variables:
+    badge_type  – 'available' | 'shipping' | 'discount' | 'delivery' | 'bestseller'
+    badge_text  – optional text override (falls back to per-type default)
+{% endcomment %}
+
+{%- liquid
+  case badge_type
+    when 'available'
+      assign bg_color   = '#4DAE7C'
+      assign txt_color  = '#ffffff'
+      assign default_text = 'متوفر ✓'
+    when 'shipping'
+      assign bg_color   = '#E2F3E8'
+      assign txt_color  = '#2E7D54'
+      assign default_text = 'شحن مجاني'
+    when 'discount'
+      assign bg_color   = '#4DAE7C'
+      assign txt_color  = '#ffffff'
+      assign default_text = 'خصم ٢٠٪'
+    when 'delivery'
+      assign bg_color   = '#DDF3F1'
+      assign txt_color  = '#2E8F8A'
+      assign default_text = 'يصلك خلال ٧–١٢ يوم'
+    when 'bestseller'
+      assign bg_color   = '#5BC4BE'
+      assign txt_color  = '#ffffff'
+      assign default_text = 'الأكثر مبيعًا'
+    else
+      assign bg_color   = '#5BC4BE'
+      assign txt_color  = '#ffffff'
+      assign default_text = badge_type
+  endcase
+
+  if badge_text != blank
+    assign label = badge_text
+  else
+    assign label = default_text
+  endif
+-%}
+
+<span
+  class="rattib-badge rattib-badge--{{ badge_type | escape }}"
+  style="
+    display: inline-block;
+    background: {{ bg_color }};
+    color: {{ txt_color }};
+    border-radius: 99px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    line-height: 1.6;
+    white-space: nowrap;
+    direction: rtl;
+  "
+  aria-label="{{ label }}"
+>
+  {{- label -}}
+</span>
