@@ -1,11 +1,18 @@
 {
   "sections": {
+    "main-cart-items": {
+      "type": "main-cart-items",
+      "settings": {}
+    },
     "cart-drawer": {
       "type": "cart-drawer",
-      "settings": {}
+      "settings": {
+        "free_shipping_threshold": 199
+      }
     }
   },
   "order": [
+    "main-cart-items",
     "cart-drawer"
   ]
 }

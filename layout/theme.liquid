@@ -1,39 +1,44 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html dir="rtl" lang="ar" class="no-js">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#5BC4BE">
 
   <title>
-    {%- if template == 'index' -%}
-      {{ shop.name }} — {{ settings.footer_tagline | default: 'بيتك مرتب… حياتك أسهل' }}
-    {%- elsif page_title -%}
-      {{ page_title }} — {{ shop.name }}
+    {%- if page_title == blank -%}
+      {{ shop.name }} {{ settings.meta_title_suffix }}
     {%- else -%}
-      {{ shop.name }}
+      {{ page_title }} {{ settings.meta_title_suffix }}
     {%- endif -%}
   </title>
 
   {%- if page_description -%}
     <meta name="description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta name="description" content="{{ settings.meta_description_default | escape }}">
   {%- endif -%}
 
-  <!-- Canonical & OG -->
-  <link rel="canonical" href="{{ canonical_url }}">
+  <!-- Open Graph -->
   <meta property="og:site_name" content="{{ shop.name }}">
   <meta property="og:url" content="{{ canonical_url }}">
   <meta property="og:title" content="{{ page_title | default: shop.name }}">
+  <meta property="og:type" content="website">
   {%- if page_description -%}
     <meta property="og:description" content="{{ page_description | escape }}">
   {%- endif -%}
-  <meta property="og:type" content="website">
+  {%- if settings.share_image -%}
+    <meta property="og:image" content="{{ settings.share_image | image_url: width: 1200 }}">
+  {%- endif -%}
 
-  <!-- Preconnect for performance -->
+  <!-- Canonical -->
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Google Fonts: Tajawal (headings) + IBM Plex Sans Arabic (body) -->
+  <!-- Google Fonts: Tajawal + IBM Plex Sans Arabic -->
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet">
 
   <!-- Theme CSS -->
@@ -42,275 +47,330 @@
   <!-- Shopify Required -->
   {{ content_for_header }}
 
-  <!-- Inline critical CSS variables from settings -->
+  <!-- Inline CSS Variables from Theme Settings -->
   <style>
     :root {
-      --rattib-aqua:        {{ settings.color_primary | default: '#5BC4BE' }};
-      --rattib-aqua-deep:   {{ settings.color_primary_deep | default: '#2E8F8A' }};
-      --rattib-aqua-soft:   {{ settings.color_primary_soft | default: '#DDF3F1' }};
-      --rattib-charcoal:    {{ settings.color_charcoal | default: '#262B2B' }};
-      --rattib-gray:        {{ settings.color_gray | default: '#F4F6F6' }};
-      --rattib-success:     {{ settings.color_success | default: '#4DAE7C' }};
-      --rattib-success-soft:{{ settings.color_success_soft | default: '#E2F3E8' }};
-      --rattib-rating:      {{ settings.color_rating | default: '#F2B53D' }};
-      --max-width:          {{ settings.max_width | default: 680 }}px;
-      --spacing-section:    {{ settings.spacing_section | default: 52 }}px;
-      --spacing-card-gap:   {{ settings.spacing_card_gap | default: 10 }}px;
-      --font-heading:       '{{ settings.font_heading | default: 'Tajawal' }}', sans-serif;
-      --font-body:          '{{ settings.font_body | default: 'IBM Plex Sans Arabic' }}', sans-serif;
+      --rattib-aqua:         {{ settings.color_primary }};
+      --rattib-aqua-deep:    {{ settings.color_primary_deep }};
+      --rattib-aqua-soft:    {{ settings.color_primary_soft }};
+      --rattib-charcoal:     {{ settings.color_charcoal }};
+      --rattib-gray:         {{ settings.color_gray }};
+      --rattib-white:        {{ settings.color_white }};
+      --rattib-success:      {{ settings.color_success }};
+      --rattib-success-soft: {{ settings.color_success_soft }};
+      --rattib-rating:       {{ settings.color_rating }};
+      --color-text:          {{ settings.color_text_primary }};
+      --color-text-secondary:{{ settings.color_text_secondary }};
+      --color-price:         {{ settings.color_price }};
+      --color-bg:            {{ settings.color_bg_body }};
+      --color-bg-card:       {{ settings.color_bg_card }};
+      --color-border:        {{ settings.color_border_card }};
+      --font-heading:        {{ settings.font_heading }}, sans-serif;
+      --font-body:           {{ settings.font_body }}, sans-serif;
+      --font-size-base:      {{ settings.font_size_base }}px;
+      --max-width:           {{ settings.max_width }}px;
+      --spacing-section:     {{ settings.spacing_section }}px;
+      --spacing-card-gap:    {{ settings.spacing_card_gap }}px;
+      --radius-card:         {{ settings.radius_card }}px;
+      --radius-btn:          {{ settings.radius_btn }}px;
     }
   </style>
-</head>
 
-<body class="template-{{ template.name }}{% if customer %} customer-logged-in{% endif %}">
-
-  <!-- ═══════════════════════════════════════════
-       SKIP TO CONTENT (Accessibility)
-  ═══════════════════════════════════════════ -->
-  <a href="#main-content" class="sr-only skip-link">
-    {{- 'accessibility.skip_to_content' | t | default: 'تخطّي إلى المحتوى' -}}
-  </a>
-
-  <!-- ═══════════════════════════════════════════
-       FREE SHIPPING BAR (above header)
-  ═══════════════════════════════════════════ -->
-  {%- if settings.show_free_shipping_bar -%}
-    {%- render 'free-shipping-bar-inline' -%}
+  <!-- Analytics: Google Analytics 4 -->
+  {%- if settings.google_analytics_id != blank -%}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ settings.google_analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ settings.google_analytics_id }}');
+    </script>
   {%- endif -%}
 
-  <!-- ═══════════════════════════════════════════
-       SITE HEADER
-  ═══════════════════════════════════════════ -->
-  <header
-    class="site-header{% if settings.header_sticky %} site-header--sticky{% endif %}"
-    role="banner"
-    id="site-header"
-  >
-    <div class="container">
-      <div class="header-inner">
+  <!-- Analytics: Meta Pixel -->
+  {%- if settings.meta_pixel_id != blank -%}
+    <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '{{ settings.meta_pixel_id }}');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id={{ settings.meta_pixel_id }}&ev=PageView&noscript=1"/></noscript>
+  {%- endif -%}
 
-        <!-- Logo -->
-        <a href="{{ routes.root_url }}" class="header-logo" aria-label="{{ shop.name }}">
-          {%- if settings.logo -%}
-            {{
-              settings.logo
-              | image_url: width: 240
-              | image_tag:
-                loading: 'eager',
-                fetchpriority: 'high',
+  <!-- Analytics: TikTok Pixel -->
+  {%- if settings.tiktok_pixel_id != blank -%}
+    <script>
+      !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
+      ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
+      ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};
+      for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+      ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};
+      ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";
+      ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=i;ttq._t=ttq._t||{};ttq._t[e]=+new Date;
+      ttq._o=ttq._o||{};ttq._o[e]=n||{};var o=document.createElement("script");
+      o.type="text/javascript";o.async=!0;o.src=i+"?sdkid="+e+"&lib="+t;
+      var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+      ttq.load('{{ settings.tiktok_pixel_id }}');ttq.page()}(window,document,'ttq');
+    </script>
+  {%- endif -%}
+</head>
+
+<body class="template-{{ template.name | handle }}{% if customer %} customer-logged-in{% endif %}">
+  <a href="#main-content" class="visually-hidden">تخطي إلى المحتوى الرئيسي</a>
+
+  <!-- ── Site Header ─────────────────────────────────────── -->
+  <header class="site-header{% if settings.header_sticky %} site-header--sticky{% endif %}" id="site-header" role="banner">
+
+    <!-- Free Shipping Bar -->
+    {%- if settings.show_free_shipping_bar -%}
+      <div class="site-header__free-shipping" aria-label="عرض الشحن المجاني">
+        {{ settings.free_shipping_bar_text }}
+      </div>
+    {%- endif -%}
+
+    <!-- Main Header Row -->
+    <div class="site-header__main">
+
+      <!-- Logo -->
+      <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }} — الصفحة الرئيسية">
+        {%- if settings.logo -%}
+          {{
+            settings.logo
+            | image_url: width: settings.logo_width
+            | image_tag:
+                width: settings.logo_width,
                 alt: shop.name,
-                width: settings.logo_width | default: 100,
-                height: 'auto',
-                class: 'header-logo__img'
-            }}
-          {%- else -%}
-            {%- render 'icon-logo' -%}
-          {%- endif -%}
+                loading: 'eager',
+                fetchpriority: 'high'
+          }}
+        {%- else -%}
+          {%- render 'rattib-logo-svg' -%}
+        {%- endif -%}
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="site-header__nav" aria-label="التنقل الرئيسي">
+        {%- if linklists[settings.main_menu].links != blank -%}
+          {%- for link in linklists[settings.main_menu].links -%}
+            <a href="{{ link.url }}"
+               class="site-header__nav-link{% if link.active %} active{% endif %}"
+               {% if link.active %}aria-current="page"{% endif %}>
+              {{ link.title }}
+            </a>
+          {%- endfor -%}
+        {%- else -%}
+          <a href="/collections/تنظيم-المطبخ"  class="site-header__nav-link">🍳 تنظيم المطبخ</a>
+          <a href="/collections/تنظيم-الثلاجة"  class="site-header__nav-link">🧊 تنظيم الثلاجة</a>
+          <a href="/collections/تنظيم-الحمام"   class="site-header__nav-link">🛁 تنظيم الحمام</a>
+          <a href="/collections/الأدراج-والخزائن" class="site-header__nav-link">🗄️ الأدراج</a>
+          <a href="/collections/غرفة-الغسيل"    class="site-header__nav-link">🧺 الغسيل</a>
+          <a href="/collections/غرف-الأطفال"    class="site-header__nav-link">🧸 الأطفال</a>
+        {%- endif -%}
+      </nav>
+
+      <!-- Actions -->
+      <div class="site-header__actions" role="group" aria-label="إجراءات الحساب والسلة">
+
+        <!-- Search -->
+        {%- if settings.header_show_search -%}
+          <a href="{{ routes.search_url }}" class="site-header__action-btn" aria-label="البحث">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        <!-- Account -->
+        {%- if settings.header_show_account -%}
+          <a href="{{ routes.account_url }}" class="site-header__action-btn" aria-label="{%- if customer -%}حسابي{%- else -%}تسجيل الدخول{%- endif -%}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
+        <!-- Cart -->
+        <a href="{{ routes.cart_url }}" class="site-header__action-btn" aria-label="السلة ({{ cart.item_count }} منتج)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+          </svg>
+          <span class="site-header__cart-count" id="cart-count" data-count="{{ cart.item_count }}">
+            {%- if cart.item_count > 0 -%}{{ cart.item_count }}{%- endif -%}
+          </span>
         </a>
 
-        <!-- Desktop Navigation -->
-        <nav class="header-nav" aria-label="{{ 'navigation.main' | t | default: 'القائمة الرئيسية' }}">
-          <a href="/collections/kitchen" class="header-nav__link">🍳 تنظيم المطبخ</a>
-          <a href="/collections/fridge" class="header-nav__link">🧊 تنظيم الثلاجة</a>
-          <a href="/collections/bathroom" class="header-nav__link">🛁 الحمام</a>
-          <a href="/collections/drawers-closets" class="header-nav__link">🗄️ الأدراج والخزائن</a>
-          <a href="/collections/laundry" class="header-nav__link">🧺 الغسيل</a>
-          <a href="/collections/kids" class="header-nav__link">🧸 غرف الأطفال</a>
-        </nav>
-
-        <!-- Header Actions -->
-        <div class="header-actions">
-
-          <!-- Search -->
-          {%- if settings.show_search_icon -%}
-            <a href="{{ routes.search_url }}" class="header-icon-btn" aria-label="{{ 'search.title' | t | default: 'بحث' }}">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-            </a>
-          {%- endif -%}
-
-          <!-- Account -->
-          <a
-            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-            class="header-icon-btn"
-            aria-label="{%- if customer -%}{{ 'account.my_account' | t | default: 'حسابي' }}{%- else -%}{{ 'account.login' | t | default: 'تسجيل الدخول' }}{%- endif -%}"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-          </a>
-
-          <!-- Cart -->
-          <a href="{{ routes.cart_url }}" class="header-icon-btn" aria-label="{{ 'cart.title' | t | default: 'السلة' }} ({{ cart.item_count }})">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <path d="M16 10a4 4 0 0 1-8 0"></path>
-            </svg>
-            {%- if cart.item_count > 0 -%}
-              <span class="cart-count" aria-live="polite">{{ cart.item_count }}</span>
-            {%- endif -%}
-          </a>
-
-        </div><!-- /.header-actions -->
-
-      </div><!-- /.header-inner -->
-    </div><!-- /.container -->
+      </div><!-- /.site-header__actions -->
+    </div><!-- /.site-header__main -->
   </header>
 
-  <!-- ═══════════════════════════════════════════
-       MAIN CONTENT
-  ═══════════════════════════════════════════ -->
+  <!-- ── Main Content ────────────────────────────────────── -->
   <main id="main-content" role="main" tabindex="-1">
     {{ content_for_layout }}
   </main>
 
-  <!-- ═══════════════════════════════════════════
-       SITE FOOTER
-  ═══════════════════════════════════════════ -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-inner">
+  <!-- ── Site Footer ────────────────────────────────────── -->
+  <footer class="site-footer" role="contentinfo" aria-label="تذييل الصفحة">
+    <div class="site-footer__inner">
+      <div class="site-footer__top">
 
         <!-- Brand Column -->
-        <div class="footer-brand">
-          <div class="footer-brand__logo" aria-label="{{ shop.name }}">
-            {%- render 'icon-logo-white' -%}
-          </div>
-          <p class="footer-brand__tagline">{{ settings.footer_tagline | default: 'بيتك مرتب… حياتك أسهل' }}</p>
-          {%- if settings.footer_about -%}
-            <div class="footer-brand__about">{{ settings.footer_about }}</div>
+        <div class="site-footer__brand">
+          <a href="{{ routes.root_url }}" class="site-footer__logo" aria-label="{{ shop.name }}">
+            {%- render 'rattib-logo-svg', inverted: true -%}
+          </a>
+          {%- if settings.footer_tagline != blank -%}
+            <p class="site-footer__tagline">{{ settings.footer_tagline }}</p>
+          {%- endif -%}
+          {%- if settings.footer_about != blank -%}
+            <div class="site-footer__about">{{ settings.footer_about }}</div>
           {%- endif -%}
 
           <!-- Social Links -->
-          <div class="social-links" style="margin-top:16px;">
+          <div class="site-footer__social" aria-label="وسائل التواصل الاجتماعي">
             {%- if settings.social_instagram != blank -%}
-              <a href="{{ settings.social_instagram }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="إنستقرام">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              <a href="{{ settings.social_instagram }}" class="site-footer__social-link" target="_blank" rel="noopener" aria-label="إنستغرام">
+                📷
               </a>
             {%- endif -%}
             {%- if settings.social_tiktok != blank -%}
-              <a href="{{ settings.social_tiktok }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="تيك توك">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.77 1.5V6.73a4.85 4.85 0 0 1-1-.04z"/></svg>
+              <a href="{{ settings.social_tiktok }}" class="site-footer__social-link" target="_blank" rel="noopener" aria-label="تيك توك">
+                🎵
               </a>
             {%- endif -%}
             {%- if settings.social_twitter != blank -%}
-              <a href="{{ settings.social_twitter }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="تويتر / X">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.736l7.737-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              <a href="{{ settings.social_twitter }}" class="site-footer__social-link" target="_blank" rel="noopener" aria-label="تويتر">
+                𝕏
               </a>
             {%- endif -%}
             {%- if settings.social_snapchat != blank -%}
-              <a href="{{ settings.social_snapchat }}" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="سناب شات">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.01 2C9.19 2 7 4.17 7 6.97v.59l-.72-.12C5.81 7.3 5.38 7.7 5.38 8.3c0 .48.32.88.77 1.02.12.04.25.06.37.06l-.09.18c-.42.86-1.07 1.4-1.07 2.24 0 .9.68 1.62 1.55 1.62.11 0 .22-.01.33-.04-.5 1.17-1.33 1.63-1.33 2.62 0 1.2 1.12 1.5 2.49 1.77.2.04.37.25.46.54.16.5.58.69.99.69.36 0 .73-.13 1.02-.31.28-.17.61-.27.96-.27.35 0 .68.1.96.27.3.18.67.31 1.03.31.41 0 .83-.19.99-.69.09-.29.26-.5.46-.54 1.37-.27 2.49-.57 2.49-1.77 0-.99-.83-1.45-1.33-2.62.11.03.22.04.33.04.87 0 1.55-.72 1.55-1.62 0-.84-.65-1.38-1.07-2.24l-.09-.18c.12 0 .25-.02.37-.06.45-.14.77-.54.77-1.02 0-.6-.43-1-1-.86l-.72.12v-.59C17 4.17 14.81 2 12.01 2z"/></svg>
+              <a href="{{ settings.social_snapchat }}" class="site-footer__social-link" target="_blank" rel="noopener" aria-label="سناب شات">
+                👻
               </a>
             {%- endif -%}
           </div>
         </div>
 
-        <!-- Categories Column -->
-        <div class="footer-col">
-          <h3 class="footer-col__title">تسوّقي</h3>
-          <nav class="footer-links" aria-label="تسوّقي">
-            <a href="/collections/kitchen">تنظيم المطبخ</a>
-            <a href="/collections/fridge">تنظيم الثلاجة</a>
-            <a href="/collections/bathroom">تنظيم الحمام</a>
-            <a href="/collections/drawers-closets">الأدراج والخزائن</a>
-            <a href="/collections/laundry">غرفة الغسيل</a>
-            <a href="/collections/kids">غرف الأطفال</a>
-          </nav>
-        </div>
-
-        <!-- Help Column -->
-        <div class="footer-col">
-          <h3 class="footer-col__title">المساعدة</h3>
-          <nav class="footer-links" aria-label="المساعدة">
-            <a href="/pages/about">عن رتّب</a>
-            <a href="/pages/faq">الأسئلة الشائعة</a>
-            <a href="/pages/shipping-policy">سياسة الشحن</a>
-            <a href="/pages/refund-policy">سياسة الإرجاع</a>
-            <a href="/pages/privacy-policy">سياسة الخصوصية</a>
-            <a href="/pages/contact">تواصلي معنا</a>
-          </nav>
-        </div>
-
-      </div><!-- /.footer-inner -->
-
-      <!-- Payment Methods -->
-      {%- if settings.footer_show_payment or settings.show_payment_icons -%}
-        <div class="footer-payment">
-          <p class="footer-payment__label">وسائل الدفع المتاحة</p>
-          <div class="footer-payment__methods">
-            <span class="footer-payment-badge">مدى</span>
-            <span class="footer-payment-badge">Apple Pay</span>
-            <span class="footer-payment-badge">تابي</span>
-            <span class="footer-payment-badge">تمارا</span>
-            <span class="footer-payment-badge">STC Pay</span>
-            <span class="footer-payment-badge">Visa</span>
-            <span class="footer-payment-badge">Mastercard</span>
+        <!-- Links Column -->
+        {%- if linklists[settings.footer_menu].links != blank -%}
+          <div class="site-footer__links-col">
+            <p class="site-footer__links-title">روابط سريعة</p>
+            <ul class="site-footer__links" role="list">
+              {%- for link in linklists[settings.footer_menu].links -%}
+                <li>
+                  <a href="{{ link.url }}" class="site-footer__link">{{ link.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
           </div>
-        </div>
-      {%- endif -%}
+        {%- else -%}
+          <div class="site-footer__links-col">
+            <p class="site-footer__links-title">روابط سريعة</p>
+            <ul class="site-footer__links" role="list">
+              <li><a href="{{ routes.root_url }}"           class="site-footer__link">الرئيسية</a></li>
+              <li><a href="{{ routes.all_products_collection_url }}" class="site-footer__link">جميع المنتجات</a></li>
+              <li><a href="/pages/about"                    class="site-footer__link">من نحن</a></li>
+              <li><a href="/pages/shipping-policy"          class="site-footer__link">سياسة الشحن</a></li>
+              <li><a href="/pages/refund-policy"            class="site-footer__link">سياسة الإرجاع</a></li>
+              <li><a href="/pages/contact"                  class="site-footer__link">تواصلي معنا</a></li>
+            </ul>
+          </div>
+        {%- endif -%}
 
-      <!-- Copyright -->
-      <p class="footer-copyright">
-        {{ settings.footer_copyright | default: '© 2025 رتّب. جميع الحقوق محفوظة.' }}
-      </p>
+      </div><!-- /.site-footer__top -->
 
-    </div><!-- /.container -->
+      <hr class="site-footer__divider">
+
+      <!-- Footer Bottom -->
+      <div class="site-footer__bottom">
+        <p class="site-footer__copyright">{{ settings.footer_copyright }}</p>
+
+        {%- if settings.footer_show_payment -%}
+          <div class="site-footer__payment" aria-label="طرق الدفع المقبولة">
+            <span class="site-footer__payment-label">ادفعي بـ:</span>
+            <span class="payment-icon">مدى</span>
+            <span class="payment-icon">Visa</span>
+            <span class="payment-icon">Mastercard</span>
+            <span class="payment-icon">Apple Pay</span>
+            <span class="payment-icon">STC Pay</span>
+            <span class="payment-icon">Tabby</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div><!-- /.site-footer__inner -->
   </footer>
 
-  <!-- ═══════════════════════════════════════════
-       MOBILE BOTTOM NAVIGATION BAR
-  ═══════════════════════════════════════════ -->
-  <nav class="mobile-bottom-nav" aria-label="{{ 'navigation.mobile' | t | default: 'قائمة الهاتف' }}">
-    <a href="{{ routes.root_url }}" class="mobile-bottom-nav__item{% if template.name == 'index' %} active{% endif %}" aria-label="{{ 'navigation.home' | t | default: 'الرئيسية' }}">
-      <span class="mobile-bottom-nav__icon" aria-hidden="true">🏠</span>
-      <span class="mobile-bottom-nav__label">الرئيسية</span>
+  <!-- ── Mobile Bottom Navigation Bar ──────────────────── -->
+  <nav class="mobile-nav" aria-label="التنقل السريع">
+    <a href="{{ routes.root_url }}"
+       class="mobile-nav__item{% if template.name == 'index' %} active{% endif %}"
+       aria-label="الرئيسية"
+       {% if template.name == 'index' %}aria-current="page"{% endif %}>
+      <span class="mobile-nav__icon" aria-hidden="true">🏠</span>
+      <span class="mobile-nav__label">الرئيسية</span>
     </a>
-    <a href="{{ routes.search_url }}" class="mobile-bottom-nav__item{% if template.name == 'search' %} active{% endif %}" aria-label="{{ 'search.title' | t | default: 'بحث' }}">
-      <span class="mobile-bottom-nav__icon" aria-hidden="true">🔍</span>
-      <span class="mobile-bottom-nav__label">بحث</span>
+
+    <a href="{{ routes.search_url }}"
+       class="mobile-nav__item{% if template.name == 'search' %} active{% endif %}"
+       aria-label="البحث"
+       {% if template.name == 'search' %}aria-current="page"{% endif %}>
+      <span class="mobile-nav__icon" aria-hidden="true">🔍</span>
+      <span class="mobile-nav__label">البحث</span>
     </a>
-    <a href="{{ routes.cart_url }}" class="mobile-bottom-nav__item{% if template.name == 'cart' %} active{% endif %}" aria-label="{{ 'cart.title' | t | default: 'السلة' }}">
-      <span class="mobile-bottom-nav__cart-wrap">
-        <span class="mobile-bottom-nav__icon" aria-hidden="true">🛒</span>
-        {%- if cart.item_count > 0 -%}
-          <span class="cart-count" aria-live="polite" style="top:0;left:0;">{{ cart.item_count }}</span>
-        {%- endif -%}
-      </span>
-      <span class="mobile-bottom-nav__label">السلة</span>
+
+    <a href="{{ routes.cart_url }}"
+       class="mobile-nav__item{% if template.name == 'cart' %} active{% endif %}"
+       aria-label="السلة ({{ cart.item_count }} منتج)"
+       {% if template.name == 'cart' %}aria-current="page"{% endif %}>
+      <span class="mobile-nav__icon" aria-hidden="true">🛒</span>
+      <span class="mobile-nav__label">السلة</span>
+      {%- if cart.item_count > 0 -%}
+        <span class="mobile-nav__cart-badge" aria-hidden="true" data-count="{{ cart.item_count }}">{{ cart.item_count }}</span>
+      {%- endif -%}
     </a>
-    <a
-      href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
-      class="mobile-bottom-nav__item{% if template.name == 'customers/account' or template.name == 'customers/login' %} active{% endif %}"
-      aria-label="{{ 'account.title' | t | default: 'حسابي' }}"
-    >
-      <span class="mobile-bottom-nav__icon" aria-hidden="true">👤</span>
-      <span class="mobile-bottom-nav__label">حسابي</span>
+
+    <a href="{{ routes.account_url }}"
+       class="mobile-nav__item{% if template.name == 'customers/account' or template.name == 'customers/login' %} active{% endif %}"
+       aria-label="{%- if customer -%}حسابي{%- else -%}تسجيل الدخول{%- endif -%}">
+      <span class="mobile-nav__icon" aria-hidden="true">👤</span>
+      <span class="mobile-nav__label">{%- if customer -%}حسابي{%- else -%}دخول{%- endif -%}</span>
     </a>
   </nav>
 
-  <!-- ═══════════════════════════════════════════
-       SCRIPTS
-  ═══════════════════════════════════════════ -->
+  <!-- ── Scroll-to-top & Header Scroll Script ───────────── -->
   <script>
-    // Sticky header scroll effect
     (function () {
+      'use strict';
+
+      // Mark <html> as JS-enabled
+      document.documentElement.classList.remove('no-js');
+      document.documentElement.classList.add('js');
+
+      // Sticky header shadow on scroll
       var header = document.getElementById('site-header');
-      if (!header) return;
-      var lastY = 0;
-      window.addEventListener('scroll', function () {
-        var y = window.scrollY;
-        if (y > 40) {
-          header.classList.add('scrolled');
-        } else {
-          header.classList.remove('scrolled');
-        }
-        lastY = y;
-      }, { passive: true });
+      if (header) {
+        window.addEventListener('scroll', function () {
+          if (window.scrollY > 10) {
+            header.classList.add('site-header--scrolled');
+          } else {
+            header.classList.remove('site-header--scrolled');
+          }
+        }, { passive: true });
+      }
+
+      // Cart count live update helper (used by AJAX cart sections)
+      document.addEventListener('cart:updated', function (e) {
+        var count = e.detail && e.detail.itemCount !== undefined ? e.detail.itemCount : 0;
+        var countEls = document.querySelectorAll('[data-count]');
+        countEls.forEach(function (el) {
+          el.setAttribute('data-count', count);
+          el.textContent = count > 0 ? count : '';
+        });
+      });
     })();
   </script>
 

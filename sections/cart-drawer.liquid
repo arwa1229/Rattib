@@ -1,95 +1,1149 @@
-<section class="cart-drawer">
+{% comment %}
+  RATTIB – Cart Page Section
+  FILE: sections/cart-drawer.liquid
+  RTL Arabic-first | Tajawal + IBM Plex Sans Arabic
+  Full cart: items list, shipping progress, upsell, payment trust, checkout
+{% endcomment %}
 
-  {%- assign free_shipping_threshold = 199 -%}
-  {%- assign cart_total_sar = cart.total_price | divided_by: 100.0 -%}
-  {%- assign remaining = free_shipping_threshold | minus: cart_total_sar -%}
-  {%- assign progress_pct = cart_total_sar | divided_by: free_shipping_threshold | times: 100 | at_most: 100 -%}
+{%- assign threshold_riyals = 199 -%}
+{%- assign threshold_cents  = threshold_riyals | times: 100 -%}
+{%- assign cart_cents       = cart.total_price | default: 0 -%}
+{%- assign cart_riyals      = cart_cents | divided_by: 100.0 -%}
 
-  <!-- Free shipping progress bar -->
-  <div class="shipping-progress">
-    {%- if remaining > 0 -%}
-      <p class="shipping-progress__label">
-        🎉 باقي <strong>{{ remaining | ceil }} ر.س</strong> وتحصلين على شحن مجاني!
-      </p>
-    {%- else -%}
-      <p class="shipping-progress__label">✅ تهانيكِ! حصلتِ على شحن مجاني</p>
-    {%- endif -%}
-    <div class="shipping-progress__bar-track">
-      <div class="shipping-progress__bar-fill" style="width: {{ progress_pct }}%;"></div>
+{%- if cart_cents >= threshold_cents -%}
+  {%- assign shipping_reached = true -%}
+  {%- assign ship_progress    = 100 -%}
+{%- else -%}
+  {%- assign shipping_reached = false -%}
+  {%- assign ship_remaining   = threshold_riyals | minus: cart_riyals | ceil -%}
+  {%- assign ship_progress    = cart_riyals | times: 100 | divided_by: threshold_riyals | round -%}
+  {%- if ship_progress > 100 -%}{%- assign ship_progress = 100 -%}{%- endif -%}
+{%- endif -%}
+
+<style>
+  /* ─── Reset & Base ─── */
+  .rattib-cart-page {
+    direction: rtl;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    background: var(--rattib-white, #ffffff);
+    min-height: 60vh;
+    padding: 40px 0 80px;
+    color: var(--rattib-charcoal, #262B2B);
+  }
+
+  .rattib-cart-page__inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  .rattib-cart-page__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: flex-start;
+  }
+
+  @media (min-width: 900px) {
+    .rattib-cart-page__layout {
+      grid-template-columns: 1fr 360px;
+      padding: 0;
+    }
+  }
+
+  /* ─── Heading ─── */
+  .rattib-cart-page__heading {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: clamp(22px, 3vw, 30px);
+    color: var(--rattib-charcoal, #262B2B);
+    margin: 0 0 28px;
+    line-height: 1.2;
+  }
+
+  /* ─── Empty Cart ─── */
+  .rattib-cart-empty {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 80px 16px;
+    text-align: center;
+  }
+
+  .rattib-cart-empty__icon {
+    color: var(--rattib-aqua, #5BC4BE);
+    opacity: 0.65;
+  }
+
+  .rattib-cart-empty__title {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--rattib-charcoal, #262B2B);
+    margin: 0;
+  }
+
+  .rattib-cart-empty__sub {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .rattib-cart-empty__cta {
+    display: inline-block;
+    background: var(--rattib-aqua, #5BC4BE);
+    color: #fff;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 13px 36px;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    margin-top: 4px;
+  }
+
+  .rattib-cart-empty__cta:hover {
+    background: var(--rattib-aqua-deep, #2E8F8A);
+  }
+
+  /* ─── Shipping Progress Bar ─── */
+  .rattib-cart-ship-bar {
+    background: var(--rattib-success-soft, #E2F3E8);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rattib-cart-ship-bar__text {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: #1e6b45;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .rattib-cart-ship-bar__text--reached {
+    color: #155c37;
+  }
+
+  .rattib-cart-ship-bar__track {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 99px;
+    height: 7px;
+    overflow: hidden;
+  }
+
+  .rattib-cart-ship-bar__fill {
+    height: 100%;
+    background: var(--rattib-success, #4DAE7C);
+    border-radius: 99px;
+    transition: width 0.45s ease;
+    width: {{ ship_progress }}%;
+  }
+
+  /* ─── Cart Items List ─── */
+  .rattib-cart-items {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rattib-cart-item {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 14px;
+    padding: 18px 0;
+    border-bottom: 1px solid #eaefef;
+    align-items: flex-start;
+    transition: opacity 0.3s ease;
+  }
+
+  .rattib-cart-item:last-child {
+    border-bottom: none;
+  }
+
+  .rattib-cart-item__img-wrap {
+    background: var(--rattib-gray, #F4F6F6);
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .rattib-cart-item__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+  }
+
+  .rattib-cart-item__body {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .rattib-cart-item__title {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--rattib-charcoal, #262B2B);
+    text-decoration: none;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .rattib-cart-item__title:hover {
+    color: var(--rattib-aqua-deep, #2E8F8A);
+  }
+
+  .rattib-cart-item__variant {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #888;
+  }
+
+  .rattib-cart-item__bottom {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  /* Qty Controls */
+  .rattib-cart-item__qty-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1.5px solid #d1d8d8;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .rattib-cart-item__qty-btn {
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border: none;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--rattib-charcoal, #262B2B);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .rattib-cart-item__qty-btn:hover {
+    background: var(--rattib-aqua-soft, #DDF3F1);
+    color: var(--rattib-aqua-deep, #2E8F8A);
+  }
+
+  .rattib-cart-item__qty-input {
+    width: 34px;
+    height: 30px;
+    border: none;
+    border-right: 1.5px solid #d1d8d8;
+    border-left: 1.5px solid #d1d8d8;
+    text-align: center;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--rattib-charcoal, #262B2B);
+    background: #fff;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+
+  .rattib-cart-item__qty-input::-webkit-inner-spin-button,
+  .rattib-cart-item__qty-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .rattib-cart-item__price {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    color: var(--rattib-aqua-deep, #2E8F8A);
+    white-space: nowrap;
+  }
+
+  .rattib-cart-item__compare {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #aaa;
+    text-decoration: line-through;
+    white-space: nowrap;
+  }
+
+  .rattib-cart-item__remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #bfc8c8;
+    font-size: 20px;
+    line-height: 1;
+    padding: 2px 4px;
+    margin-right: auto;
+    margin-left: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background 0.15s;
+    flex-shrink: 0;
+  }
+
+  .rattib-cart-item__remove:hover {
+    color: #e55;
+    background: #fff0f0;
+  }
+
+  /* ─── Upsell Block ─── */
+  .rattib-cart-upsell {
+    background: var(--rattib-aqua-soft, #DDF3F1);
+    border-radius: 14px;
+    padding: 20px 18px;
+    margin-top: 28px;
+  }
+
+  .rattib-cart-upsell__heading {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--rattib-charcoal, #262B2B);
+    margin: 0 0 14px;
+  }
+
+  .rattib-cart-upsell__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  @media (min-width: 640px) {
+    .rattib-cart-upsell__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .rattib-cart-upsell-card {
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 4px rgba(46, 143, 138, 0.08);
+  }
+
+  .rattib-cart-upsell-card__img-wrap {
+    background: var(--rattib-gray, #F4F6F6);
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rattib-cart-upsell-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+    transition: transform 0.3s ease;
+  }
+
+  .rattib-cart-upsell-card:hover .rattib-cart-upsell-card__img {
+    transform: scale(1.04);
+  }
+
+  .rattib-cart-upsell-card__info {
+    padding: 8px 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+
+  .rattib-cart-upsell-card__title {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: var(--rattib-charcoal, #262B2B);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    line-height: 1.45;
+    text-decoration: none;
+  }
+
+  .rattib-cart-upsell-card__price {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: 13px;
+    color: var(--rattib-aqua-deep, #2E8F8A);
+  }
+
+  .rattib-cart-upsell-card__btn {
+    display: block;
+    width: 100%;
+    background: var(--rattib-aqua, #5BC4BE);
+    color: #fff;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 6px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s ease;
+    margin-top: auto;
+  }
+
+  .rattib-cart-upsell-card__btn:hover {
+    background: var(--rattib-aqua-deep, #2E8F8A);
+  }
+
+  /* ─── Summary Sidebar ─── */
+  .rattib-cart-summary {
+    position: sticky;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .rattib-cart-summary__box {
+    background: var(--rattib-gray, #F4F6F6);
+    border-radius: 14px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .rattib-cart-summary__title {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--rattib-charcoal, #262B2B);
+    margin: 0;
+  }
+
+  .rattib-cart-summary__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .rattib-cart-summary__label {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .rattib-cart-summary__value {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--rattib-charcoal, #262B2B);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .rattib-cart-summary__hr {
+    border: none;
+    border-top: 1px solid #dde3e3;
+    margin: 0;
+  }
+
+  .rattib-cart-summary__total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .rattib-cart-summary__total-label {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--rattib-charcoal, #262B2B);
+  }
+
+  .rattib-cart-summary__total-value {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    color: var(--rattib-aqua-deep, #2E8F8A);
+    white-space: nowrap;
+  }
+
+  .rattib-cart-summary__shipping-note {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 300;
+    font-size: 12px;
+    color: #888;
+    text-align: center;
+    margin: 0;
+  }
+
+  .rattib-cart-summary__checkout {
+    display: block;
+    width: 100%;
+    background: var(--rattib-aqua, #5BC4BE);
+    color: #fff;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s ease;
+    text-decoration: none;
+    box-sizing: border-box;
+  }
+
+  .rattib-cart-summary__checkout:hover {
+    background: var(--rattib-aqua-deep, #2E8F8A);
+  }
+
+  .rattib-cart-summary__continue {
+    display: block;
+    text-align: center;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--rattib-aqua-deep, #2E8F8A);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .rattib-cart-summary__continue:hover {
+    color: var(--rattib-aqua, #5BC4BE);
+  }
+
+  /* ─── Delivery Badge ─── */
+  .rattib-cart-delivery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--rattib-aqua-soft, #DDF3F1);
+    border-radius: 10px;
+    padding: 10px 16px;
+  }
+
+  .rattib-cart-delivery__text {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--rattib-aqua-deep, #2E8F8A);
+    margin: 0;
+  }
+
+  /* ─── Payment Trust ─── */
+  .rattib-cart-trust {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .rattib-cart-trust__label {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    color: #999;
+    margin: 0;
+    text-align: center;
+  }
+
+  .rattib-cart-trust__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .rattib-cart-trust__pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1.5px solid #d8e8e8;
+    border-radius: 8px;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    color: var(--rattib-charcoal, #262B2B);
+    padding: 5px 10px;
+    white-space: nowrap;
+    line-height: 1.4;
+  }
+
+  /* ─── Secure Note ─── */
+  .rattib-cart-secure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-weight: 400;
+    font-size: 11px;
+    color: #888;
+  }
+
+  .rattib-cart-secure__icon {
+    color: var(--rattib-success, #4DAE7C);
+    flex-shrink: 0;
+  }
+</style>
+
+<section
+  class="rattib-cart-page"
+  id="rattib-cart-section"
+  dir="rtl"
+  lang="ar"
+  aria-label="سلة المشتريات"
+>
+  <div class="rattib-cart-page__inner">
+    <div class="rattib-cart-page__layout">
+
+      {%- if cart.item_count == 0 -%}
+
+        {%- comment -%}── Empty Cart State ──{%- endcomment -%}
+        <div class="rattib-cart-empty" aria-live="polite" aria-atomic="true">
+          <div class="rattib-cart-empty__icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="1.4" width="72" height="72">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
+            </svg>
+          </div>
+          <h1 class="rattib-cart-empty__title">سلتك فارغة</h1>
+          <p class="rattib-cart-empty__sub">ابدئي التسوق وأضيفي منتجاتك المفضلة إلى السلة</p>
+          <a href="/collections/all" class="rattib-cart-empty__cta" aria-label="تصفح المنتجات">
+            تصفحي المنتجات
+          </a>
+        </div>
+
+      {%- else -%}
+
+        {%- comment -%}── Left: Main Cart ──{%- endcomment -%}
+        <div class="rattib-cart-main">
+
+          <h1 class="rattib-cart-page__heading">
+            سلتي
+            <span style="font-size:17px;font-weight:500;color:#888;">
+              ({{ cart.item_count }})
+            </span>
+          </h1>
+
+          {%- comment -%}── Shipping Progress Bar ──{%- endcomment -%}
+          <div
+            class="rattib-cart-ship-bar"
+            id="cart-ship-bar"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {%- if shipping_reached -%}
+              <p class="rattib-cart-ship-bar__text rattib-cart-ship-bar__text--reached" id="cart-ship-text">
+                🎉 تهانينا! حصلتِ على شحن مجاني
+              </p>
+            {%- else -%}
+              <p class="rattib-cart-ship-bar__text" id="cart-ship-text">
+                تحتاجين <strong>{{ ship_remaining }} ر.س</strong> للحصول على شحن مجاني
+              </p>
+            {%- endif -%}
+            <div
+              class="rattib-cart-ship-bar__track"
+              role="progressbar"
+              aria-valuenow="{{ ship_progress }}"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label="تقدم الشحن المجاني {{ ship_progress }}٪"
+            >
+              <div
+                class="rattib-cart-ship-bar__fill"
+                id="cart-ship-fill"
+                style="width:{{ ship_progress }}%"
+              ></div>
+            </div>
+          </div>
+
+          {%- comment -%}── Cart Items ──{%- endcomment -%}
+          <ul class="rattib-cart-items" role="list" aria-label="محتويات السلة">
+            {%- for item in cart.items -%}
+              {%- assign item_riyals = item.final_price | divided_by: 100.0 | floor -%}
+              {%- assign line_riyals = item.final_line_price | divided_by: 100.0 | floor -%}
+              {%- assign has_compare = false -%}
+              {%- if item.variant.compare_at_price > item.final_price -%}
+                {%- assign has_compare = true -%}
+                {%- assign compare_riyals = item.variant.compare_at_price | divided_by: 100.0 | floor -%}
+              {%- endif -%}
+
+              <li
+                class="rattib-cart-item"
+                data-key="{{ item.key }}"
+                role="listitem"
+              >
+                {%- comment -%} Image {%- endcomment -%}
+                <div class="rattib-cart-item__img-wrap">
+                  <a href="{{ item.url }}" aria-label="{{ item.product.title }}" tabindex="0">
+                    {%- if item.image -%}
+                      <img
+                        class="rattib-cart-item__img"
+                        src="{{ item.image | image_url: width: 200 }}"
+                        alt="{{ item.image.alt | default: item.product.title | escape }}"
+                        width="200"
+                        height="200"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag: 'rattib-cart-item__img' }}
+                    {%- endif -%}
+                  </a>
+                </div>
+
+                {%- comment -%} Body {%- endcomment -%}
+                <div class="rattib-cart-item__body">
+                  <a href="{{ item.url }}" class="rattib-cart-item__title">
+                    {{ item.product.title }}
+                  </a>
+
+                  {%- unless item.variant.title == 'Default Title' or item.variant.title == blank -%}
+                    <span class="rattib-cart-item__variant">{{ item.variant.title }}</span>
+                  {%- endunless -%}
+
+                  <div class="rattib-cart-item__bottom">
+                    {%- comment -%} Quantity Controls {%- endcomment -%}
+                    <div
+                      class="rattib-cart-item__qty-wrap"
+                      role="group"
+                      aria-label="الكمية لـ {{ item.product.title }}"
+                    >
+                      <button
+                        type="button"
+                        class="rattib-cart-item__qty-btn rattib-qty-minus"
+                        data-key="{{ item.key }}"
+                        aria-label="تقليل كمية {{ item.product.title }}"
+                      >−</button>
+                      <input
+                        type="number"
+                        class="rattib-cart-item__qty-input rattib-qty-input"
+                        value="{{ item.quantity }}"
+                        min="0"
+                        max="99"
+                        data-key="{{ item.key }}"
+                        aria-label="كمية {{ item.product.title }}"
+                      >
+                      <button
+                        type="button"
+                        class="rattib-cart-item__qty-btn rattib-qty-plus"
+                        data-key="{{ item.key }}"
+                        aria-label="زيادة كمية {{ item.product.title }}"
+                      >+</button>
+                    </div>
+
+                    {%- comment -%} Price {%- endcomment -%}
+                    <span
+                      class="rattib-cart-item__price rattib-item-price"
+                      data-unit-price="{{ item_riyals }}"
+                    >
+                      {{ line_riyals }} ر.س
+                    </span>
+
+                    {%- if has_compare -%}
+                      <s class="rattib-cart-item__compare">{{ compare_riyals }} ر.س</s>
+                    {%- endif -%}
+
+                    {%- comment -%} Remove {%- endcomment -%}
+                    <button
+                      type="button"
+                      class="rattib-cart-item__remove rattib-remove-item"
+                      data-key="{{ item.key }}"
+                      aria-label="حذف {{ item.product.title }} من السلة"
+                    >×</button>
+                  </div>
+                </div>
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          {%- comment -%}── In-Cart Upsell ──{%- endcomment -%}
+          {%- assign upsell_col = collections['upsell'] -%}
+          {%- if upsell_col == blank -%}
+            {%- assign upsell_col = collections.all -%}
+          {%- endif -%}
+
+          <div class="rattib-cart-upsell" aria-labelledby="upsell-heading">
+            <h2 class="rattib-cart-upsell__heading" id="upsell-heading">
+              قد يعجبك أيضاً
+            </h2>
+            <div class="rattib-cart-upsell__grid" role="list">
+              {%- for upsell_product in upsell_col.products limit: 3 -%}
+                {%- assign up_riyals = upsell_product.price | divided_by: 100.0 | floor -%}
+                {%- assign up_variant = upsell_product.variants.first -%}
+                <div class="rattib-cart-upsell-card" role="listitem">
+                  <div class="rattib-cart-upsell-card__img-wrap">
+                    <a href="{{ upsell_product.url }}" tabindex="0" aria-label="{{ upsell_product.title }}">
+                      {%- if upsell_product.featured_image -%}
+                        <img
+                          class="rattib-cart-upsell-card__img"
+                          src="{{ upsell_product.featured_image | image_url: width: 240 }}"
+                          alt="{{ upsell_product.featured_image.alt | default: upsell_product.title | escape }}"
+                          width="240"
+                          height="240"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        {{ 'product-1' | placeholder_svg_tag: 'rattib-cart-upsell-card__img' }}
+                      {%- endif -%}
+                    </a>
+                  </div>
+                  <div class="rattib-cart-upsell-card__info">
+                    <a href="{{ upsell_product.url }}" class="rattib-cart-upsell-card__title">
+                      {{ upsell_product.title }}
+                    </a>
+                    <span class="rattib-cart-upsell-card__price">{{ up_riyals }} ر.س</span>
+                    {%- if upsell_product.available -%}
+                      <button
+                        type="button"
+                        class="rattib-cart-upsell-card__btn rattib-upsell-atc"
+                        data-variant-id="{{ up_variant.id }}"
+                        aria-label="أضف {{ upsell_product.title }} إلى السلة"
+                      >
+                        أضف إلى السلة
+                      </button>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+
+        </div>
+
+        {%- comment -%}── Right: Summary Sidebar ──{%- endcomment -%}
+        <aside class="rattib-cart-summary" aria-label="ملخص الطلب">
+
+          {%- comment -%} Delivery Badge {%- endcomment -%}
+          <div class="rattib-cart-delivery">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                 stroke="#2E8F8A" stroke-width="1.8" width="18" height="18" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M8.25 18.75a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 0 1-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 0 0-3.213-9.193 2.056 2.056 0 0 0-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 0 0-10.026 0 1.106 1.106 0 0 0-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/>
+            </svg>
+            <p class="rattib-cart-delivery__text">يصلك خلال ٧–١٢ يوم</p>
+          </div>
+
+          {%- comment -%} Order Summary {%- endcomment -%}
+          <div class="rattib-cart-summary__box">
+            <h2 class="rattib-cart-summary__title">ملخص الطلب</h2>
+
+            <div class="rattib-cart-summary__row">
+              <span class="rattib-cart-summary__label">المجموع الفرعي</span>
+              <span
+                class="rattib-cart-summary__value"
+                id="cart-subtotal-display"
+              >
+                {{ cart_riyals | floor }} ر.س
+              </span>
+            </div>
+
+            <div class="rattib-cart-summary__row">
+              <span class="rattib-cart-summary__label">الشحن</span>
+              <span class="rattib-cart-summary__value" id="cart-shipping-display">
+                {%- if shipping_reached -%}
+                  مجاني 🎉
+                {%- else -%}
+                  يُحسب عند الدفع
+                {%- endif -%}
+              </span>
+            </div>
+
+            <hr class="rattib-cart-summary__hr" aria-hidden="true">
+
+            <div class="rattib-cart-summary__total-row">
+              <span class="rattib-cart-summary__total-label">الإجمالي</span>
+              <span
+                class="rattib-cart-summary__total-value"
+                id="cart-total-display"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {{ cart_riyals | floor }} ر.س
+              </span>
+            </div>
+
+            <p class="rattib-cart-summary__shipping-note">
+              الضرائب تُحسب عند إتمام الطلب
+            </p>
+
+            <a
+              href="/checkout"
+              class="rattib-cart-summary__checkout"
+              role="button"
+              aria-label="إتمام الطلب بشكل آمن"
+            >
+              🔒 إتمام الطلب
+            </a>
+
+            <a href="/collections/all" class="rattib-cart-summary__continue">
+              متابعة التسوق
+            </a>
+          </div>
+
+          {%- comment -%} Payment Trust Row {%- endcomment -%}
+          <div class="rattib-cart-trust">
+            <p class="rattib-cart-trust__label">طرق الدفع المتاحة</p>
+            <div class="rattib-cart-trust__row" role="list" aria-label="طرق الدفع المقبولة">
+              <span class="rattib-cart-trust__pill" role="listitem">مدى</span>
+              <span class="rattib-cart-trust__pill" role="listitem">Apple Pay</span>
+              <span class="rattib-cart-trust__pill" role="listitem">تابي</span>
+              <span class="rattib-cart-trust__pill" role="listitem">تمارا</span>
+              <span class="rattib-cart-trust__pill" role="listitem">STC Pay</span>
+            </div>
+          </div>
+
+          {%- comment -%} Secure Note {%- endcomment -%}
+          <div class="rattib-cart-secure">
+            <svg
+              class="rattib-cart-secure__icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              width="13"
+              height="13"
+              aria-hidden="true"
+            >
+              <path fill-rule="evenodd"
+                    d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3v-6.75a3 3 0 0 0-3-3v-3c0-2.9-2.35-5.25-5.25-5.25Zm3.75 8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"
+                    clip-rule="evenodd"/>
+            </svg>
+            دفع آمن ومشفر بالكامل
+          </div>
+
+        </aside>
+
+      {%- endif -%}
+
     </div>
   </div>
-
-  <!-- Cart items -->
-  {%- if cart.item_count > 0 -%}
-    <div style="display:flex; flex-direction:column; gap:12px;">
-      {%- for item in cart.items -%}
-        <div class="product-card" style="flex-direction:row; align-items:center; gap:12px; padding:12px;">
-          <img src="{{ item.image | img_url: '120x120', crop: 'center' }}" alt="{{ item.title | escape }}"
-               width="60" height="60" style="border-radius:10px; object-fit:cover; flex-shrink:0;">
-          <div style="flex:1;">
-            <p class="product-card__title">{{ item.product.title }}</p>
-            <p class="product-card__price">{{ item.price | money }} ر.س</p>
-          </div>
-          <span style="font-size:12px; color:#8A9695;">× {{ item.quantity }}</span>
-        </div>
-      {%- endfor -%}
-    </div>
-
-    <!-- Upsell card (first recommended product from related collection) -->
-    {%- assign upsell = recommendations.products | first -%}
-    {%- if upsell -%}
-      <div class="upsell-card">
-        <img class="upsell-card__image"
-             src="{{ upsell.featured_image | img_url: '120x120', crop: 'center' }}"
-             alt="{{ upsell.title | escape }}" width="60" height="60">
-        <div class="upsell-card__info">
-          <p class="upsell-card__title">{{ upsell.title }}</p>
-          <p class="upsell-card__price">{{ upsell.price | money }} ر.س</p>
-        </div>
-        <form action="/cart/add" method="post">
-          <input type="hidden" name="id" value="{{ upsell.variants.first.id }}">
-          <button type="submit" class="btn btn-primary" style="padding:8px 14px; font-size:13px;">
-            + أضف
-          </button>
-        </form>
-      </div>
-    {%- endif -%}
-
-    <!-- Checkout button -->
-    <a href="/checkout" class="btn btn-primary btn-full">
-      اشترِي الآن · {{ cart.total_price | money }} ر.س
-    </a>
-
-    <!-- Payment trust row -->
-    <div class="payment-trust">
-      <p class="payment-trust__label">ادفعي بأمان عبر</p>
-      <div class="payment-trust__logos">
-        <span>مدى</span>
-        <span>·</span>
-        <span>Apple Pay</span>
-        <span>·</span>
-        <span>تابي</span>
-        <span>·</span>
-        <span>تمارا</span>
-        <span>·</span>
-        <span>STC Pay</span>
-      </div>
-    </div>
-
-  {%- else -%}
-    <div style="text-align:center; padding:40px 16px; color:#8A9695;">
-      <p style="font-size:40px; margin-bottom:12px;">🛒</p>
-      <p style="font-family:'Tajawal',sans-serif; font-weight:700; font-size:16px; color:var(--rattib-charcoal);">سلتك فارغة</p>
-      <p style="font-size:14px; margin-top:6px;">ابدئي التسوق لإضافة منتجات</p>
-      <a href="/collections/all" class="btn btn-primary" style="margin-top:20px;">تسوّقي الآن</a>
-    </div>
-  {%- endif -%}
-
 </section>
+
+<script>
+  (function () {
+    'use strict';
+
+    var THRESHOLD_CENTS  = {{ threshold_cents }};
+    var THRESHOLD_RIYALS = {{ threshold_riyals }};
+
+    /* ─── DOM refs (grabbed lazily) ─── */
+    function $id(id) { return document.getElementById(id); }
+
+    /* ─── Update shipping progress bar ─── */
+    function updateShipBar(totalCents) {
+      var textEl = $id('cart-ship-text');
+      var fillEl = $id('cart-ship-fill');
+      var track  = document.querySelector('#cart-ship-bar .rattib-cart-ship-bar__track');
+      if (!fillEl) return;
+
+      var riyals    = totalCents / 100;
+      var pct       = Math.min(Math.round((riyals / THRESHOLD_RIYALS) * 100), 100);
+      var remaining = Math.ceil(THRESHOLD_RIYALS - riyals);
+
+      fillEl.style.width = pct + '%';
+      if (track) track.setAttribute('aria-valuenow', pct);
+
+      if (textEl) {
+        if (totalCents >= THRESHOLD_CENTS) {
+          textEl.classList.add('rattib-cart-ship-bar__text--reached');
+          textEl.innerHTML = '🎉 تهانينا! حصلتِ على شحن مجاني';
+        } else {
+          textEl.classList.remove('rattib-cart-ship-bar__text--reached');
+          textEl.innerHTML = 'تحتاجين <strong>' + remaining + ' ر.س</strong> للحصول على شحن مجاني';
+        }
+      }
+    }
+
+    /* ─── Update totals display ─── */
+    function updateTotals(totalCents) {
+      var riyals = Math.floor(totalCents / 100);
+      var label  = riyals + ' ر.س';
+      [$id('cart-subtotal-display'), $id('cart-total-display')].forEach(function (el) {
+        if (el) el.textContent = label;
+      });
+      var shipEl = $id('cart-shipping-display');
+      if (shipEl) {
+        shipEl.textContent = totalCents >= THRESHOLD_CENTS ? 'مجاني 🎉' : 'يُحسب عند الدفع';
+      }
+    }
+
+    /* ─── Ajax: change item quantity ─── */
+    function changeItem(key, qty) {
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ id: key, quantity: qty })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          updateShipBar(data.total_price);
+          updateTotals(data.total_price);
+          if (qty === 0) removeItemRow(key);
+          document.dispatchEvent(new CustomEvent('rattib:cart:updated', { detail: data }));
+        })
+        .catch(function (err) {
+          console.error('[RATTIB] cart change error:', err);
+        });
+    }
+
+    /* ─── Remove row from DOM ─── */
+    function removeItemRow(key) {
+      var row = document.querySelector('.rattib-cart-item[data-key="' + key + '"]');
+      if (row) {
+        row.style.opacity = '0';
+        row.style.transition = 'opacity 0.3s';
+        setTimeout(function () { row.remove(); }, 320);
+      }
+    }
+
+    /* ─── Qty minus ─── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.rattib-qty-minus');
+      if (!btn) return;
+      var key   = btn.dataset.key;
+      var input = document.querySelector('.rattib-qty-input[data-key="' + key + '"]');
+      if (!input) return;
+      var newVal = Math.max(0, parseInt(input.value, 10) - 1);
+      input.value = newVal;
+      changeItem(key, newVal);
+    });
+
+    /* ─── Qty plus ─── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.rattib-qty-plus');
+      if (!btn) return;
+      var key   = btn.dataset.key;
+      var input = document.querySelector('.rattib-qty-input[data-key="' + key + '"]');
+      if (!input) return;
+      var newVal = Math.min(99, parseInt(input.value, 10) + 1);
+      input.value = newVal;
+      changeItem(key, newVal);
+    });
+
+    /* ─── Input change ─── */
+    document.addEventListener('change', function (e) {
+      if (!e.target.classList.contains('rattib-qty-input')) return;
+      var key = e.target.dataset.key;
+      var qty = Math.max(0, Math.min(99, parseInt(e.target.value, 10) || 0));
+      e.target.value = qty;
+      changeItem(key, qty);
+    });
+
+    /* ─── Remove button ─── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.rattib-remove-item');
+      if (!btn) return;
+      changeItem(btn.dataset.key, 0);
+    });
+
+    /* ─── Upsell add-to-cart ─── */
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.rattib-upsell-atc');
+      if (!btn) return;
+      var vid = btn.dataset.variantId;
+      if (!vid) return;
+      var orig = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'جاري…';
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ id: vid, quantity: 1 })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function () {
+          return fetch('/cart.js', { headers: { Accept: 'application/json' } });
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          btn.textContent = '✓ تمت الإضافة';
+          btn.style.background = '#4DAE7C';
+          updateShipBar(data.total_price);
+          updateTotals(data.total_price);
+          document.dispatchEvent(new CustomEvent('rattib:cart:updated', { detail: data }));
+          setTimeout(function () {
+            btn.disabled = false;
+            btn.textContent = orig;
+            btn.style.background = '';
+          }, 2200);
+        })
+        .catch(function () {
+          btn.disabled = false;
+          btn.textContent = orig;
+        });
+    });
+
+    /* ─── Global cart updated event (from other sections) ─── */
+    document.addEventListener('rattib:cart:updated', function (e) {
+      if (e.detail && typeof e.detail.total_price !== 'undefined') {
+        updateShipBar(e.detail.total_price);
+        updateTotals(e.detail.total_price);
+      }
+    });
+
+  })();
+</script>
 
 {% schema %}
 {
-  "name": "سلة التسوق",
-  "settings": []
+  "name": "سلة المشتريات",
+  "tag": "section",
+  "class": "rattib-section-cart",
+  "settings": [],
+  "presets": [
+    {
+      "name": "سلة المشتريات"
+    }
+  ]
 }
 {% endschema %}

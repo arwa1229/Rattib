@@ -1,28 +1,47 @@
 {
   "general": {
     "password_page": { "login_form_heading": "أدخلي كلمة المرور" },
-    "meta": { "tags": "الوسوم", "page": "الصفحة" }
+    "meta": { "tags": "الوسوم", "page": "الصفحة" },
+    "cart": {
+      "title": "سلة التسوق",
+      "empty": "سلّتكِ فارغة — رتّبي بيتك الآن!",
+      "checkout": "إتمام الطلب",
+      "subtotal": "المجموع الجزئي",
+      "savings": "وفّرتِ",
+      "continue_shopping": "مواصلة التسوق",
+      "item_count": {
+        "one": "منتج واحد",
+        "other": "{{ count }} منتجات"
+      }
+    }
   },
   "products": {
     "product": {
-      "add_to_cart": "أضف إلى السلة",
+      "add_to_cart": "أضيفي إلى السلة",
       "buy_it_now": "اشترِي الآن",
       "sold_out": "نفذ المخزون",
       "unavailable": "غير متوفر",
       "on_sale": "خصم",
       "quantity": "الكمية",
-      "description": "الوصف"
+      "description": "الوصف",
+      "price": "السعر",
+      "regular_price": "السعر الأصلي",
+      "sale_price": "سعر الخصم",
+      "unit_price": "سعر الوحدة",
+      "choose_variant": "اختاري المقاس / اللون"
     },
     "general": {
       "vendor": "الماركة",
-      "sku": "الرقم التعريفي"
+      "sku": "الرقم التعريفي",
+      "reviews": "تقييمات",
+      "from_price_html": "يبدأ من"
     }
   },
   "cart": {
     "general": {
       "title": "سلة التسوق",
-      "empty": "سلتك فارغة",
-      "checkout": "إتمام الشراء",
+      "empty": "سلّتكِ فارغة — رتّبي بيتك الآن!",
+      "checkout": "إتمام الطلب",
       "subtotal": "المجموع الجزئي",
       "savings": "وفّرتِ",
       "continue_shopping": "مواصلة التسوق",
@@ -90,7 +109,64 @@
   },
   "sections": {
     "header": {
+      "search": "بحث",
+      "cart": "السلة",
+      "account": "حسابي",
       "cart_count": { "one": "منتج", "other": "منتجات" }
+    },
+    "free_shipping_bar": {
+      "progress_text": "أضيفي {{ remaining }} ر.س للحصول على شحن مجاني",
+      "success_text": "حصلتِ على شحن مجاني! 🎉"
+    },
+    "hero": {
+      "heading": "بيتك مرتب… حياتك أسهل",
+      "subheading": "اكتشفي أدوات التنظيم المنزلي الذكية",
+      "cta_primary": "تسوّقي الآن",
+      "cta_secondary": "تعرّفي علينا",
+      "delivery_badge": "يصلكِ خلال ٧–١٢ يوم"
+    },
+    "featured_products": {
+      "heading": "منتجات مميزة",
+      "view_all": "عرض الكل"
+    },
+    "category_grid": {
+      "heading": "تسوّقي حسب القسم"
     }
+  },
+  "badges": {
+    "available": "متوفر ✓",
+    "free_shipping": "شحن مجاني",
+    "discount": "خصم",
+    "delivery": "يصلكِ خلال ٧–١٢ يوم",
+    "bestseller": "الأكثر مبيعًا"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "search": "بحث",
+    "cart": "سلّتي",
+    "account": "حسابي",
+    "categories": "الأقسام",
+    "kitchen": "تنظيم المطبخ",
+    "fridge": "تنظيم الثلاجة",
+    "bathroom": "تنظيم الحمام",
+    "drawers_closets": "الأدراج والخزائن",
+    "laundry": "غرفة الغسيل",
+    "kids": "غرف الأطفال"
+  },
+  "footer": {
+    "tagline": "بيتك مرتب… حياتك أسهل",
+    "copyright": "© ٢٠٢٥ رتّب. جميع الحقوق محفوظة.",
+    "about": "رتّب — متجرك لمستلزمات التنظيم والترتيب",
+    "links_heading": "روابط سريعة",
+    "contact_heading": "تواصلي معنا",
+    "social_heading": "تابعينا"
+  },
+  "payment": {
+    "trust_label": "ادفعي بأمان عبر",
+    "mada": "مدى",
+    "apple_pay": "Apple Pay",
+    "tabby": "تابي",
+    "tamara": "تمارا",
+    "stc_pay": "STC Pay"
   }
 }

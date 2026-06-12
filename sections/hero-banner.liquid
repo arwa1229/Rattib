@@ -1,31 +1,210 @@
-<section class="hero-banner" style="padding-block: {{ section.settings.padding_top }}px {{ section.settings.padding_bottom }}px;">
+{%- liquid
+  assign heading = section.settings.heading | default: 'بيتك مرتب… حياتك أسهل'
+  assign subheading = section.settings.subheading | default: 'اكتشفي أجمل حلول التنظيم المنزلي المصممة خصيصًا لكِ — لأن بيتك المرتّب يبدأ من هنا.'
+  assign primary_label = section.settings.primary_button_label | default: 'رتّبي بيتك'
+  assign primary_url = section.settings.primary_button_url | default: '/collections/all'
+  assign secondary_label = section.settings.secondary_button_label | default: 'تسوّقي الآن'
+  assign secondary_url = section.settings.secondary_button_url | default: '/collections'
+  assign show_delivery = section.settings.show_delivery_badge
+  assign delivery_text = section.settings.delivery_badge_text | default: 'يصلكِ خلال ٧–١٢ يوم'
+-%}
+
+<section
+  class="hero-banner"
+  id="section-{{ section.id }}"
+  style="
+    {%- if section.settings.bg_color != blank -%}background: {{ section.settings.bg_color }};{%- endif -%}
+    {%- if section.settings.text_align != blank -%}text-align: {{ section.settings.text_align }};{%- endif -%}
+  "
+>
   <div class="container">
-    <p class="hero-banner__tagline">{{ section.settings.eyebrow }}</p>
-    <h1 class="hero-banner__heading">{{ section.settings.heading }}</h1>
-    <div class="hero-banner__actions">
-      <a href="{{ section.settings.primary_btn_url }}" class="btn btn-primary">
-        {{ section.settings.primary_btn_label }}
-      </a>
-      <a href="{{ section.settings.secondary_btn_url }}" class="btn btn-dark">
-        {{ section.settings.secondary_btn_label }}
-      </a>
-    </div>
-  </div>
+    <div class="hero-banner__inner">
+
+      <!-- Pre-title label -->
+      {%- if section.settings.pretitle != blank -%}
+        <p class="hero-banner__pretitle">
+          <span aria-hidden="true">✨</span>
+          {{ section.settings.pretitle }}
+        </p>
+      {%- endif -%}
+
+      <!-- Main heading H1 -->
+      <h1 class="hero-banner__title">
+        {%- assign words = heading | split: '…' -%}
+        {%- if words.size > 1 -%}
+          {{ words[0] }}…<span>{{ words[1] }}</span>
+        {%- else -%}
+          {{ heading }}
+        {%- endif -%}
+      </h1>
+
+      <!-- Subheading -->
+      {%- if subheading != blank -%}
+        <p class="hero-banner__subtitle">{{ subheading }}</p>
+      {%- endif -%}
+
+      <!-- CTA Buttons -->
+      <div class="hero-banner__actions">
+        {%- if primary_label != blank -%}
+          <a href="{{ primary_url }}" class="btn btn-primary btn-lg">
+            {{ primary_label }}
+          </a>
+        {%- endif -%}
+        {%- if secondary_label != blank -%}
+          <a href="{{ secondary_url }}" class="btn btn-dark btn-lg">
+            {{ secondary_label }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <!-- Delivery Badge -->
+      {%- if show_delivery -%}
+        <div class="hero-banner__badge">
+          {%- render 'badge', badge_type: 'delivery', badge_text: delivery_text -%}
+        </div>
+      {%- endif -%}
+
+      <!-- Hero Image -->
+      {%- if section.settings.image != blank -%}
+        <div class="hero-banner__image">
+          {{
+            section.settings.image
+            | image_url: width: 680
+            | image_tag:
+              loading: 'eager',
+              fetchpriority: 'high',
+              widths: '375, 560, 680, 960',
+              sizes: '(min-width: 768px) 680px, 100vw',
+              alt: heading
+          }}
+        </div>
+      {%- elsif section.settings.show_placeholder_image -%}
+        <div class="hero-banner__image">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-placeholder-img' }}
+        </div>
+      {%- endif -%}
+
+    </div><!-- /.hero-banner__inner -->
+  </div><!-- /.container -->
 </section>
 
 {% schema %}
 {
-  "name": "البانر الرئيسي",
+  "name": "Hero Banner — البانر الرئيسي",
+  "tag": "section",
+  "class": "section-hero-banner",
+  "limit": 1,
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "النص العلوي", "default": "متجر التنظيم المنزلي" },
-    { "type": "text", "id": "heading", "label": "العنوان الرئيسي", "default": "بيتك مرتب… حياتك أسهل" },
-    { "type": "text", "id": "primary_btn_label", "label": "نص الزر الأول", "default": "تسوّقي الآن" },
-    { "type": "url",  "id": "primary_btn_url",   "label": "رابط الزر الأول" },
-    { "type": "text", "id": "secondary_btn_label","label": "نص الزر الثاني", "default": "تصفّحي الفئات" },
-    { "type": "url",  "id": "secondary_btn_url",  "label": "رابط الزر الثاني" },
-    { "type": "range","id": "padding_top",    "min": 24, "max": 80, "step": 4, "default": 48, "label": "مسافة علوية" },
-    { "type": "range","id": "padding_bottom", "min": 24, "max": 80, "step": 4, "default": 40, "label": "مسافة سفلية" }
+    {
+      "type": "header",
+      "content": "المحتوى"
+    },
+    {
+      "type": "text",
+      "id": "pretitle",
+      "label": "النص التمهيدي (فوق العنوان)",
+      "default": "حلول التنظيم المنزلي"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "العنوان الرئيسي H1",
+      "default": "بيتك مرتب… حياتك أسهل"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "النص الفرعي",
+      "default": "اكتشفي أجمل حلول التنظيم المنزلي المصممة خصيصًا لكِ — لأن بيتك المرتّب يبدأ من هنا."
+    },
+    {
+      "type": "header",
+      "content": "أزرار الاتصال بالإجراء (CTA)"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "نص الزر الأول",
+      "default": "رتّبي بيتك"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_url",
+      "label": "رابط الزر الأول"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "نص الزر الثاني",
+      "default": "تسوّقي الآن"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_url",
+      "label": "رابط الزر الثاني"
+    },
+    {
+      "type": "header",
+      "content": "شارة التوصيل"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_delivery_badge",
+      "label": "إظهار شارة موعد التوصيل",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "delivery_badge_text",
+      "label": "نص شارة التوصيل",
+      "default": "يصلكِ خلال ٧–١٢ يوم"
+    },
+    {
+      "type": "header",
+      "content": "الصورة"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "صورة البانر"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_placeholder_image",
+      "label": "إظهار صورة افتراضية إذا لم تُحدَّد صورة",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "التصميم"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "لون الخلفية (اختياري)"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "محاذاة النص",
+      "options": [
+        { "value": "right", "label": "يمين" },
+        { "value": "center", "label": "وسط" },
+        { "value": "left", "label": "يسار" }
+      ],
+      "default": "center"
+    }
   ],
-  "presets": [{ "name": "البانر الرئيسي" }]
+  "presets": [
+    {
+      "name": "Hero Banner — البانر الرئيسي",
+      "settings": {
+        "heading": "بيتك مرتب… حياتك أسهل",
+        "primary_button_label": "رتّبي بيتك",
+        "secondary_button_label": "تسوّقي الآن",
+        "show_delivery_badge": true
+      }
+    }
+  ]
 }
 {% endschema %}
