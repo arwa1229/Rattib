@@ -1,0 +1,41 @@
+<section style="padding:24px 16px; max-width:680px; margin:0 auto;">
+  <div style="background:#F4F6F6; border-radius:16px; overflow:hidden; margin-bottom:20px; aspect-ratio:1/1;">
+    {%- if product.featured_image -%}
+      <img src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}" alt="{{ product.title | escape }}" width="800" height="800" style="width:100%; height:100%; object-fit:cover;">
+    {%- endif -%}
+  </div>
+
+  <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
+    {%- if product.available -%}<span class="badge badge-stock">متوفر ✓</span>{%- endif -%}
+    <span class="badge badge-delivery">يصلك خلال ٧–١٢ يوم</span>
+    {%- if product.compare_at_price > product.price -%}<span class="badge badge-discount">خصم</span>{%- endif -%}
+  </div>
+
+  <h1 style="font-family:'Tajawal',sans-serif; font-weight:700; font-size:22px; color:#262B2B; margin-bottom:10px;">{{ product.title }}</h1>
+
+  <p style="font-family:'Tajawal',sans-serif; font-weight:900; font-size:22px; color:#2E8F8A; margin-bottom:16px;">
+    {{ product.price | money_without_trailing_zeros }} ر.س
+    {%- if product.compare_at_price > product.price -%}
+      <span style="font-size:15px; font-weight:400; color:#8A9695; text-decoration:line-through; margin-right:8px;">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+    {%- endif -%}
+  </p>
+
+  {%- if product.description != blank -%}
+    <div style="font-family:'IBM Plex Sans Arabic',sans-serif; font-size:14px; line-height:1.8; color:#262B2B; margin-bottom:20px;">
+      {{ product.description }}
+    </div>
+  {%- endif -%}
+
+  {%- form 'product', product -%}
+    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+    <div style="display:flex; flex-direction:column; gap:10px;">
+      <button type="submit" class="btn btn-primary btn-full">أضف إلى السلة</button>
+      <a href="/checkout?variant={{ product.variants.first.id }}&quantity=1" class="btn btn-dark btn-full">اشترِي الآن</a>
+    </div>
+  {%- endform -%}
+
+  <div style="margin-top:20px; padding:14px; background:#DDF3F1; border-radius:12px; font-family:'IBM Plex Sans Arabic',sans-serif; font-size:13px; color:#2E8F8A; display:flex; gap:8px; align-items:center;">
+    🔒 <span>دفع آمن · مدى · Apple Pay · تابي · تمارا · STC Pay</span>
+  </div>
+</section>
+{% schema %}{ "name": "صفحة المنتج" }{% endschema %}

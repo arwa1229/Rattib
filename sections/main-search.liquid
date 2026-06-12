@@ -1,0 +1,30 @@
+<section style="padding:32px 16px; max-width:680px; margin:0 auto;">
+  <h1 style="font-family:'Tajawal',sans-serif; font-weight:700; font-size:24px; color:#262B2B; margin-bottom:20px;">البحث</h1>
+  <form action="/search" method="get" style="margin-bottom:32px; display:flex; gap:10px;">
+    <input type="text" name="q" value="{{ search.terms | escape }}" placeholder="ابحثي عن منتج…"
+           style="flex:1; padding:13px 16px; border:1px solid #EDF1F1; border-radius:12px; font-family:'IBM Plex Sans Arabic',sans-serif; font-size:15px; direction:rtl; outline:none;">
+    <button type="submit" class="btn btn-primary">بحث</button>
+  </form>
+  {%- if search.performed -%}
+    {%- if search.results_count == 0 -%}
+      <p style="color:#8A9695; font-family:'IBM Plex Sans Arabic',sans-serif;">لا توجد نتائج لـ «{{ search.terms }}»</p>
+    {%- else -%}
+      <div class="product-grid">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            <div class="product-card">
+              <a href="{{ item.url }}" class="product-card__image-wrap" style="display:block;">
+                <img src="{{ item.featured_image | img_url: '400x400', crop: 'center' }}" alt="{{ item.title | escape }}" loading="lazy">
+              </a>
+              <div class="product-card__body">
+                <a href="{{ item.url }}" class="product-card__title" style="text-decoration:none;color:inherit;">{{ item.title }}</a>
+                <p class="product-card__price">{{ item.price | money_without_trailing_zeros }} ر.س</p>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  {%- endif -%}
+</section>
+{% schema %}{ "name": "نتائج البحث" }{% endschema %}

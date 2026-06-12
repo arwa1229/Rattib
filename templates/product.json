@@ -1,26 +1,9 @@
 {
   "sections": {
-    "free-shipping-bar": {
-      "type": "free-shipping-bar",
-      "settings": {
-        "threshold": 199
-      }
-    },
-    "main-product": {
+    "main": {
       "type": "main-product",
       "settings": {}
-    },
-    "featured-products": {
-      "type": "featured-products",
-      "settings": {
-        "heading": "قد يعجبكِ أيضاً",
-        "products_to_show": 4
-      }
     }
   },
-  "order": [
-    "free-shipping-bar",
-    "main-product",
-    "featured-products"
-  ]
+  "order": ["main"]
 }
