@@ -1,0 +1,51 @@
+<section style="padding:60px 16px; max-width:560px; margin:0 auto;">
+  <h1 style="font-family:'Tajawal',sans-serif;font-weight:900;font-size:28px;color:#262B2B;margin-bottom:8px;text-align:center;">تواصل معنا</h1>
+  <p style="font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;color:#5F6B6A;text-align:center;margin-bottom:36px;">يسعدنا مساعدتك! أرسلي رسالتك وسنرد خلال ٢٤ ساعة.</p>
+
+  {%- form 'contact' -%}
+    {%- if form.posted_successfully? -%}
+      <div style="background:#E2F3E8;border-radius:12px;padding:20px;text-align:center;margin-bottom:24px;">
+        <p style="font-family:'Tajawal',sans-serif;font-weight:700;color:#2E7D54;font-size:16px;">✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.</p>
+      </div>
+    {%- endif -%}
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div>
+        <label style="font-family:'Tajawal',sans-serif;font-weight:700;font-size:13px;color:#262B2B;display:block;margin-bottom:6px;">الاسم</label>
+        <input type="text" name="contact[name]" value="{{ form.name }}" placeholder="اسمك الكريم"
+               style="width:100%;padding:13px 16px;border:1px solid #EDF1F1;border-radius:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;direction:rtl;outline:none;transition:border-color 0.2s;"
+               onfocus="this.style.borderColor='#5BC4BE'" onblur="this.style.borderColor='#EDF1F1'">
+      </div>
+
+      <div>
+        <label style="font-family:'Tajawal',sans-serif;font-weight:700;font-size:13px;color:#262B2B;display:block;margin-bottom:6px;">البريد الإلكتروني</label>
+        <input type="email" name="contact[email]" value="{{ form.email }}" placeholder="email@example.com"
+               style="width:100%;padding:13px 16px;border:1px solid #EDF1F1;border-radius:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;direction:ltr;text-align:right;outline:none;transition:border-color 0.2s;"
+               onfocus="this.style.borderColor='#5BC4BE'" onblur="this.style.borderColor='#EDF1F1'">
+      </div>
+
+      <div>
+        <label style="font-family:'Tajawal',sans-serif;font-weight:700;font-size:13px;color:#262B2B;display:block;margin-bottom:6px;">رقم الجوال (اختياري)</label>
+        <input type="tel" name="contact[phone]" placeholder="05xxxxxxxx"
+               style="width:100%;padding:13px 16px;border:1px solid #EDF1F1;border-radius:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;direction:ltr;text-align:right;outline:none;transition:border-color 0.2s;"
+               onfocus="this.style.borderColor='#5BC4BE'" onblur="this.style.borderColor='#EDF1F1'">
+      </div>
+
+      <div>
+        <label style="font-family:'Tajawal',sans-serif;font-weight:700;font-size:13px;color:#262B2B;display:block;margin-bottom:6px;">رسالتك</label>
+        <textarea name="contact[body]" rows="5" placeholder="كيف نقدر نساعدك؟"
+                  style="width:100%;padding:13px 16px;border:1px solid #EDF1F1;border-radius:12px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;direction:rtl;outline:none;resize:vertical;transition:border-color 0.2s;"
+                  onfocus="this.style.borderColor='#5BC4BE'" onblur="this.style.borderColor='#EDF1F1'">{{ form.body }}</textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full">إرسال الرسالة</button>
+    </div>
+  {%- endform -%}
+
+  <div style="margin-top:36px;padding:20px;background:#F4F6F6;border-radius:14px;display:flex;flex-direction:column;gap:10px;">
+    <p style="font-family:'Tajawal',sans-serif;font-weight:700;font-size:14px;color:#262B2B;">أو تواصل معنا عبر:</p>
+    <p style="font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;color:#5F6B6A;">📧 البريد الإلكتروني: support@rattib.sa</p>
+    <p style="font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;color:#5F6B6A;">🕐 أوقات الدعم: السبت – الخميس، ٩ص – ٦م</p>
+  </div>
+</section>
+{% schema %}{ "name": "صفحة التواصل" }{% endschema %}

@@ -1,0 +1,27 @@
+<section style="padding:60px 16px; max-width:680px; margin:0 auto;">
+  <h1 style="font-family:'Tajawal',sans-serif;font-weight:900;font-size:28px;color:#262B2B;margin-bottom:8px;text-align:center;">الأسئلة الشائعة</h1>
+  <p style="font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;color:#5F6B6A;text-align:center;margin-bottom:40px;">إجابات على أكثر الأسئلة التي تصلنا</p>
+
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    {%- assign faqs = "كم يستغرق التوصيل؟|يصل طلبك خلال ٧–١٢ يوم عمل من تاريخ الشراء. نرسل لك رقم تتبع الشحنة فور إرسالها.,ما هي تكلفة الشحن؟|الشحن مجاني على الطلبات التي تتجاوز ١٩٩ ر.س. للطلبات الأقل تُحتسب رسوم الشحن عند الدفع.,هل يمكنني إرجاع المنتج؟|نعم، نقبل الإرجاع خلال ١٤ يوماً من استلام المنتج بشرط أن يكون بحالته الأصلية.,ما وسائل الدفع المتاحة؟|نقبل مدى، Apple Pay، STC Pay، تابي، تمارا، Visa وMastercard.,هل المنتجات أصلية؟|جميع منتجاتنا من موردين موثوقين ومعتمدين. نضمن الجودة أو نستبدل المنتج مجاناً.,كيف أتتبع طلبي؟|بعد شحن طلبك ستصلك رسالة SMS على جوالك تحتوي رقم التتبع." | split: "," -%}
+
+    {%- for faq in faqs -%}
+      {%- assign parts = faq | split: "|" -%}
+      <details style="background:#F4F6F6;border-radius:14px;overflow:hidden;">
+        <summary style="padding:18px 20px;font-family:'Tajawal',sans-serif;font-weight:700;font-size:15px;color:#262B2B;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;">
+          {{ parts[0] }}
+          <span style="font-size:20px;color:#5BC4BE;flex-shrink:0;margin-inline-start:12px;">+</span>
+        </summary>
+        <div style="padding:0 20px 18px;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:14px;color:#5F6B6A;line-height:1.8;border-top:1px solid #EDF1F1;padding-top:14px;">
+          {{ parts[1] }}
+        </div>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  <div style="margin-top:40px;background:#DDF3F1;border-radius:14px;padding:24px;text-align:center;">
+    <p style="font-family:'Tajawal',sans-serif;font-weight:700;font-size:16px;color:#262B2B;margin-bottom:8px;">لم تجدي إجابتك؟</p>
+    <a href="/pages/contact" class="btn btn-primary" style="display:inline-block;margin-top:4px;">تواصل معنا</a>
+  </div>
+</section>
+{% schema %}{ "name": "صفحة الأسئلة الشائعة" }{% endschema %}
