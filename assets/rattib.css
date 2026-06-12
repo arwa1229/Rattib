@@ -543,9 +543,10 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-direction: row-reverse; /* logo on left (LTR visual), nav right, actions far right */
   height: var(--header-height);
-  padding-inline: 16px;
-  max-width: min(960px, 100%);
+  padding-inline: 20px;
+  max-width: 100%;
   margin-inline: auto;
   gap: 12px;
 }

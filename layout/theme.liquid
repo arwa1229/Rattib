@@ -126,15 +126,8 @@
   <!-- ── Site Header ─────────────────────────────────────── -->
   <header class="site-header{% if settings.header_sticky %} site-header--sticky{% endif %}" id="site-header" role="banner">
 
-    <!-- Free Shipping Bar -->
-    {%- if settings.show_free_shipping_bar -%}
-      <div class="site-header__free-shipping" aria-label="عرض الشحن المجاني">
-        {{ settings.free_shipping_bar_text }}
-      </div>
-    {%- endif -%}
-
     <!-- Main Header Row -->
-    <div class="site-header__main">
+    <div class="site-header__inner">
 
       <!-- Logo -->
       <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="{{ shop.name }} — الصفحة الرئيسية">
@@ -205,7 +198,7 @@
         </a>
 
       </div><!-- /.site-header__actions -->
-    </div><!-- /.site-header__main -->
+    </div><!-- /.site-header__inner -->
   </header>
 
   <!-- ── Main Content ────────────────────────────────────── -->
