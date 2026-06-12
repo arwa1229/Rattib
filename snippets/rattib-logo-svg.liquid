@@ -1,0 +1,23 @@
+{%- liquid
+  assign logo_charcoal = '#262B2B'
+  assign logo_wordmark = logo_charcoal
+  assign bar3_color = logo_charcoal
+  if inverted
+    assign logo_wordmark = '#FFFFFF'
+    assign bar3_color = '#FFFFFF'
+  endif
+-%}
+<svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="رتّب RATTIB" style="height:44px;width:auto;display:block;">
+  <!-- Shelves (replace the shadda) -->
+  <rect x="93"  y="10" width="14"  height="3.5" rx="1.75" fill="#5BC4BE"/>
+  <rect x="86"  y="18" width="28"  height="3.5" rx="1.75" fill="#2E8F8A"/>
+  <rect x="79"  y="26" width="42"  height="3.5" rx="1.75" fill="{{ bar3_color }}"/>
+  <!-- Wordmark -->
+  <text x="100" y="75" text-anchor="middle"
+        font-family="Tajawal, sans-serif" font-weight="900" font-size="52"
+        fill="{{ logo_wordmark }}">رتب</text>
+  <!-- Latin sub-mark -->
+  <text x="100" y="92" text-anchor="middle"
+        font-family="Tajawal, sans-serif" font-weight="500" font-size="10"
+        letter-spacing="5" fill="#A8B4B3">RATTIB</text>
+</svg>

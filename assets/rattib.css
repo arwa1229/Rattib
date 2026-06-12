@@ -527,8 +527,8 @@ p {
 
 /* ── Header ───────────────────────────────────────────────── */
 .site-header {
-  background-color: var(--rattib-white);
-  border-bottom: 1px solid var(--rattib-border);
+  background-color: var(--rattib-charcoal);
+  border-bottom: none;
   position: relative;
   z-index: 100;
 }
@@ -575,6 +575,7 @@ p {
 
 .site-header__nav-link {
   font-family: var(--font-body);
+  color: rgba(255,255,255,0.85) !important;
   font-weight: 500;
   font-size: 14px;
   color: var(--rattib-charcoal);
@@ -586,8 +587,8 @@ p {
 
 .site-header__nav-link:hover,
 .site-header__nav-link--active {
-  color: var(--rattib-aqua-deep);
-  background-color: var(--rattib-aqua-soft);
+  color: var(--rattib-aqua) !important;
+  background-color: rgba(91,196,190,0.12);
 }
 
 /* Header actions */
@@ -605,6 +606,7 @@ p {
   width: 42px;
   height: 42px;
   border-radius: 10px;
+  color: rgba(255,255,255,0.85);
   color: var(--rattib-charcoal);
   background: none;
   border: none;
@@ -615,8 +617,8 @@ p {
 }
 
 .header-action-btn:hover {
-  background-color: var(--rattib-gray);
-  color: var(--rattib-aqua-deep);
+  background-color: rgba(91,196,190,0.15);
+  color: var(--rattib-aqua);
 }
 
 .header-action-btn svg {
