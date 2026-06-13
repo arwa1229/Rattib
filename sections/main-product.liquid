@@ -135,7 +135,7 @@
   .product-page__gallery-inner {
     display: flex;
     gap: 8px;
-    align-items: flex-start;
+    align-items: stretch;
   }
   .product-page__image-wrap {
     flex: 1;
@@ -157,7 +157,6 @@
     gap: 8px;
     flex-shrink: 0;
     width: 72px;
-    max-height: 440px;
     overflow-y: auto;
     scrollbar-width: none;
   }
@@ -332,14 +331,16 @@
     }
   }
 
-  // Thumbnail clicks
+  // Thumbnail hover + click
   document.querySelectorAll('.product-thumb').forEach(function (thumb) {
-    thumb.addEventListener('click', function () {
+    function activate(el) {
       var img = document.getElementById('product-main-image');
-      if (img) img.src = this.dataset.src;
+      if (img) img.src = el.dataset.src;
       document.querySelectorAll('.product-thumb').forEach(function (t) { t.classList.remove('product-thumb--active'); });
-      this.classList.add('product-thumb--active');
-    });
+      el.classList.add('product-thumb--active');
+    }
+    thumb.addEventListener('mouseover', function () { activate(this); });
+    thumb.addEventListener('click', function () { activate(this); });
   });
 
   document.querySelectorAll('.variant-btn').forEach(function (btn) {
