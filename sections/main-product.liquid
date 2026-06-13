@@ -5,21 +5,7 @@
     <div class="product-page__gallery">
       <div class="product-page__gallery-inner">
 
-        <!-- Main Image -->
-        <div class="product-page__image-wrap">
-          {%- if product.featured_image -%}
-            <img
-              id="product-main-image"
-              src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
-              alt="{{ product.title | escape }}"
-              width="800" height="800"
-            >
-          {%- else -%}
-            {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
-          {%- endif -%}
-        </div>
-
-        <!-- Thumbnails (right column) -->
+        <!-- Thumbnails (right column — first in DOM = right in RTL) -->
         {%- if product.images.size > 1 -%}
           <div class="product-page__thumbs">
             {%- for image in product.images -%}
@@ -34,6 +20,20 @@
             {%- endfor -%}
           </div>
         {%- endif -%}
+
+        <!-- Main Image -->
+        <div class="product-page__image-wrap">
+          {%- if product.featured_image -%}
+            <img
+              id="product-main-image"
+              src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
+              alt="{{ product.title | escape }}"
+              width="800" height="800"
+            >
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
+          {%- endif -%}
+        </div>
 
       </div>
     </div>
