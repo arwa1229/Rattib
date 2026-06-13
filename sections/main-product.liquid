@@ -3,34 +3,36 @@
 
     <!-- Right: Product Gallery -->
     <div class="product-page__gallery">
-      <!-- Main Image -->
-      <div class="product-page__image-wrap">
-        {%- if product.featured_image -%}
-          <img
-            id="product-main-image"
-            src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
-            alt="{{ product.title | escape }}"
-            width="800" height="800"
-          >
-        {%- else -%}
-          {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
+      <div class="product-page__gallery-inner">
+        <!-- Thumbnails column (left of main image) -->
+        {%- if product.images.size > 1 -%}
+          <div class="product-page__thumbs">
+            {%- for image in product.images -%}
+              <button
+                type="button"
+                class="product-thumb{% if forloop.first %} product-thumb--active{% endif %}"
+                data-src="{{ image | img_url: '800x800', crop: 'center' }}"
+                aria-label="{{ product.title | escape }} — صورة {{ forloop.index }}"
+              >
+                <img src="{{ image | img_url: '160x160', crop: 'center' }}" alt="" width="80" height="80">
+              </button>
+            {%- endfor -%}
+          </div>
         {%- endif -%}
-      </div>
-      <!-- Thumbnails -->
-      {%- if product.images.size > 1 -%}
-        <div class="product-page__thumbs">
-          {%- for image in product.images -%}
-            <button
-              type="button"
-              class="product-thumb{% if forloop.first %} product-thumb--active{% endif %}"
-              data-src="{{ image | img_url: '800x800', crop: 'center' }}"
-              aria-label="{{ product.title | escape }} — صورة {{ forloop.index }}"
+        <!-- Main Image -->
+        <div class="product-page__image-wrap">
+          {%- if product.featured_image -%}
+            <img
+              id="product-main-image"
+              src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
+              alt="{{ product.title | escape }}"
+              width="800" height="800"
             >
-              <img src="{{ image | img_url: '160x160', crop: 'center' }}" alt="" width="80" height="80">
-            </button>
-          {%- endfor -%}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
+          {%- endif -%}
         </div>
-      {%- endif -%}
+      </div>
     </div>
 
     <!-- Left: Product Info -->
@@ -234,11 +236,19 @@
     border-top: 1px solid #EDF1F1;
     padding-top: 20px;
   }
+  .product-page__gallery-inner {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
   .product-page__thumbs {
     display: flex;
+    flex-direction: column;
     gap: 8px;
-    margin-top: 10px;
-    flex-wrap: wrap;
+    flex-shrink: 0;
+    max-height: 440px;
+    overflow-y: auto;
+    scrollbar-width: thin;
   }
   .product-thumb {
     width: 64px;
