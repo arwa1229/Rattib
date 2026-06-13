@@ -1,9 +1,5 @@
 {
   "sections": {
-    "free-shipping-bar": {
-      "type": "free-shipping-bar",
-      "settings": {}
-    },
     "hero-banner": {
       "type": "hero-banner",
       "settings": {}
@@ -18,7 +14,6 @@
     }
   },
   "order": [
-    "free-shipping-bar",
     "hero-banner",
     "category-grid",
     "featured-products"
