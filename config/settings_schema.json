@@ -1,1 +1,461 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Rattib",
+    "theme_version": "1.0.0",
+    "theme_author": "Rattib",
+    "theme_documentation_url": "https://rattib.sa",
+    "theme_support_url": "https://rattib.sa"
+  },
+  {
+    "name": "الألوان",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "اللون الرئيسي (أكوا)",
+        "default": "#5BC4BE"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_deep",
+        "label": "الأكوا الداكن",
+        "default": "#2E8F8A"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_soft",
+        "label": "الأكوا الفاتح",
+        "default": "#DDF3F1"
+      },
+      {
+        "type": "color",
+        "id": "color_charcoal",
+        "label": "الرمادي الداكن",
+        "default": "#262B2B"
+      },
+      {
+        "type": "color",
+        "id": "color_gray",
+        "label": "الرمادي الفاتح",
+        "default": "#F4F6F6"
+      },
+      {
+        "type": "color",
+        "id": "color_white",
+        "label": "الأبيض",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_success",
+        "label": "لون النجاح",
+        "default": "#4DAE7C"
+      },
+      {
+        "type": "color",
+        "id": "color_success_soft",
+        "label": "لون النجاح الفاتح",
+        "default": "#E2F3E8"
+      },
+      {
+        "type": "color",
+        "id": "color_rating",
+        "label": "لون التقييم (نجوم)",
+        "default": "#F2B53D"
+      },
+      {
+        "type": "color",
+        "id": "color_text_primary",
+        "label": "لون النص الرئيسي",
+        "default": "#262B2B"
+      },
+      {
+        "type": "color",
+        "id": "color_text_secondary",
+        "label": "لون النص الثانوي",
+        "default": "#6B7575"
+      },
+      {
+        "type": "color",
+        "id": "color_price",
+        "label": "لون السعر",
+        "default": "#2E8F8A"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_body",
+        "label": "لون خلفية الصفحة",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_bg_card",
+        "label": "لون خلفية البطاقة",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_border_card",
+        "label": "لون حدود البطاقة",
+        "default": "#EDF1F1"
+      }
+    ]
+  },
+  {
+    "name": "الخطوط",
+    "settings": [
+      {
+        "type": "text",
+        "id": "font_heading",
+        "label": "خط العناوين",
+        "default": "Tajawal"
+      },
+      {
+        "type": "text",
+        "id": "font_body",
+        "label": "خط النص",
+        "default": "IBM Plex Sans Arabic"
+      },
+      {
+        "type": "range",
+        "id": "font_size_base",
+        "label": "حجم الخط الأساسي (px)",
+        "min": 13,
+        "max": 18,
+        "step": 1,
+        "default": 15
+      }
+    ]
+  },
+  {
+    "name": "التخطيط",
+    "settings": [
+      {
+        "type": "range",
+        "id": "max_width",
+        "label": "الحد الأقصى لعرض المحتوى (px)",
+        "min": 480,
+        "max": 1440,
+        "step": 40,
+        "default": 680
+      },
+      {
+        "type": "range",
+        "id": "spacing_section",
+        "label": "المسافة بين الأقسام (px)",
+        "min": 20,
+        "max": 120,
+        "step": 4,
+        "default": 52
+      },
+      {
+        "type": "range",
+        "id": "spacing_card_gap",
+        "label": "المسافة بين البطاقات (px)",
+        "min": 4,
+        "max": 32,
+        "step": 2,
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "radius_card",
+        "label": "انحناء زوايا البطاقة (px)",
+        "min": 0,
+        "max": 32,
+        "step": 2,
+        "default": 16
+      },
+      {
+        "type": "range",
+        "id": "radius_btn",
+        "label": "انحناء زوايا الزر (px)",
+        "min": 0,
+        "max": 32,
+        "step": 2,
+        "default": 12
+      }
+    ]
+  },
+  {
+    "name": "الهيدر",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "شعار المتجر"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "label": "عرض الشعار (px)",
+        "min": 60,
+        "max": 300,
+        "step": 10,
+        "default": 120
+      },
+      {
+        "type": "checkbox",
+        "id": "header_sticky",
+        "label": "هيدر ثابت عند التمرير",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "header_show_search",
+        "label": "إظهار أيقونة البحث",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "header_show_account",
+        "label": "إظهار أيقونة الحساب",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "main_menu",
+        "label": "القائمة الرئيسية",
+        "default": "main-menu"
+      }
+    ]
+  },
+  {
+    "name": "شريط الشحن",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_free_shipping_bar",
+        "label": "إظهار شريط الشحن المجاني",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_bar_text",
+        "label": "نص شريط الشحن",
+        "default": "🚚 شحن مجاني على الطلبات فوق ١٩٩ ر.س"
+      }
+    ]
+  },
+  {
+    "name": "الفوتر",
+    "settings": [
+      {
+        "type": "text",
+        "id": "footer_tagline",
+        "label": "شعار الفوتر",
+        "default": "بيتك مرتب… حياتك أسهل"
+      },
+      {
+        "type": "richtext",
+        "id": "footer_about",
+        "label": "نص وصف المتجر في الفوتر"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu",
+        "label": "قائمة الفوتر",
+        "default": "footer"
+      },
+      {
+        "type": "text",
+        "id": "footer_email",
+        "label": "البريد الإلكتروني"
+      },
+      {
+        "type": "text",
+        "id": "footer_whatsapp",
+        "label": "رقم واتساب"
+      },
+      {
+        "type": "text",
+        "id": "footer_copyright",
+        "label": "نص حقوق النشر",
+        "default": "جميع الحقوق محفوظة @ رتّب"
+      }
+    ]
+  },
+  {
+    "name": "التواصل الاجتماعي",
+    "settings": [
+      {
+        "type": "url",
+        "id": "social_instagram",
+        "label": "إنستغرام"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok",
+        "label": "تيك توك"
+      },
+      {
+        "type": "url",
+        "id": "social_snapchat",
+        "label": "سناب شات"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter",
+        "label": "تويتر / X"
+      }
+    ]
+  },
+  {
+    "name": "المنتجات",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_badge_available",
+        "label": "إظهار شارة «متوفر»",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_badge_free_shipping",
+        "label": "إظهار شارة «شحن مجاني»",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_badge_bestseller",
+        "label": "إظهار شارة «الأكثر مبيعاً»",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_delivery_badge",
+        "label": "إظهار شارة التوصيل",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "delivery_badge_text",
+        "label": "نص شارة التوصيل",
+        "default": "يصلكِ خلال ٧–١٢ يوم"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_compare_price",
+        "label": "إظهار السعر الأصلي",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "show_rating_stars",
+        "label": "إظهار نجوم التقييم",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "products_per_row_mobile",
+        "label": "منتجات في الصف (موبايل)",
+        "min": 1,
+        "max": 3,
+        "step": 1,
+        "default": 2
+      },
+      {
+        "type": "range",
+        "id": "products_per_row_desktop",
+        "label": "منتجات في الصف (ديسكتوب)",
+        "min": 2,
+        "max": 5,
+        "step": 1,
+        "default": 3
+      }
+    ]
+  },
+  {
+    "name": "السلة",
+    "settings": [
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "label": "حد الشحن المجاني (ر.س)",
+        "min": 0,
+        "max": 500,
+        "step": 10,
+        "default": 199
+      },
+      {
+        "type": "checkbox",
+        "id": "show_shipping_progress",
+        "label": "إظهار شريط تقدم الشحن المجاني في السلة",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "cart_shipping_message",
+        "label": "رسالة الشحن المجاني",
+        "default": "أضيفي {amount} للحصول على شحن مجاني 🚚"
+      },
+      {
+        "type": "text",
+        "id": "cart_free_shipping_reached",
+        "label": "رسالة الوصول للشحن المجاني",
+        "default": "🎉 مبروك! حصلتِ على شحن مجاني"
+      },
+      {
+        "type": "text",
+        "id": "cart_empty_text",
+        "label": "نص السلة الفارغة",
+        "default": "سلّتكِ فارغة — رتّبي بيتك الآن!"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_notes",
+        "label": "تفعيل ملاحظات الطلب",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_show_upsell",
+        "label": "إظهار منتجات مقترحة في السلة",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "التحليلات",
+    "settings": [
+      {
+        "type": "text",
+        "id": "google_analytics_id",
+        "label": "معرّف Google Analytics 4 (G-XXXXXXXXXX)"
+      },
+      {
+        "type": "text",
+        "id": "meta_pixel_id",
+        "label": "معرّف Meta Pixel"
+      },
+      {
+        "type": "text",
+        "id": "tiktok_pixel_id",
+        "label": "معرّف TikTok Pixel"
+      }
+    ]
+  },
+  {
+    "name": "SEO",
+    "settings": [
+      {
+        "type": "text",
+        "id": "meta_title_suffix",
+        "label": "لاحقة عنوان الصفحة",
+        "default": "| رتّب"
+      },
+      {
+        "type": "textarea",
+        "id": "meta_description_default",
+        "label": "وصف الموقع الافتراضي",
+        "default": "رتّب — متجر متخصص في منتجات التنظيم المنزلي للسوق السعودي والخليجي."
+      },
+      {
+        "type": "image_picker",
+        "id": "share_image",
+        "label": "صورة المشاركة (Open Graph)"
+      }
+    ]
+  }
+]

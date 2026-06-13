@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
     "color_primary": "#5BC4BE",
@@ -14,12 +5,15 @@
     "color_primary_soft": "#DDF3F1",
     "color_charcoal": "#262B2B",
     "color_gray": "#F4F6F6",
+    "color_white": "#FFFFFF",
     "color_success": "#4DAE7C",
     "color_success_soft": "#E2F3E8",
     "color_rating": "#F2B53D",
-    "color_background": "#FFFFFF",
-    "color_text": "#262B2B",
-    "color_text_muted": "#6B7575",
+    "color_text_primary": "#262B2B",
+    "color_text_secondary": "#6B7575",
+    "color_price": "#2E8F8A",
+    "color_bg_body": "#FFFFFF",
+    "color_bg_card": "#FFFFFF",
     "color_border_card": "#EDF1F1",
     "font_heading": "Tajawal",
     "font_body": "IBM Plex Sans Arabic",
@@ -31,12 +25,13 @@
     "radius_btn": 12,
     "logo_width": 120,
     "header_sticky": true,
+    "header_show_search": true,
+    "header_show_account": true,
+    "main_menu": "main-menu",
     "show_free_shipping_bar": true,
-    "free_shipping_bar_text": "🎉 اشترِي بـ ١٩٩ ر.س أو أكثر واحصلي على شحن مجاني!",
-    "show_search_icon": true,
-    "nav_menu": "main-menu",
+    "free_shipping_bar_text": "🚚 شحن مجاني على الطلبات فوق ١٩٩ ر.س",
     "footer_tagline": "بيتك مرتب… حياتك أسهل",
-    "footer_about": "<p>رتّب — متجرك لمستلزمات التنظيم والترتيب. نساعدكِ تحوّلي بيتك لمساحة هادئة ومرتّبة.</p>",
+    "footer_about": "<p>رتّب — متجر متخصص في منتجات التنظيم المنزلي للسوق السعودي والخليجي.</p>",
     "footer_menu": "footer",
     "social_instagram": "https://instagram.com/rattib.sa",
     "social_tiktok": "https://tiktok.com/@rattib.sa",
@@ -44,7 +39,7 @@
     "social_twitter": "https://x.com/rattib_sa",
     "footer_email": "hello@rattib.sa",
     "footer_whatsapp": "+966500000000",
-    "footer_copyright": "© ٢٠٢٥ رتّب. جميع الحقوق محفوظة.",
+    "footer_copyright": "جميع الحقوق محفوظة @ رتّب",
     "show_badge_available": true,
     "show_badge_free_shipping": true,
     "show_badge_bestseller": true,
@@ -60,6 +55,8 @@
     "cart_free_shipping_reached": "🎉 مبروك! حصلتِ على شحن مجاني",
     "cart_empty_text": "سلّتكِ فارغة — رتّبي بيتك الآن!",
     "enable_cart_notes": true,
-    "cart_show_upsell": true
+    "cart_show_upsell": true,
+    "meta_title_suffix": "| رتّب",
+    "meta_description_default": "رتّب — متجر متخصص في منتجات التنظيم المنزلي للسوق السعودي والخليجي."
   }
 }
