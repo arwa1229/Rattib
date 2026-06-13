@@ -1,0 +1,91 @@
+{%- liquid
+  assign p = product
+  assign show_badges = show_badges | default: true
+  assign show_delivery = show_delivery | default: settings.show_delivery_badge | default: true
+  assign delivery_text = settings.delivery_badge_text | default: 'يصلكِ خلال ٧–١٢ يوم'
+  assign product_available = p.available
+  assign has_compare_price = false
+  if p.compare_at_price > p.price
+    assign has_compare_price = true
+    assign discount_amount = p.compare_at_price | minus: p.price
+    assign discount_pct = discount_amount | times: 100 | divided_by: p.compare_at_price | round
+  endif
+  assign show_badge_available = settings.show_badge_available | default: true
+  assign show_badge_shipping = settings.show_badge_free_shipping | default: true
+  assign show_badge_bestseller = badge_bestseller | default: false
+-%}
+
+<article class="product-card {{ card_class }}" aria-label="{{ p.title | escape }}">
+
+  <a href="{{ p.url }}" class="product-card__image-wrap" aria-label="{{ p.title | escape }}" tabindex="-1">
+    {%- if p.featured_media -%}
+      {{
+        p.featured_media
+        | image_url: width: 400
+        | image_tag:
+          loading: 'lazy',
+          widths: '200, 300, 400',
+          sizes: '(min-width: 768px) 200px, 50vw',
+          alt: p.featured_media.alt | escape | default: p.title | escape,
+          class: 'product-card__img'
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'product-card__img product-card__placeholder' }}
+    {%- endif -%}
+
+    {%- if show_badges -%}
+      <div class="product-card__badges">
+        {%- if show_badge_bestseller -%}
+          {%- render 'badge', badge_type: 'bestseller', badge_text: 'الأكثر مبيعًا' -%}
+        {%- endif -%}
+        {%- if has_compare_price -%}
+          {%- assign discount_text = 'خصم ' | append: discount_pct | append: '٪' -%}
+          {%- render 'badge', badge_type: 'discount', badge_text: discount_text -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </a>
+
+  <div class="product-card__body">
+    {%- if show_badges -%}
+      <div class="badge-row">
+        {%- if product_available and show_badge_available -%}
+          {%- render 'badge', badge_type: 'available', badge_text: 'متوفر ✓' -%}
+        {%- elsif product_available == false -%}
+          <span class="badge" style="background:#EDF1F1;color:#8A9A9A;">نفد المخزون</span>
+        {%- endif -%}
+        {%- if show_badge_shipping -%}
+          {%- render 'badge', badge_type: 'shipping', badge_text: 'شحن مجاني' -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <a href="{{ p.url }}" class="product-card__title">{{ p.title }}</a>
+
+    <div class="product-card__price-row">
+      <span class="product-card__price">{{- p.price | money -}} ر.س</span>
+      {%- if has_compare_price -%}
+        <span class="product-card__compare-price">{{- p.compare_at_price | money -}} ر.س</span>
+      {%- endif -%}
+    </div>
+
+    {%- if show_delivery -%}
+      <div class="product-card__delivery">
+        {%- render 'badge', badge_type: 'delivery', badge_text: delivery_text -%}
+      </div>
+    {%- endif -%}
+
+    <div class="product-card__action">
+      {%- if product_available -%}
+        <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="id" value="{{ p.selected_or_first_available_variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="btn btn-primary product-card__btn">أضف إلى السلة</button>
+        </form>
+      {%- else -%}
+        <button class="btn product-card__btn" disabled style="background:#EDF1F1;color:#8A9A9A;cursor:not-allowed;">نفد المخزون</button>
+      {%- endif -%}
+    </div>
+  </div>
+
+</article>
