@@ -45,13 +45,8 @@
 
       <!-- CTA Buttons -->
       <div class="hero-banner__actions">
-        {%- if primary_label != blank -%}
-          <a href="{{ primary_url }}" class="btn btn-primary btn-lg">
-            {{ primary_label }}
-          </a>
-        {%- endif -%}
         {%- if secondary_label != blank -%}
-          <a href="{{ secondary_url }}" class="btn btn-dark btn-lg">
+          <a href="{{ secondary_url }}" class="btn btn-primary btn-lg">
             {{ secondary_label }}
           </a>
         {%- endif -%}
