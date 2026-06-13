@@ -1,98 +1,225 @@
-<section style="padding:24px 16px; max-width:680px; margin:0 auto;">
+<section class="product-page">
+  <div class="product-page__inner">
 
-  <!-- Product Image (updates on variant change) -->
-  <div style="background:#F4F6F6; border-radius:16px; overflow:hidden; margin-bottom:20px; aspect-ratio:1/1;">
-    {%- if product.featured_image -%}
-      <img
-        id="product-main-image"
-        src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
-        alt="{{ product.title | escape }}"
-        width="800" height="800"
-        style="width:100%; height:100%; object-fit:cover;"
-      >
-    {%- endif -%}
-  </div>
-
-  <!-- Badges -->
-  <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
-    {%- if product.available -%}<span class="badge badge-stock">متوفر ✓</span>{%- endif -%}
-    <span class="badge badge-delivery">يصلك خلال ٧–١٢ يوم</span>
-    {%- if product.compare_at_price > product.price -%}<span class="badge badge-discount">خصم</span>{%- endif -%}
-  </div>
-
-  <!-- Title -->
-  <h1 style="font-family:'Tajawal',sans-serif; font-weight:700; font-size:22px; color:#262B2B; margin-bottom:10px;">{{ product.title }}</h1>
-
-  <!-- Price (updates on variant change) -->
-  <p id="product-price" style="font-family:'Tajawal',sans-serif; font-weight:900; font-size:22px; color:#2E8F8A; margin-bottom:16px;">
-    {{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }} ر.س
-    {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
-      <span id="product-compare-price" style="font-size:15px; font-weight:400; color:#8A9695; text-decoration:line-through; margin-right:8px;">
-        {{ product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }} ر.س
-      </span>
-    {%- endif -%}
-  </p>
-
-  <!-- Description -->
-  {%- if product.description != blank -%}
-    <div style="font-family:'IBM Plex Sans Arabic',sans-serif; font-size:14px; line-height:1.8; color:#262B2B; margin-bottom:20px;">
-      {{ product.description }}
+    <!-- Right: Product Image -->
+    <div class="product-page__gallery">
+      <div class="product-page__image-wrap">
+        {%- if product.featured_image -%}
+          <img
+            id="product-main-image"
+            src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
+            alt="{{ product.title | escape }}"
+            width="800" height="800"
+          >
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
+        {%- endif -%}
+      </div>
     </div>
-  {%- endif -%}
 
-  <!-- Product Form -->
-  {%- form 'product', product, id: 'product-form' -%}
-    <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
+    <!-- Left: Product Info -->
+    <div class="product-page__info">
 
-    <!-- Variant Picker -->
-    {%- unless product.has_only_default_variant -%}
-      {%- for option in product.options_with_values -%}
-        <div style="margin-bottom:16px;">
-          <p style="font-family:'Tajawal',sans-serif; font-weight:700; font-size:14px; color:#262B2B; margin-bottom:8px;">
-            {{ option.name }}:
-            <span id="selected-{{ option.position }}" style="font-weight:400; color:#2E8F8A;">{{ option.selected_value }}</span>
-          </p>
-          <div style="display:flex; flex-wrap:wrap; gap:8px;">
-            {%- for value in option.values -%}
-              <button
-                type="button"
-                class="variant-btn"
-                data-option-position="{{ option.position }}"
-                data-value="{{ value | escape }}"
-                style="
-                  padding:8px 16px;
-                  border-radius:8px;
-                  border:2px solid {% if option.selected_value == value %}#2E8F8A{% else %}#EDF1F1{% endif %};
-                  background:{% if option.selected_value == value %}#DDF3F1{% else %}#fff{% endif %};
-                  color:#262B2B;
-                  font-family:'Tajawal',sans-serif;
-                  font-size:13px;
-                  cursor:pointer;
-                "
-              >
-                {{ value }}
-              </button>
-            {%- endfor -%}
-          </div>
+      <!-- Badges -->
+      <div class="product-page__badges">
+        {%- if product.available -%}<span class="badge badge-stock">متوفر ✓</span>{%- endif -%}
+        <span class="badge badge-delivery">يصلك خلال ٧–١٢ يوم</span>
+        {%- if product.compare_at_price > product.price -%}<span class="badge badge-discount">خصم</span>{%- endif -%}
+      </div>
+
+      <!-- Title -->
+      <h1 class="product-page__title">{{ product.title }}</h1>
+
+      <!-- Price -->
+      <div class="product-page__price" id="product-price">
+        <span class="product-page__price-current">
+          {{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }} ر.س
+        </span>
+        {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+          <span class="product-page__price-compare" id="product-compare-price">
+            {{ product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }} ر.س
+          </span>
+        {%- endif -%}
+      </div>
+
+      <!-- Form: Variants + Buttons -->
+      {%- form 'product', product, id: 'product-form' -%}
+        <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
+
+        <!-- Variant Picker -->
+        {%- unless product.has_only_default_variant -%}
+          {%- for option in product.options_with_values -%}
+            <div class="product-page__option">
+              <p class="product-page__option-label">
+                {{ option.name }}:
+                <span id="selected-{{ option.position }}" class="product-page__option-value">{{ option.selected_value }}</span>
+              </p>
+              <div class="product-page__option-buttons">
+                {%- for value in option.values -%}
+                  <button
+                    type="button"
+                    class="variant-btn{% if option.selected_value == value %} variant-btn--active{% endif %}"
+                    data-option-position="{{ option.position }}"
+                    data-value="{{ value | escape }}"
+                  >
+                    {{ value }}
+                  </button>
+                {%- endfor -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        {%- endunless -%}
+
+        <!-- CTA Buttons -->
+        <div class="product-page__actions">
+          <button type="submit" id="add-to-cart-btn" class="btn btn-primary btn-full">أضف إلى السلة</button>
+          <a href="#" id="buy-now-btn" class="btn btn-dark btn-full">اشترِي الآن</a>
         </div>
-      {%- endfor -%}
-    {%- endunless -%}
 
-    <!-- Add to Cart + Buy Now -->
-    <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px;">
-      <button type="submit" id="add-to-cart-btn" class="btn btn-primary btn-full">أضف إلى السلة</button>
-      <a href="#" id="buy-now-btn" class="btn btn-dark btn-full">اشترِي الآن</a>
-    </div>
-  {%- endform -%}
+      {%- endform -%}
 
-  <!-- Trust bar -->
-  <div style="margin-top:20px; padding:14px; background:#DDF3F1; border-radius:12px; font-family:'IBM Plex Sans Arabic',sans-serif; font-size:13px; color:#2E8F8A; display:flex; gap:8px; align-items:center;">
-    🔒 <span>دفع آمن · مدى · Apple Pay · تابي · تمارا · STC Pay</span>
-  </div>
+      <!-- Trust Bar -->
+      <div class="product-page__trust">
+        🔒 <span>دفع آمن · مدى · Apple Pay · تابي · تمارا · STC Pay</span>
+      </div>
 
+      <!-- Description -->
+      {%- if product.description != blank -%}
+        <div class="product-page__desc">
+          {{ product.description }}
+        </div>
+      {%- endif -%}
+
+    </div><!-- /.product-page__info -->
+  </div><!-- /.product-page__inner -->
 </section>
 
-<!-- Variant Picker Script -->
+<style>
+  .product-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+  .product-page__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 680px) {
+    .product-page__inner {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+  .product-page__image-wrap {
+    background: #F4F6F6;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+  }
+  .product-page__image-wrap img,
+  .product-page__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .product-page__badges {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .product-page__title {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: #262B2B;
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .product-page__price {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .product-page__price-current {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    color: #2E8F8A;
+  }
+  .product-page__price-compare {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 15px;
+    color: #8A9695;
+    text-decoration: line-through;
+  }
+  .product-page__option {
+    margin-bottom: 16px;
+  }
+  .product-page__option-label {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #262B2B;
+    margin-bottom: 8px;
+  }
+  .product-page__option-value {
+    font-weight: 400;
+    color: #2E8F8A;
+  }
+  .product-page__option-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .variant-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 2px solid #EDF1F1;
+    background: #fff;
+    color: #262B2B;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .variant-btn--active,
+  .variant-btn:hover {
+    border-color: #2E8F8A;
+    background: #DDF3F1;
+  }
+  .product-page__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 16px;
+  }
+  .product-page__trust {
+    padding: 12px 16px;
+    background: #DDF3F1;
+    border-radius: 12px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 13px;
+    color: #2E8F8A;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .product-page__desc {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #262B2B;
+    border-top: 1px solid #EDF1F1;
+    padding-top: 20px;
+  }
+</style>
+
 <script>
 (function () {
   var productVariants = {{ product.variants | json }};
@@ -116,13 +243,19 @@
 
     document.getElementById('variant-id').value = variant.id;
 
-    var priceEl = document.getElementById('product-price');
-    if (priceEl) {
-      var priceFormatted = (variant.price / 100).toFixed(0) + ' ر.س';
-      var compareFormatted = variant.compare_at_price > variant.price
-        ? '<span style="font-size:15px;font-weight:400;color:#8A9695;text-decoration:line-through;margin-right:8px;">' + (variant.compare_at_price / 100).toFixed(0) + ' ر.س</span>'
-        : '';
-      priceEl.innerHTML = priceFormatted + compareFormatted;
+    var priceEl = document.querySelector('.product-page__price-current');
+    if (priceEl) priceEl.textContent = Math.round(variant.price / 100) + ' ر.س';
+
+    var compareEl = document.querySelector('.product-page__price-compare');
+    if (variant.compare_at_price > variant.price) {
+      if (!compareEl) {
+        compareEl = document.createElement('span');
+        compareEl.className = 'product-page__price-compare';
+        document.getElementById('product-price').appendChild(compareEl);
+      }
+      compareEl.textContent = Math.round(variant.compare_at_price / 100) + ' ر.س';
+    } else if (compareEl) {
+      compareEl.remove();
     }
 
     var buyBtn = document.getElementById('buy-now-btn');
@@ -144,16 +277,13 @@
     btn.addEventListener('click', function () {
       var position = parseInt(this.dataset.optionPosition) - 1;
       var value = this.dataset.value;
-
       selectedOptions[position] = value;
 
       var label = document.getElementById('selected-' + (position + 1));
       if (label) label.textContent = value;
 
       document.querySelectorAll('.variant-btn[data-option-position="' + (position + 1) + '"]').forEach(function (b) {
-        var active = b.dataset.value === value;
-        b.style.border = '2px solid ' + (active ? '#2E8F8A' : '#EDF1F1');
-        b.style.background = active ? '#DDF3F1' : '#fff';
+        b.classList.toggle('variant-btn--active', b.dataset.value === value);
       });
 
       updateVariant();
