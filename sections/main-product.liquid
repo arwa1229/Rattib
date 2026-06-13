@@ -1,37 +1,19 @@
 <section class="product-page">
   <div class="product-page__inner">
 
-    <!-- Right: Product Gallery -->
+    <!-- Right: Product Image -->
     <div class="product-page__gallery">
-      <div class="product-page__gallery-inner">
-        <!-- Thumbnails column (left of main image) -->
-        {%- if product.images.size > 1 -%}
-          <div class="product-page__thumbs">
-            {%- for image in product.images -%}
-              <button
-                type="button"
-                class="product-thumb{% if forloop.first %} product-thumb--active{% endif %}"
-                data-src="{{ image | img_url: '800x800', crop: 'center' }}"
-                aria-label="{{ product.title | escape }} — صورة {{ forloop.index }}"
-              >
-                <img src="{{ image | img_url: '160x160', crop: 'center' }}" alt="" width="80" height="80">
-              </button>
-            {%- endfor -%}
-          </div>
+      <div class="product-page__image-wrap">
+        {%- if product.featured_image -%}
+          <img
+            id="product-main-image"
+            src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
+            alt="{{ product.title | escape }}"
+            width="800" height="800"
+          >
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
         {%- endif -%}
-        <!-- Main Image -->
-        <div class="product-page__image-wrap">
-          {%- if product.featured_image -%}
-            <img
-              id="product-main-image"
-              src="{{ product.featured_image | img_url: '800x800', crop: 'center' }}"
-              alt="{{ product.title | escape }}"
-              width="800" height="800"
-            >
-          {%- else -%}
-            {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
-          {%- endif -%}
-        </div>
       </div>
     </div>
 
@@ -129,6 +111,19 @@
       align-items: start;
     }
   }
+  .product-page__image-wrap {
+    background: #F4F6F6;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+  }
+  .product-page__image-wrap img,
+  .product-page__placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
   .product-page__badges {
     display: flex;
     gap: 6px;
@@ -223,57 +218,6 @@
     border-top: 1px solid #EDF1F1;
     padding-top: 20px;
   }
-  .product-page__gallery-inner {
-    display: flex;
-    flex-direction: row-reverse;
-    gap: 10px;
-    align-items: stretch;
-  }
-  .product-page__image-wrap {
-    flex: 1;
-    border-radius: 16px;
-    overflow: hidden;
-    background: #F4F6F6;
-    aspect-ratio: 1/1;
-  }
-  .product-page__image-wrap img,
-  .product-page__placeholder {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .product-page__thumbs {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    flex-shrink: 0;
-    width: 72px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-  }
-  .product-thumb {
-    width: 72px;
-    height: 72px;
-    border-radius: 10px;
-    border: 2px solid #EDF1F1;
-    overflow: hidden;
-    cursor: pointer;
-    padding: 0;
-    background: #F4F6F6;
-    flex-shrink: 0;
-    transition: border-color 0.15s;
-  }
-  .product-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .product-thumb--active,
-  .product-thumb:hover {
-    border-color: #2E8F8A;
-  }
 </style>
 
 <script>
@@ -328,18 +272,6 @@
       if (img) img.src = variant.featured_image.src;
     }
   }
-
-  // Thumbnail gallery
-  document.querySelectorAll('.product-thumb').forEach(function (thumb) {
-    thumb.addEventListener('click', function () {
-      var img = document.getElementById('product-main-image');
-      if (img) img.src = this.dataset.src;
-      document.querySelectorAll('.product-thumb').forEach(function (t) {
-        t.classList.remove('product-thumb--active');
-      });
-      this.classList.add('product-thumb--active');
-    });
-  });
 
   document.querySelectorAll('.variant-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
