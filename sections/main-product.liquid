@@ -158,7 +158,20 @@
     flex-shrink: 0;
     width: 72px;
     overflow-y: auto;
+    direction: ltr;
     scrollbar-width: thin;
+    scrollbar-color: #2E8F8A #EDF1F1;
+  }
+  .product-page__thumbs::-webkit-scrollbar {
+    width: 4px;
+  }
+  .product-page__thumbs::-webkit-scrollbar-track {
+    background: #EDF1F1;
+    border-radius: 4px;
+  }
+  .product-page__thumbs::-webkit-scrollbar-thumb {
+    background: #2E8F8A;
+    border-radius: 4px;
   }
   .product-thumb {
     width: 72px;
