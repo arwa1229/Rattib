@@ -356,19 +356,24 @@ p {
 }
 
 /* ── Free Shipping Bar ────────────────────────────────────── */
+.free-shipping-bar,
 .shipping-bar {
-  background-color: var(--rattib-aqua-soft);
-  color: var(--rattib-aqua-deep);
+  background-color: var(--rattib-aqua);
+  color: #fff;
   text-align: center;
-  font-family: var(--font-body);
-  font-weight: 500;
+  font-family: var(--font-heading);
+  font-weight: 700;
   font-size: 13px;
   padding: 10px 16px;
-  min-height: var(--shipping-bar-height);
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  letter-spacing: 0.3px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
 }
 
 /* Cart progress bar */
@@ -535,7 +540,7 @@ p {
 
 .site-header--sticky {
   position: sticky;
-  top: 0;
+  top: 40px;
   z-index: 100;
 }
 
