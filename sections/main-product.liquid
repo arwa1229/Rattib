@@ -332,17 +332,17 @@
   }
 
   // Match thumbnail column height to main image
-  var mainImg = document.getElementById('product-main-image');
+  var imageWrap = document.querySelector('.product-page__image-wrap');
   var thumbsCol = document.querySelector('.product-page__thumbs');
-  function syncThumbHeight() {
-    if (mainImg && thumbsCol) {
-      thumbsCol.style.maxHeight = mainImg.offsetWidth + 'px';
+  if (imageWrap && thumbsCol) {
+    function syncThumbHeight() {
+      thumbsCol.style.maxHeight = imageWrap.offsetHeight + 'px';
     }
-  }
-  if (mainImg) {
-    mainImg.addEventListener('load', syncThumbHeight);
-    window.addEventListener('resize', syncThumbHeight);
     syncThumbHeight();
+    window.addEventListener('resize', syncThumbHeight);
+    if (window.ResizeObserver) {
+      new ResizeObserver(syncThumbHeight).observe(imageWrap);
+    }
   }
 
   // Thumbnail hover + click
