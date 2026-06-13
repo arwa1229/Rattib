@@ -200,9 +200,40 @@
           </span>
         </a>
 
+        <!-- Hamburger (mobile only) -->
+        <button class="site-header__hamburger" id="hamburger-btn" aria-label="القائمة" aria-expanded="false" aria-controls="mobile-menu">
+          <span></span><span></span><span></span>
+        </button>
+
       </div><!-- /.site-header__actions -->
     </div><!-- /.site-header__inner -->
   </header>
+
+  <!-- ── Mobile Menu Drawer ─────────────────────────────────── -->
+  <div class="mobile-menu-overlay" id="mobile-menu-overlay" aria-hidden="true"></div>
+  <nav class="mobile-menu" id="mobile-menu" aria-label="قائمة الموبايل" aria-hidden="true">
+    <div class="mobile-menu__header">
+      <span class="mobile-menu__title">القائمة</span>
+      <button class="mobile-menu__close" id="mobile-menu-close" aria-label="إغلاق القائمة">✕</button>
+    </div>
+    <ul class="mobile-menu__links">
+      {%- if linklists[settings.main_menu].links != blank -%}
+        {%- for link in linklists[settings.main_menu].links -%}
+          <li><a href="{{ link.url }}" class="mobile-menu__link{% if link.active %} active{% endif %}">{{ link.title }}</a></li>
+        {%- endfor -%}
+      {%- else -%}
+        <li><a href="/collections/تنظيم-المطبخ"    class="mobile-menu__link">🍳 تنظيم المطبخ</a></li>
+        <li><a href="/collections/تنظيم-الثلاجة"    class="mobile-menu__link">🧊 تنظيم الثلاجة</a></li>
+        <li><a href="/collections/تنظيم-الحمام"     class="mobile-menu__link">🛁 تنظيم الحمام</a></li>
+        <li><a href="/collections/الأدراج-والخزائن" class="mobile-menu__link">🗄️ الأدراج والخزائن</a></li>
+        <li><a href="/collections/غرفة-الغسيل"      class="mobile-menu__link">🧺 غرفة الغسيل</a></li>
+        <li><a href="/collections/غرف-الأطفال"      class="mobile-menu__link">🧸 غرف الأطفال</a></li>
+      {%- endif -%}
+      <li><a href="{{ routes.root_url }}"    class="mobile-menu__link">🏠 الرئيسية</a></li>
+      <li><a href="/pages/about"             class="mobile-menu__link">من نحن</a></li>
+      <li><a href="/pages/contact"           class="mobile-menu__link">تواصل معنا</a></li>
+    </ul>
+  </nav>
 
   <!-- ── Main Content ────────────────────────────────────── -->
   <main id="main-content" role="main" tabindex="-1">
@@ -359,6 +390,29 @@
           }
         }, { passive: true });
       }
+
+      // Mobile menu drawer
+      var hamburger = document.getElementById('hamburger-btn');
+      var mobileMenu = document.getElementById('mobile-menu');
+      var overlay = document.getElementById('mobile-menu-overlay');
+      var closeBtn = document.getElementById('mobile-menu-close');
+      function openMenu() {
+        mobileMenu.classList.add('open');
+        overlay.classList.add('open');
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu() {
+        mobileMenu.classList.remove('open');
+        overlay.classList.remove('open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+      if (hamburger) hamburger.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      if (overlay) overlay.addEventListener('click', closeMenu);
 
       // Cart count live update helper (used by AJAX cart sections)
       document.addEventListener('cart:updated', function (e) {
