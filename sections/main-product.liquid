@@ -1,8 +1,9 @@
 <section class="product-page">
   <div class="product-page__inner">
 
-    <!-- Right: Product Image -->
+    <!-- Right: Product Gallery -->
     <div class="product-page__gallery">
+      <!-- Main Image -->
       <div class="product-page__image-wrap">
         {%- if product.featured_image -%}
           <img
@@ -15,6 +16,21 @@
           {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
         {%- endif -%}
       </div>
+      <!-- Thumbnails -->
+      {%- if product.images.size > 1 -%}
+        <div class="product-page__thumbs">
+          {%- for image in product.images -%}
+            <button
+              type="button"
+              class="product-thumb{% if forloop.first %} product-thumb--active{% endif %}"
+              data-src="{{ image | img_url: '800x800', crop: 'center' }}"
+              aria-label="{{ product.title | escape }} — صورة {{ forloop.index }}"
+            >
+              <img src="{{ image | img_url: '160x160', crop: 'center' }}" alt="" width="80" height="80">
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
     </div>
 
     <!-- Left: Product Info -->
@@ -218,6 +234,34 @@
     border-top: 1px solid #EDF1F1;
     padding-top: 20px;
   }
+  .product-page__thumbs {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .product-thumb {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    border: 2px solid #EDF1F1;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    background: #F4F6F6;
+    flex-shrink: 0;
+    transition: border-color 0.15s;
+  }
+  .product-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .product-thumb--active,
+  .product-thumb:hover {
+    border-color: #2E8F8A;
+  }
 </style>
 
 <script>
@@ -272,6 +316,18 @@
       if (img) img.src = variant.featured_image.src;
     }
   }
+
+  // Thumbnail gallery
+  document.querySelectorAll('.product-thumb').forEach(function (thumb) {
+    thumb.addEventListener('click', function () {
+      var img = document.getElementById('product-main-image');
+      if (img) img.src = this.dataset.src;
+      document.querySelectorAll('.product-thumb').forEach(function (t) {
+        t.classList.remove('product-thumb--active');
+      });
+      this.classList.add('product-thumb--active');
+    });
+  });
 
   document.querySelectorAll('.variant-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
