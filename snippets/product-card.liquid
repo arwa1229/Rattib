@@ -19,16 +19,15 @@
 
   <a href="{{ p.url }}" class="product-card__image-wrap" aria-label="{{ p.title | escape }}" tabindex="-1">
     {%- if p.featured_media -%}
-      {{
-        p.featured_media
-        | image_url: width: 400
-        | image_tag:
-          loading: 'lazy',
-          widths: '200, 300, 400',
-          sizes: '(min-width: 768px) 200px, 50vw',
-          alt: p.featured_media.alt | escape | default: p.title | escape,
-          class: 'product-card__img'
-      }}
+      {%- assign img_alt = p.featured_media.alt | default: p.title | escape -%}
+      <img
+        src="{{ p.featured_media | image_url: width: 400 }}"
+        alt="{{ img_alt }}"
+        width="400"
+        height="400"
+        loading="lazy"
+        class="product-card__img"
+      >
     {%- else -%}
       {{ 'product-1' | placeholder_svg_tag: 'product-card__img product-card__placeholder' }}
     {%- endif -%}
