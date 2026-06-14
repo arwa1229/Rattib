@@ -11,6 +11,7 @@
   /* Colors */
   --rattib-aqua:        #5BC4BE;
   --rattib-aqua-deep:   #2E8F8A;
+  --rattib-teal:        #2E8F8A;
   --rattib-aqua-soft:   #DDF3F1;
   --rattib-charcoal:    #262B2B;
   --rattib-gray:        #F4F6F6;
@@ -346,6 +347,13 @@ p {
   background-color: var(--rattib-aqua);
   color: var(--rattib-white);
 }
+
+/* Alias classes for backward-compat with inline badge usage */
+.badge-stock    { background-color: var(--rattib-success);      color: var(--rattib-white); }
+.badge-delivery { background-color: var(--rattib-aqua-soft);    color: var(--rattib-aqua-deep); }
+.badge-discount { background-color: var(--rattib-success);      color: var(--rattib-white); }
+.badge-available{ background-color: var(--rattib-success);      color: var(--rattib-white); }
+.badge-shipping { background-color: var(--rattib-success-soft); color: #2E7D54; }
 
 /* Badge row */
 .badge-row {

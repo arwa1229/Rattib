@@ -51,7 +51,7 @@
         {%- if product_available and show_badge_available -%}
           {%- render 'badge', badge_type: 'available', badge_text: 'متوفر ✓' -%}
         {%- elsif product_available == false -%}
-          <span class="badge" style="background:#EDF1F1;color:#8A9A9A;">نفد المخزون</span>
+          <span class="badge" style="background:var(--rattib-border);color:var(--rattib-text-muted);">نفد المخزون</span>
         {%- endif -%}
         {%- if show_badge_shipping -%}
           {%- render 'badge', badge_type: 'shipping', badge_text: 'شحن مجاني' -%}
@@ -82,7 +82,7 @@
           <button type="submit" class="btn btn-primary product-card__btn">أضف إلى السلة</button>
         </form>
       {%- else -%}
-        <button class="btn product-card__btn" disabled style="background:#EDF1F1;color:#8A9A9A;cursor:not-allowed;">نفد المخزون</button>
+        <button class="btn product-card__btn" disabled style="background:var(--rattib-border);color:var(--rattib-text-muted);cursor:not-allowed;">نفد المخزون</button>
       {%- endif -%}
     </div>
   </div>
