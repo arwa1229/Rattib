@@ -1,0 +1,38 @@
+[
+  {
+    "id": "kitchen",
+    "labelAr": "مطبخ",
+    "tag": "مطبخ",
+    "keywords": ["kitchen organizer", "kitchen storage", "cabinet organizer", "spice rack", "kitchen rack"]
+  },
+  {
+    "id": "fridge",
+    "labelAr": "ثلاجة",
+    "tag": "ثلاجة",
+    "keywords": ["refrigerator organizer", "fridge organizer", "fridge storage box", "egg holder fridge"]
+  },
+  {
+    "id": "bathroom",
+    "labelAr": "حمام",
+    "tag": "حمام",
+    "keywords": ["bathroom organizer", "bathroom shelf", "shower caddy", "toilet storage", "bathroom rack"]
+  },
+  {
+    "id": "drawers",
+    "labelAr": "أدراج وخزائن",
+    "tag": "أدراج",
+    "keywords": ["drawer organizer", "closet organizer", "wardrobe divider", "storage divider", "drawer divider"]
+  },
+  {
+    "id": "laundry",
+    "labelAr": "غسيل",
+    "tag": "غسيل",
+    "keywords": ["laundry organizer", "laundry basket", "clothes organizer", "laundry bag", "foldable laundry"]
+  },
+  {
+    "id": "kids",
+    "labelAr": "أطفال",
+    "tag": "أطفال",
+    "keywords": ["kids room organizer", "toy storage", "kids storage box", "toy organizer", "children storage"]
+  }
+]

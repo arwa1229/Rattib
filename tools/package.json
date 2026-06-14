@@ -1,0 +1,13 @@
+{
+  "name": "rattib-import-tools",
+  "version": "1.0.0",
+  "description": "Auto-import catalog from CJ Dropshipping to Shopify",
+  "type": "module",
+  "scripts": {
+    "import": "node import-catalog.js",
+    "dry-run": "node import-catalog.js --dry-run"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
