@@ -1,34 +1,102 @@
-<section style="padding:32px 16px; max-width:680px; margin:0 auto;">
-  <h1 style="font-family:'Tajawal',sans-serif; font-weight:700; font-size:24px; color:#262B2B; margin-bottom:20px;">{{ collection.title }}</h1>
-  <div class="product-grid">
-    {%- for product in collection.products -%}
-      <div class="product-card">
-        <a href="{{ product.url }}" class="product-card__image-wrap" style="display:block;">
-          {%- if product.featured_image -%}
-            <img src="{{ product.featured_image | img_url: '400x400', crop: 'center' }}" alt="{{ product.title | escape }}" width="400" height="400" loading="lazy">
-          {%- endif -%}
-          {%- if product.compare_at_price > product.price -%}
-            <div class="product-card__badges"><span class="badge badge-discount">خصم</span></div>
-          {%- endif -%}
-        </a>
-        <div class="product-card__body">
-          <a href="{{ product.url }}" class="product-card__title" style="text-decoration:none; color:inherit;">{{ product.title }}</a>
-          <p class="product-card__price">
-            {{ product.price | money_without_trailing_zeros }} ر.س
-            {%- if product.compare_at_price > product.price -%}
-              <span class="product-card__price-original">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
-            {%- endif -%}
-          </p>
-          <span class="badge badge-delivery">يصلك خلال ٧–١٢ يوم</span>
-          <form action="/cart/add" method="post">
-            <input type="hidden" name="id" value="{{ product.variants.first.id }}">
-            <button type="submit" class="btn btn-primary btn-full">أضف إلى السلة</button>
-          </form>
-        </div>
+<section class="collection-page">
+  <div class="collection-page__inner">
+
+    <!-- Header -->
+    <div class="collection-page__header">
+      <h1 class="collection-page__title">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <p class="collection-page__desc">{{ collection.description }}</p>
+      {%- endif -%}
+      <p class="collection-page__count">{{ collection.products_count }} منتج</p>
+    </div>
+
+    <!-- Grid -->
+    {%- if collection.products_count > 0 -%}
+      <div class="collection-page__grid">
+        {%- for product in collection.products -%}
+          {%- liquid
+            assign is_bestseller = false
+            if product.tags contains 'bestseller'
+              assign is_bestseller = true
+            endif
+          -%}
+          {%- render 'product-card',
+            product: product,
+            show_badges: true,
+            show_delivery: true,
+            badge_bestseller: is_bestseller
+          -%}
+        {%- endfor -%}
       </div>
     {%- else -%}
-      <p style="color:#8A9695; font-family:'IBM Plex Sans Arabic',sans-serif;">لا توجد منتجات في هذه الفئة حالياً.</p>
-    {%- endfor -%}
+      <div class="collection-page__empty">
+        <p>لا توجد منتجات في هذه الفئة حالياً.</p>
+        <a href="/collections/all" class="btn btn-primary">تصفّحي جميع المنتجات</a>
+      </div>
+    {%- endif -%}
+
   </div>
 </section>
+
+<style>
+  .collection-page {
+    padding: 32px 16px 64px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .collection-page__header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 2px solid #EDF1F1;
+  }
+  .collection-page__title {
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+    font-size: 28px;
+    color: #262B2B;
+    margin-bottom: 8px;
+  }
+  .collection-page__desc {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 15px;
+    color: #5C6F6E;
+    max-width: 560px;
+    margin: 0 auto 8px;
+    line-height: 1.7;
+  }
+  .collection-page__count {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-size: 13px;
+    color: #2E8F8A;
+    margin: 0;
+  }
+  .collection-page__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (min-width: 680px) {
+    .collection-page__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+  }
+  @media (min-width: 1024px) {
+    .collection-page__grid {
+      gap: 24px;
+    }
+  }
+  .collection-page__empty {
+    text-align: center;
+    padding: 64px 16px;
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    color: #8A9695;
+  }
+  .collection-page__empty p {
+    font-size: 16px;
+    margin-bottom: 20px;
+  }
+</style>
+
 {% schema %}{ "name": "صفحة المجموعة" }{% endschema %}
