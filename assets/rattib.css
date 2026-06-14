@@ -648,15 +648,15 @@ p {
   flex-shrink: 0;
 }
 
-.header-action-btn {
+.header-action-btn,
+.site-header__action-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  color: rgba(255,255,255,0.85);
-  color: var(--rattib-charcoal);
+  color: rgba(255,255,255,0.9);
   background: none;
   border: none;
   cursor: pointer;
@@ -665,17 +665,20 @@ p {
   text-decoration: none;
 }
 
-.header-action-btn:hover {
-  background-color: rgba(91,196,190,0.15);
+.header-action-btn:hover,
+.site-header__action-btn:hover {
+  background-color: rgba(91,196,190,0.2);
   color: var(--rattib-aqua);
 }
 
-.header-action-btn svg {
+.header-action-btn svg,
+.site-header__action-btn svg {
   width: 22px;
   height: 22px;
 }
 
-.cart-count {
+.cart-count,
+.site-header__cart-count {
   position: absolute;
   top: 4px;
   left: 4px;
