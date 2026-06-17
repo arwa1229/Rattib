@@ -176,6 +176,13 @@ p {
   max-width: min(960px, 100%);
 }
 
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .section {
   padding-block: var(--spacing-section);
 }
