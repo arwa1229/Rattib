@@ -68,12 +68,6 @@
       {%- endif -%}
     </div>
 
-    {%- if show_delivery -%}
-      <div class="product-card__delivery">
-        {%- render 'badge', badge_type: 'delivery', badge_text: delivery_text -%}
-      </div>
-    {%- endif -%}
-
     <div class="product-card__action">
       {%- if product_available -%}
         <form action="{{ routes.cart_add_url }}" method="post" enctype="multipart/form-data">
