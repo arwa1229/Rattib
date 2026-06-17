@@ -1642,6 +1642,38 @@ p {
   }
 }
 
+/* ── Featured Products Grid ───────────────────────────────── */
+.featured-products__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (min-width: 680px) {
+  .featured-products__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+.featured-products__more-link {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rattib-aqua-deep);
+  text-decoration: none;
+  padding: 8px 16px;
+  border: 2px solid var(--rattib-aqua-deep);
+  border-radius: var(--radius-btn);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.featured-products__more-link:hover {
+  background: var(--rattib-aqua-deep);
+  color: var(--rattib-white);
+}
+.featured-products__footer {
+  text-align: center;
+  margin-top: 24px;
+}
+
 /* Large desktop (≥ 960px) */
 @media (min-width: 960px) {
   :root {
