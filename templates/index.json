@@ -1,16 +1,40 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-banner": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "eyebrow": "متجر التنظيم المنزلي",
+        "heading": "بيتك مرتب… حياتك أسهل",
+        "primary_btn_label": "تسوّقي الآن",
+        "primary_btn_url": "",
+        "secondary_btn_label": "تصفّحي الفئات",
+        "secondary_btn_url": "",
+        "padding_top": 48,
+        "padding_bottom": 40
+      }
     },
     "category-grid": {
       "type": "category-grid",
-      "settings": {}
+      "settings": {
+        "title": "تسوّقي حسب الفئة"
+      }
     },
     "featured-products": {
       "type": "featured-products",
-      "settings": {}
+      "settings": {
+        "heading": "منتجاتنا المميزة",
+        "collection": "تنظيم-المطبخ",
+        "products_to_show": 8
+      }
     }
   },
   "order": [
