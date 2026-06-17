@@ -17,83 +17,46 @@
       </h2>
     {%- endif -%}
 
-    {%- if section.blocks.size > 0 -%}
-      <div
-        class="category-grid"
-        style="
-          display: grid;
-          grid-template-columns: repeat({{ columns_mobile }}, 1fr);
-          gap: {{ settings.spacing_card_gap | default: 10 }}px;
-        "
-      >
-        {%- for block in section.blocks -%}
-          {%- liquid
-            assign tile_label = block.settings.label | default: 'فئة'
-            assign tile_url = block.settings.url | default: '/collections/all'
-            assign tile_icon = block.settings.icon | default: '🏠'
-            assign tile_bg = block.settings.bg_color | default: '#F4F6F6'
-          -%}
-
-          <a
-            href="{{ tile_url }}"
-            class="category-tile"
-            style="background: {{ tile_bg }};"
-            {{ block.shopify_attributes }}
-          >
-            <span class="category-tile__icon" aria-hidden="true">{{ tile_icon }}</span>
-            <span class="category-tile__label">{{ tile_label }}</span>
-          </a>
-
-        {%- endfor -%}
-      </div><!-- /.category-grid -->
-
-    {%- else -%}
-      <!-- Default 6 categories if no blocks configured -->
-      <div
-        class="category-grid"
-        style="
-          display: grid;
-          grid-template-columns: repeat({{ columns_mobile }}, 1fr);
-          gap: {{ settings.spacing_card_gap | default: 10 }}px;
-        "
-      >
-        <a href="/collections/تنظيم-المطبخ" class="category-tile">
-          <span class="category-tile__icon" aria-hidden="true">🍳</span>
-          <span class="category-tile__label">تنظيم المطبخ</span>
-        </a>
-        <a href="/collections/تنظيم-الثلاجة" class="category-tile">
-          <span class="category-tile__icon" aria-hidden="true">🧊</span>
-          <span class="category-tile__label">تنظيم الثلاجة</span>
-        </a>
-        <a href="/collections/تنظيم-الحمام" class="category-tile">
-          <span class="category-tile__icon" aria-hidden="true">🛁</span>
-          <span class="category-tile__label">تنظيم الحمام</span>
-        </a>
-        <a href="/collections/تنظيم-الأدراج-والخزائن" class="category-tile">
-          <span class="category-tile__icon" aria-hidden="true">🗄️</span>
-          <span class="category-tile__label">الأدراج والخزائن</span>
-        </a>
-        <a href="/collections/غرفة-الغسيل" class="category-tile">
-          <span class="category-tile__icon" aria-hidden="true">🧺</span>
-          <span class="category-tile__label">غرفة الغسيل</span>
-        </a>
-        <a href="/collections/غرف-الأطفال" class="category-tile">
-          <span class="category-tile__icon" aria-hidden="true">🧸</span>
-          <span class="category-tile__label">غرف الأطفال</span>
-        </a>
-      </div>
-    {%- endif -%}
+    <div class="category-grid">
+      <a href="/collections/تنظيم-المطبخ" class="category-tile">
+        <span class="category-tile__icon" aria-hidden="true">🍳</span>
+        <span class="category-tile__label">تنظيم المطبخ</span>
+      </a>
+      <a href="/collections/تنظيم-الثلاجة" class="category-tile">
+        <span class="category-tile__icon" aria-hidden="true">🧊</span>
+        <span class="category-tile__label">تنظيم الثلاجة</span>
+      </a>
+      <a href="/collections/تنظيم-الحمام" class="category-tile">
+        <span class="category-tile__icon" aria-hidden="true">🛁</span>
+        <span class="category-tile__label">تنظيم الحمام</span>
+      </a>
+      <a href="/collections/تنظيم-الأدراج-والخزائن" class="category-tile">
+        <span class="category-tile__icon" aria-hidden="true">🗄️</span>
+        <span class="category-tile__label">الأدراج والخزائن</span>
+      </a>
+      <a href="/collections/غرفة-الغسيل" class="category-tile">
+        <span class="category-tile__icon" aria-hidden="true">🧺</span>
+        <span class="category-tile__label">غرفة الغسيل</span>
+      </a>
+      <a href="/collections/غرف-الأطفال" class="category-tile">
+        <span class="category-tile__icon" aria-hidden="true">🧸</span>
+        <span class="category-tile__label">غرف الأطفال</span>
+      </a>
+    </div>
 
   </div><!-- /.container -->
 </section>
 
 <style>
   #section-{{ section.id }} .category-grid {
-    grid-template-columns: repeat({{ columns_mobile }}, 1fr);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
   }
-  @media (min-width: 768px) {
+  @media (min-width: 680px) {
     #section-{{ section.id }} .category-grid {
-      grid-template-columns: repeat({{ columns_desktop }}, 1fr);
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
     }
   }
 </style>
