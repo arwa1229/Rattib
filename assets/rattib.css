@@ -1693,3 +1693,19 @@ p {
   }
 
 }
+
+/* ── Force: hide delivery badge on product cards everywhere ── */
+.product-card .rattib-badge--delivery,
+.product-card .badge-delivery,
+.product-card__delivery,
+.rattib-badge--delivery {
+  display: none !important;
+}
+
+/* ── Force: 3-column product grid on desktop ── */
+@media (min-width: 680px) {
+  .featured-products__grid,
+  .collection-page__grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
