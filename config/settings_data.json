@@ -43,7 +43,7 @@
     "show_badge_available": true,
     "show_badge_free_shipping": true,
     "show_badge_bestseller": true,
-    "show_delivery_badge": true,
+    "show_delivery_badge": false,
     "delivery_badge_text": "يصلكِ خلال ٧–١٢ يوم",
     "show_compare_price": true,
     "show_rating_stars": true,
