@@ -47,7 +47,6 @@
           <a href="/collections" class="btn btn-outline btn-lg">تصفّحي الفئات</a>
         </div>
 
-        <!-- Trust badges -->
         <div class="hero-banner__trust">
           <span class="hero-trust-item">🚚 شحن مجاني فوق ١٩٩ ر.س</span>
           <span class="hero-trust-item">✅ منتجات مختارة بعناية</span>
@@ -59,14 +58,7 @@
       <div class="hero-banner__visual">
         {%- if section.settings.image != blank -%}
           <div class="hero-banner__img-main">
-            {{
-              section.settings.image
-              | image_url: width: 560
-              | image_tag:
-                loading: 'eager',
-                fetchpriority: 'high',
-                alt: heading
-            }}
+            {{section.settings.image | image_url: width: 560 | image_tag: loading: 'eager', fetchpriority: 'high', alt: heading}}
           </div>
         {%- else -%}
           <div class="hero-banner__collage">
@@ -94,8 +86,8 @@
         {%- endif -%}
       </div>
 
-    </div><!-- /.hero-banner__inner -->
-  </div><!-- /.container -->
+    </div>
+  </div>
 </section>
 
 {% schema %}
@@ -105,116 +97,22 @@
   "class": "section-hero-banner",
   "limit": 1,
   "settings": [
-    {
-      "type": "header",
-      "content": "المحتوى"
-    },
-    {
-      "type": "text",
-      "id": "pretitle",
-      "label": "النص التمهيدي (فوق العنوان)",
-      "default": "حلول التنظيم المنزلي"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "العنوان الرئيسي H1",
-      "default": "بيتك مرتب… حياتك أسهل"
-    },
-    {
-      "type": "textarea",
-      "id": "subheading",
-      "label": "النص الفرعي",
-      "default": "اكتشفي أجمل حلول التنظيم المنزلي المصممة خصيصًا لكِ — لأن بيتك المرتّب يبدأ من هنا."
-    },
-    {
-      "type": "header",
-      "content": "أزرار الاتصال بالإجراء (CTA)"
-    },
-    {
-      "type": "text",
-      "id": "primary_button_label",
-      "label": "نص الزر الأول",
-      "default": "رتّبي بيتك"
-    },
-    {
-      "type": "url",
-      "id": "primary_button_url",
-      "label": "رابط الزر الأول"
-    },
-    {
-      "type": "text",
-      "id": "secondary_button_label",
-      "label": "نص الزر الثاني",
-      "default": "تسوّقي الآن"
-    },
-    {
-      "type": "url",
-      "id": "secondary_button_url",
-      "label": "رابط الزر الثاني"
-    },
-    {
-      "type": "header",
-      "content": "شارة التوصيل"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_delivery_badge",
-      "label": "إظهار شارة موعد التوصيل",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "delivery_badge_text",
-      "label": "نص شارة التوصيل",
-      "default": "يصلكِ خلال ٧–١٢ يوم"
-    },
-    {
-      "type": "header",
-      "content": "الصورة"
-    },
-    {
-      "type": "image_picker",
-      "id": "image",
-      "label": "صورة البانر"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_placeholder_image",
-      "label": "إظهار صورة افتراضية إذا لم تُحدَّد صورة",
-      "default": false
-    },
-    {
-      "type": "header",
-      "content": "التصميم"
-    },
-    {
-      "type": "color",
-      "id": "bg_color",
-      "label": "لون الخلفية (اختياري)"
-    },
-    {
-      "type": "select",
-      "id": "text_align",
-      "label": "محاذاة النص",
-      "options": [
-        { "value": "right", "label": "يمين" },
-        { "value": "center", "label": "وسط" },
-        { "value": "left", "label": "يسار" }
-      ],
-      "default": "center"
-    }
+    {"type": "header", "content": "المحتوى"},
+    {"type": "text", "id": "pretitle", "label": "النص التمهيدي", "default": "متجر التنظيم المنزلي"},
+    {"type": "text", "id": "heading", "label": "العنوان الرئيسي", "default": "بيتك مرتب… حياتك أسهل"},
+    {"type": "textarea", "id": "subheading", "label": "النص الفرعي", "default": "اكتشفي أجمل حلول التنظيم المنزلي المصممة خصيصًا لكِ."},
+    {"type": "header", "content": "الأزرار"},
+    {"type": "text", "id": "primary_button_label", "label": "نص الزر الأول", "default": "تسوّقي الآن"},
+    {"type": "url", "id": "primary_button_url", "label": "رابط الزر الأول"},
+    {"type": "text", "id": "secondary_button_label", "label": "نص الزر الثاني", "default": "تصفّحي الفئات"},
+    {"type": "url", "id": "secondary_button_url", "label": "رابط الزر الثاني"},
+    {"type": "header", "content": "الصورة"},
+    {"type": "image_picker", "id": "image", "label": "صورة البانر"},
+    {"type": "header", "content": "التصميم"},
+    {"type": "color", "id": "bg_color", "label": "لون الخلفية"},
+    {"type": "select", "id": "text_align", "label": "محاذاة النص", "options": [{"value": "right", "label": "يمين"}, {"value": "center", "label": "وسط"}], "default": "right"},
+    {"type": "checkbox", "id": "show_delivery_badge", "label": "شارة التوصيل", "default": false}
   ],
-  "presets": [
-    {
-      "name": "Hero Banner — البانر الرئيسي",
-      "settings": {
-        "heading": "بيتك مرتب… حياتك أسهل",
-        "primary_button_label": "رتّبي بيتك",
-        "secondary_button_label": "تسوّقي الآن",
-        "show_delivery_badge": true
-      }
-    }
-  ]
+  "presets": [{"name": "Hero Banner — البانر الرئيسي"}]
 }
 {% endschema %}

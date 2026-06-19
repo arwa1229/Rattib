@@ -1,5 +1,4 @@
 {%- liquid
-  assign section_heading = section.settings.heading | default: 'تسوّقي حسب الفئة'
   assign columns_mobile = section.settings.columns_mobile | default: 2
   assign columns_desktop = section.settings.columns_desktop | default: 3
 -%}
@@ -10,7 +9,6 @@
   style="background: {{ section.settings.bg_color | default: '#FFFFFF' }};"
 >
   <div class="container">
-
     <div class="category-grid">
       <a href="/collections/تنظيم-المطبخ" class="category-tile">
         <span class="category-tile__icon" aria-hidden="true">🍳</span>
@@ -37,8 +35,7 @@
         <span class="category-tile__label">غرف الأطفال</span>
       </a>
     </div>
-
-  </div><!-- /.container -->
+  </div>
 </section>
 
 <style>
@@ -60,130 +57,11 @@
   "name": "Category Grid — شبكة الفئات",
   "tag": "section",
   "class": "section-category-grid",
-  "max_blocks": 12,
   "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "عنوان القسم",
-      "default": "تسوّقي حسب الفئة"
-    },
-    {
-      "type": "checkbox",
-      "id": "heading_center",
-      "label": "توسيط العنوان",
-      "default": false
-    },
-    {
-      "type": "color",
-      "id": "bg_color",
-      "label": "لون خلفية القسم",
-      "default": "#FFFFFF"
-    },
-    {
-      "type": "range",
-      "id": "columns_mobile",
-      "label": "عدد الأعمدة (موبايل)",
-      "min": 1,
-      "max": 3,
-      "step": 1,
-      "default": 2
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "label": "عدد الأعمدة (ديسكتوب)",
-      "min": 2,
-      "max": 6,
-      "step": 1,
-      "default": 3
-    }
+    {"type": "color", "id": "bg_color", "label": "لون الخلفية", "default": "#FFFFFF"},
+    {"type": "range", "id": "columns_mobile", "label": "أعمدة موبايل", "min": 1, "max": 3, "step": 1, "default": 2},
+    {"type": "range", "id": "columns_desktop", "label": "أعمدة ديسكتوب", "min": 2, "max": 6, "step": 1, "default": 6}
   ],
-  "blocks": [
-    {
-      "type": "category",
-      "name": "فئة",
-      "settings": [
-        {
-          "type": "text",
-          "id": "label",
-          "label": "اسم الفئة",
-          "default": "فئة جديدة"
-        },
-        {
-          "type": "url",
-          "id": "url",
-          "label": "رابط الفئة"
-        },
-        {
-          "type": "text",
-          "id": "icon",
-          "label": "أيقونة (إيموجي أو رمز)",
-          "default": "🏠"
-        },
-        {
-          "type": "color",
-          "id": "bg_color",
-          "label": "لون خلفية البطاقة",
-          "default": "#F4F6F6"
-        }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "Category Grid — شبكة الفئات",
-      "blocks": [
-        {
-          "type": "category",
-          "settings": {
-            "label": "تنظيم المطبخ",
-            "url": "/collections/تنظيم-المطبخ",
-            "icon": "🍳"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "label": "تنظيم الثلاجة",
-            "url": "/collections/تنظيم-الثلاجة",
-            "icon": "🧊"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "label": "تنظيم الحمام",
-            "url": "/collections/تنظيم-الحمام",
-            "icon": "🛁"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "label": "الأدراج والخزائن",
-            "url": "/collections/تنظيم-الأدراج-والخزائن",
-            "icon": "🗄️"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "label": "غرفة الغسيل",
-            "url": "/collections/غرفة-الغسيل",
-            "icon": "🧺"
-          }
-        },
-        {
-          "type": "category",
-          "settings": {
-            "label": "غرف الأطفال",
-            "url": "/collections/غرف-الأطفال",
-            "icon": "🧸"
-          }
-        }
-      ]
-    }
-  ]
+  "presets": [{"name": "Category Grid — شبكة الفئات"}]
 }
 {% endschema %}
