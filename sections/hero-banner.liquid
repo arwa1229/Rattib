@@ -20,60 +20,79 @@
   <div class="container">
     <div class="hero-banner__inner">
 
-      <!-- Pre-title label -->
-      {%- if section.settings.pretitle != blank -%}
-        <p class="hero-banner__pretitle">
-          <span aria-hidden="true">✨</span>
-          {{ section.settings.pretitle }}
-        </p>
-      {%- endif -%}
-
-      <!-- Main heading H1 -->
-      <h1 class="hero-banner__title">
-        {%- assign words = heading | split: '…' -%}
-        {%- if words.size > 1 -%}
-          {{ words[0] }}…<span>{{ words[1] }}</span>
-        {%- else -%}
-          {{ heading }}
+      <!-- RIGHT: Text content (RTL = visually right) -->
+      <div class="hero-banner__text">
+        {%- if section.settings.pretitle != blank -%}
+          <p class="hero-banner__pretitle">
+            <span aria-hidden="true">✨</span>
+            {{ section.settings.pretitle }}
+          </p>
         {%- endif -%}
-      </h1>
 
-      <!-- Subheading -->
-      {%- if subheading != blank -%}
-        <p class="hero-banner__subtitle">{{ subheading }}</p>
-      {%- endif -%}
+        <h1 class="hero-banner__title">
+          {%- assign words = heading | split: '…' -%}
+          {%- if words.size > 1 -%}
+            {{ words[0] }}…<span class="hero-banner__title-accent">{{ words[1] }}</span>
+          {%- else -%}
+            {{ heading }}
+          {%- endif -%}
+        </h1>
 
-      <!-- CTA Button -->
-      <div class="hero-banner__actions">
-        <a href="/collections/all" class="btn btn-primary btn-lg">تسوّقي الآن</a>
+        {%- if subheading != blank -%}
+          <p class="hero-banner__subtitle">{{ subheading }}</p>
+        {%- endif -%}
+
+        <div class="hero-banner__actions">
+          <a href="/collections/all" class="btn btn-primary btn-lg">تسوّقي الآن</a>
+          <a href="/collections" class="btn btn-outline btn-lg">تصفّحي الفئات</a>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="hero-banner__trust">
+          <span class="hero-trust-item">🚚 شحن مجاني فوق ١٩٩ ر.س</span>
+          <span class="hero-trust-item">✅ منتجات مختارة بعناية</span>
+          <span class="hero-trust-item">🔄 إرجاع مجاني</span>
+        </div>
       </div>
 
-      <!-- Delivery Badge -->
-      {%- if show_delivery -%}
-        <div class="hero-banner__badge">
-          {%- render 'badge', badge_type: 'delivery', badge_text: delivery_text -%}
-        </div>
-      {%- endif -%}
-
-      <!-- Hero Image -->
-      {%- if section.settings.image != blank -%}
-        <div class="hero-banner__image">
-          {{
-            section.settings.image
-            | image_url: width: 680
-            | image_tag:
-              loading: 'eager',
-              fetchpriority: 'high',
-              widths: '375, 560, 680, 960',
-              sizes: '(min-width: 768px) 680px, 100vw',
-              alt: heading
-          }}
-        </div>
-      {%- elsif section.settings.show_placeholder_image -%}
-        <div class="hero-banner__image">
-          {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-placeholder-img' }}
-        </div>
-      {%- endif -%}
+      <!-- LEFT: Visual collage -->
+      <div class="hero-banner__visual">
+        {%- if section.settings.image != blank -%}
+          <div class="hero-banner__img-main">
+            {{
+              section.settings.image
+              | image_url: width: 560
+              | image_tag:
+                loading: 'eager',
+                fetchpriority: 'high',
+                alt: heading
+            }}
+          </div>
+        {%- else -%}
+          <div class="hero-banner__collage">
+            <div class="hero-collage__card hero-collage__card--1">
+              <span class="hero-collage__icon">🍳</span>
+              <span class="hero-collage__label">مطبخ مرتّب</span>
+            </div>
+            <div class="hero-collage__card hero-collage__card--2">
+              <span class="hero-collage__icon">🛁</span>
+              <span class="hero-collage__label">حمام أنيق</span>
+            </div>
+            <div class="hero-collage__card hero-collage__card--3">
+              <span class="hero-collage__icon">🗄️</span>
+              <span class="hero-collage__label">خزائن منظّمة</span>
+            </div>
+            <div class="hero-collage__card hero-collage__card--4">
+              <span class="hero-collage__icon">🧺</span>
+              <span class="hero-collage__label">غسيل سهل</span>
+            </div>
+            <div class="hero-collage__center">
+              <span style="font-size:48px;">🏠</span>
+              <p style="font-family:var(--font-heading);font-weight:700;font-size:14px;color:var(--rattib-aqua-deep);margin:4px 0 0;">بيتك، بطريقتك</p>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
 
     </div><!-- /.hero-banner__inner -->
   </div><!-- /.container -->
