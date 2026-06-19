@@ -1286,6 +1286,7 @@ p {
   padding-inline: 16px;
   position: relative;
   z-index: 1;
+  text-align: right;
 }
 
 .hero-banner__content {
