@@ -2,6 +2,7 @@
   assign heading = section.settings.heading | default: 'بيتك مرتب… حياتك أسهل'
   assign subheading = section.settings.subheading | default: 'اكتشفي أجمل حلول التنظيم المنزلي المصممة خصيصًا لكِ — لأن بيتك المرتّب يبدأ من هنا.'
   assign show_delivery = section.settings.show_delivery_badge
+  assign delivery_text = section.settings.delivery_badge_text | default: 'يصلكِ خلال ٧–١٢ يوم'
 -%}
 
 <section
@@ -12,69 +13,42 @@
   <div class="container">
     <div class="hero-banner__inner">
 
-      <div class="hero-banner__text">
-        {%- if section.settings.pretitle != blank -%}
-          <p class="hero-banner__pretitle">
-            <span aria-hidden="true">✨</span>
-            {{ section.settings.pretitle }}
-          </p>
-        {%- endif -%}
+      {%- if section.settings.pretitle != blank -%}
+        <p class="hero-banner__pretitle">
+          <span aria-hidden="true">✨</span>
+          {{ section.settings.pretitle }}
+        </p>
+      {%- endif -%}
 
-        <h1 class="hero-banner__title">
-          {%- assign words = heading | split: '…' -%}
-          {%- if words.size > 1 -%}
-            {{ words[0] }}…<span class="hero-banner__title-accent">{{ words[1] }}</span>
-          {%- else -%}
-            {{ heading }}
-          {%- endif -%}
-        </h1>
-
-        {%- if subheading != blank -%}
-          <p class="hero-banner__subtitle">{{ subheading }}</p>
-        {%- endif -%}
-
-        <div class="hero-banner__actions">
-          <a href="/collections/all" class="btn btn-primary btn-lg">تسوّقي الآن</a>
-          <a href="/collections" class="btn btn-outline btn-lg">تصفّحي الفئات</a>
-        </div>
-
-        <div class="hero-banner__trust">
-          <span class="hero-trust-item">🚚 شحن مجاني فوق ١٩٩ ر.س</span>
-          <span class="hero-trust-item">✅ منتجات مختارة بعناية</span>
-          <span class="hero-trust-item">🔄 إرجاع مجاني</span>
-        </div>
-      </div>
-
-      <div class="hero-banner__visual">
-        {%- if section.settings.image != blank -%}
-          <div class="hero-banner__img-main">
-            {{ section.settings.image | image_url: width: 560 | image_tag: loading: 'eager', alt: heading }}
-          </div>
+      <h1 class="hero-banner__title">
+        {%- assign words = heading | split: '…' -%}
+        {%- if words.size > 1 -%}
+          {{ words[0] }}…<span>{{ words[1] }}</span>
         {%- else -%}
-          <div class="hero-banner__collage">
-            <div class="hero-collage__card hero-collage__card--1">
-              <span class="hero-collage__icon">🍳</span>
-              <span class="hero-collage__label">مطبخ مرتّب</span>
-            </div>
-            <div class="hero-collage__card hero-collage__card--2">
-              <span class="hero-collage__icon">🛁</span>
-              <span class="hero-collage__label">حمام أنيق</span>
-            </div>
-            <div class="hero-collage__card hero-collage__card--3">
-              <span class="hero-collage__icon">🗄️</span>
-              <span class="hero-collage__label">خزائن منظّمة</span>
-            </div>
-            <div class="hero-collage__card hero-collage__card--4">
-              <span class="hero-collage__icon">🧺</span>
-              <span class="hero-collage__label">غسيل سهل</span>
-            </div>
-            <div class="hero-collage__center">
-              <span style="font-size:44px;">🏠</span>
-              <p style="font-family:var(--font-heading);font-weight:700;font-size:13px;color:var(--rattib-aqua-deep);margin:4px 0 0;">بيتك، بطريقتك</p>
-            </div>
-          </div>
+          {{ heading }}
         {%- endif -%}
+      </h1>
+
+      {%- if subheading != blank -%}
+        <p class="hero-banner__subtitle">{{ subheading }}</p>
+      {%- endif -%}
+
+      <div class="hero-banner__actions">
+        <a href="/collections/all" class="btn btn-primary btn-lg">تسوّقي الآن</a>
+        <a href="/collections" class="btn btn-outline-hero btn-lg">تصفّحي الفئات</a>
       </div>
+
+      {%- if show_delivery -%}
+        <div class="hero-banner__badge">
+          {%- render 'badge', badge_type: 'delivery', badge_text: delivery_text -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.image != blank -%}
+        <div class="hero-banner__image">
+          {{ section.settings.image | image_url: width: 680 | image_tag: loading: 'eager', alt: heading }}
+        </div>
+      {%- endif -%}
 
     </div>
   </div>
@@ -97,8 +71,6 @@
     { "type": "color", "id": "bg_color", "label": "لون الخلفية" },
     { "type": "checkbox", "id": "show_delivery_badge", "label": "شارة التوصيل", "default": false }
   ],
-  "presets": [
-    { "name": "البانر الرئيسي" }
-  ]
+  "presets": [{ "name": "البانر الرئيسي" }]
 }
 {% endschema %}
