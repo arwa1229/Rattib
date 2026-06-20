@@ -12,20 +12,11 @@
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
-        "eyebrow": "متجر التنظيم المنزلي",
+        "pretitle": "متجر التنظيم المنزلي",
         "heading": "بيتك مرتب… حياتك أسهل",
-        "primary_btn_label": "تسوّقي الآن",
-        "primary_btn_url": "",
-        "secondary_btn_label": "تصفّحي الفئات",
-        "secondary_btn_url": "",
-        "padding_top": 48,
-        "padding_bottom": 40
-      }
-    },
-    "category-grid": {
-      "type": "category-grid",
-      "settings": {
-        "title": "تسوّقي حسب الفئة"
+        "subheading": "اكتشفي أجمل حلول التنظيم المنزلي المصممة خصيصًا لكِ.",
+        "bg_color": "",
+        "show_delivery_badge": false
       }
     },
     "featured-products": {
@@ -39,7 +30,6 @@
   },
   "order": [
     "hero-banner",
-    "category-grid",
     "featured-products"
   ]
 }
