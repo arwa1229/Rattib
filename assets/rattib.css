@@ -1,0 +1,49 @@
+/* ============================================================
+   RATTIB Theme — rattib.css
+   RTL Arabic-first • Mobile-first • Production quality
+   ============================================================ */
+
+/* ── Google Fonts ─────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@700;900&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap');
+
+/* ── CSS Custom Properties (Brand Tokens) ─────────────────── */
+:root {
+  /* Colors */
+  --rattib-aqua:        #5BC4BE;
+  --rattib-aqua-deep:   #2E8F8A;
+  --rattib-teal:        #2E8F8A;
+  --rattib-aqua-soft:   #DDF3F1;
+  --rattib-charcoal:    #262B2B;
+  --rattib-gray:        #F4F6F6;
+  --rattib-white:       #FFFFFF;
+  --rattib-success:     #4DAE7C;
+  --rattib-success-soft:#E2F3E8;
+  --rattib-rating:      #F2B53D;
+  --rattib-border:      #EDF1F1;
+  --rattib-text-muted:  #6B7574;
+
+  /* Typography */
+  --font-heading: 'Tajawal', sans-serif;
+  --font-body:    'IBM Plex Sans Arabic', sans-serif;
+
+  /* Spacing & Layout */
+  --radius-card:      16px;
+  --radius-btn:       12px;
+  --radius-pill:      99px;
+  --spacing-section:  52px;
+  --spacing-card-gap: 10px;
+  --max-width:        680px;
+
+  /* Shadows */
+  --shadow-card:    0 2px 12px rgba(38, 43, 43, 0.07);
+  --shadow-card-hover: 0 6px 24px rgba(38, 43, 43, 0.12);
+  --shadow-btn:     0 2px 8px rgba(91, 196, 190, 0.30);
+
+  /* Transitions */
+  --transition-fast:   0.15s ease;
+  --transition-normal: 0.25s ease;
+
+  /* Header */
+  --header-height: 80px;
+  --shipping-bar-height: 38px;
+}
